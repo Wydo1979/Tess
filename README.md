@@ -29,3 +29,23 @@ Woordsoorten hebben 3 niveaus (⭐ zelfst. nw / werkwoord / bijv. nw / lidwoord 
 
 ## Zelf oefenstof toevoegen
 Alle zinnen en werkwoorden staan in `data.js` en zijn makkelijk aan te vullen.
+
+---
+
+# 🤖 AI-Academie – speel jezelf AI-expert
+
+Open `ai-academie.html` in een browser (computer, tablet of telefoon). Niets te installeren; voortgang wordt bewaard op het apparaat.
+
+| Spel | Wat leer je? |
+|---|---|
+| 🎓 Kennisquiz | 80 vragen in 7 thema's: de basis, hoe machines leren, ChatGPT & taalmodellen, beeld/stem/deepfakes, AI in werk & leven, ethiek & wetgeving (AI Act, AVG), geschiedenis. Met uitleg bij elk antwoord en een kennismeter. |
+| 🕵️ Waar of fabel? | Veelvoorkomende mythes over AI doorprikken. |
+| 🔗 Begrippen koppelen | AI-jargon (token, hallucinatie, RAG, bias …) koppelen aan de betekenis. |
+| 🔮 Denk als ChatGPT | Raad het volgende woord en zie hoe kansverdeling en temperatuur werken. |
+| 🧪 Bouw een spamfilter | Stel zelf de gewichten van een echt kunstmatig neuron in, of laat het zelf trainen. |
+| ✍️ Prompt-coach | Leer de beste opdrachten aan een AI te geven. |
+| 📜 Tijdlijn | Mijlpalen van Turing (1950) tot ChatGPT en de AI Act op volgorde. |
+| 🏅 AI-diploma | 20 vragen door elkaar; 16 goed = afdrukbaar diploma. |
+| 📖 AI-woordenboek | Alle begrippen met zoekfunctie. |
+
+XP en rangen (van 🌱 Nieuwsgierige beginner tot 🏆 AI-goeroe) houden je gemotiveerd. Vragen en begrippen staan bovenin het `<script>` en zijn makkelijk aan te vullen.
