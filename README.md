@@ -4,7 +4,7 @@ Oefenspelletjes voor **woordsoorten**, **tijden (tegenwoordige, verleden en volt
 en **persoonsvorm & onderwerp**. Speciaal gemaakt om prettig te werken bij **dyslexie**.
 
 ## Spelen
-Open `index.html` in een browser (computer, tablet of telefoon). Je hoeft niets te installeren.
+Open `taaltopper.html` (alles in één bestand) of `index.html` in een browser (computer, tablet of telefoon). Je hoeft niets te installeren.
 Tip: zet GitHub Pages aan voor deze repository, dan kan je kind het spel ook via een link openen.
 
 ## De spelletjes
