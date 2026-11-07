@@ -249,7 +249,7 @@ const ZINNEN_WS = ZINNEN_WOORDSOORT.map((regel) =>
 const zinTekst = (tokens) => tokens.map((t) => t.woord + t.leesteken).join(" ");
 const MEERVOUD = {
   zn: "zelfstandige naamwoorden", ww: "werkwoorden", bn: "bijvoeglijke naamwoorden",
-  lw: "lidwoorden", vnw: "voornaamwoorden", tw: "telwoorden", vz: "voorzetsels",
+  lw: "lidwoorden", hww: "hulpwerkwoorden", vd: "voltooide deelwoorden", vz: "voorzetsels",
 };
 
 // ===============================================================
@@ -274,7 +274,7 @@ function vraagWoordsoort() {
     toon(doos, api) {
       const zin = maak("div", { class: "zin" });
       tokens.forEach((t, i) => {
-        zin.append(maak("span", { class: "w" + (i === ti ? " aangewezen" : "") }, t.woord), t.leesteken, " ");
+        zin.append(maak("span", { style: "white-space:nowrap" }, maak("span", { class: "w" + (i === ti ? " aangewezen" : "") }, t.woord), t.leesteken), " ");
       });
       doos.append(zin);
       const raster = maak("div", { class: "antwoorden" });
@@ -351,6 +351,7 @@ function vraagJager() {
         if (teVeel) hint += `Er ${teVeel === 1 ? "is 1 woord" : "zijn " + teVeel + " woorden"} gekozen dat er niet bij hoort. `;
         if (mist) hint += `Je mist er nog ${mist}. `;
         hint += info.tip;
+        if (doelSoort === "ww" && soorten.includes("hww")) hint += " (Hulpwerkwoorden en voltooide deelwoorden tellen hier niet mee.)";
         if (!api.fout(hint)) eindig(false);
       };
     },
@@ -634,7 +635,7 @@ function startScherm() {
   ));
 
   // niveau voor woordsoorten
-  const niveauNamen = { 1: "Niveau 1: zelfst. nw., werkwoord, bijv. nw.", 2: "Niveau 2: + lidwoord, voornaamwoord", 3: "Niveau 3: + telwoord, voorzetsel" };
+  const niveauNamen = { 1: "Niveau 1: zelfst. nw., werkwoord, bijv. nw., lidwoord", 2: "Niveau 2: + hulpwerkwoord, voltooid deelwoord", 3: "Niveau 3: + voorzetsel" };
   const niveauDoos = maak("div", { class: "niveau-keuze" }, maak("span", {}, "Woordsoorten:"));
   [1, 2, 3].forEach((n) => {
     const b = maak("button", { class: opslag.niveau === n ? "actief" : "", title: niveauNamen[n] }, `${"⭐".repeat(n)}`);

@@ -18,7 +18,7 @@ Tip: zet GitHub Pages aan voor deze repository, dan kan je kind het spel ook via
 | 🏆 Toppertoets | Alles door elkaar. |
 | 📖 Spiekbriefje | Alle regels en trucjes op een rij. |
 
-Woordsoorten hebben 3 niveaus (⭐ zelfst. nw / werkwoord / bijv. nw → ⭐⭐ + lidwoord, voornaamwoord → ⭐⭐⭐ + telwoord, voorzetsel).
+Woordsoorten hebben 3 niveaus (⭐ zelfst. nw / werkwoord / bijv. nw / lidwoord → ⭐⭐ + hulpwerkwoord, voltooid deelwoord → ⭐⭐⭐ + voorzetsel).
 
 ## Dyslexievriendelijk
 - Groot, rustig lettertype (Lexend; Verdana kan ook) met extra ruimte tussen letters en regels.
