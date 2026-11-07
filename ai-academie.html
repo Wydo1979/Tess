@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI-Academie – speel jezelf AI-expert</title>
+<style>
+:root {
+  --bg: #f3f5fa; --kaart: #ffffff; --tekst: #1d2433; --zacht: #5d6578;
+  --blauw: #2f5bea; --blauw-d: #1f3fb0; --paars: #7b4ce0;
+  --goed: #1f9d55; --goed-l: #dcf5e6; --fout: #d23c3c; --fout-l: #fde4e4;
+  --geel: #fff4cc; --rand: #dfe4ef; --schaduw: 0 2px 4px rgba(20,30,60,.06), 0 8px 24px rgba(20,30,60,.08);
+  --basis: 19px;
+}
+body.groot { --basis: 22px; }
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--tekst); font: var(--basis)/1.55 system-ui, -apple-system, "Segoe UI", Roboto, Verdana, sans-serif; min-height: 100vh; }
+button { font: inherit; color: inherit; cursor: pointer; }
+h1, h2, h3 { line-height: 1.25; margin: .3em 0; }
+h1 { font-size: 1.55em; } h2 { font-size: 1.25em; } h3 { font-size: 1.05em; }
+p { margin: .45em 0; }
+.top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: .6em; padding: .5em .9em;
+  background: linear-gradient(90deg, #1f3fb0, #7b4ce0); color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.15); }
+.top .titel { flex: 1; font-weight: 700; }
+.top button { border: none; background: rgba(255,255,255,.18); color: #fff; border-radius: 12px; padding: .25em .6em; font-size: 1em; }
+.xp-pil { background: rgba(255,255,255,.18); border-radius: 999px; padding: .15em .7em; font-weight: 700; white-space: nowrap; }
+main { max-width: 920px; margin: 0 auto; padding: 1em 1em 5em; }
+.kaart { background: var(--kaart); border-radius: 18px; padding: 1.1em 1.2em; box-shadow: var(--schaduw); margin-bottom: 1em; }
+.held { background: linear-gradient(135deg, #2f5bea, #7b4ce0); color: #fff; }
+.held .zacht { color: #e3e8ff; }
+.zacht { color: var(--zacht); }
+.klein { font-size: .85em; }
+.balk { height: 14px; background: rgba(0,0,0,.08); border-radius: 999px; overflow: hidden; }
+.held .balk { background: rgba(255,255,255,.25); }
+.balk > div { height: 100%; background: linear-gradient(90deg, #36c27a, #1f9d55); border-radius: 999px; transition: width .4s; }
+.held .balk > div { background: #ffd34d; }
+.raster { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: .9em; }
+.tegel { text-align: left; border: 2px solid transparent; background: var(--kaart); border-radius: 18px; padding: 1em; box-shadow: var(--schaduw); transition: transform .12s, border-color .12s; }
+.tegel:hover { transform: translateY(-2px); border-color: var(--blauw); }
+.tegel .ico { font-size: 2em; }
+.tegel b { display: block; font-size: 1.05em; margin: .2em 0; }
+.tegel span { color: var(--zacht); font-size: .85em; }
+.knop { border: none; background: var(--blauw); color: #fff; border-radius: 14px; padding: .6em 1.2em; font-weight: 600; box-shadow: 0 3px 0 var(--blauw-d); }
+.knop:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--blauw-d); }
+.knop.wit { background: #fff; color: var(--blauw); box-shadow: 0 3px 0 #c9d3f0; border: 2px solid #c9d3f0; }
+.knop:disabled { opacity: .45; cursor: default; }
+.knoppen { display: flex; gap: .6em; flex-wrap: wrap; margin-top: .8em; }
+.opties { display: grid; gap: .6em; margin-top: .8em; }
+.optie { text-align: left; border: 2px solid var(--rand); background: #fff; border-radius: 14px; padding: .7em 1em; transition: border-color .1s, background .1s; }
+.optie:hover:not(:disabled) { border-color: var(--blauw); background: #f5f7ff; }
+.optie:disabled { cursor: default; }
+.optie.goed { border-color: var(--goed); background: var(--goed-l); }
+.optie.fout { border-color: var(--fout); background: var(--fout-l); }
+.optie.gekozen { border-color: var(--blauw); background: #e8edff; }
+.uitleg { margin-top: .9em; padding: .8em 1em; border-radius: 14px; background: var(--geel); border-left: 6px solid #f0b400; }
+.uitleg.goed { background: var(--goed-l); border-left-color: var(--goed); }
+.uitleg.fout { background: var(--fout-l); border-left-color: var(--fout); }
+.voortgang { display: flex; justify-content: space-between; align-items: center; gap: 1em; margin-bottom: .5em; color: var(--zacht); font-size: .9em; }
+.label { display: inline-block; font-size: .75em; font-weight: 700; padding: .1em .6em; border-radius: 999px; background: #e8edff; color: var(--blauw-d); }
+.twee { display: grid; grid-template-columns: 1fr 1fr; gap: .6em; }
+@media (max-width: 600px) { :root { --basis: 17px; } body.groot { --basis: 20px; } .twee { grid-template-columns: 1fr; } main { padding: .7em .6em 5em; } }
+.thema-rij { display: flex; align-items: center; gap: .8em; padding: .6em 0; border-bottom: 1px solid var(--rand); }
+.thema-rij:last-child { border-bottom: none; }
+.thema-rij .naam { flex: 1; }
+.thema-rij .balk { width: 120px; }
+.toast { position: fixed; left: 50%; bottom: 1.2em; transform: translateX(-50%); background: #1d2433; color: #fff; padding: .6em 1.2em; border-radius: 999px; z-index: 40; box-shadow: var(--schaduw); animation: op .3s; }
+@keyframes op { from { opacity: 0; transform: translate(-50%, 20px); } }
+.schud { animation: schud .35s; }
+@keyframes schud { 20%,60% { transform: translateX(-6px); } 40%,80% { transform: translateX(6px); } }
+/* Koppelspel */
+.koppel { display: grid; grid-template-columns: 1fr 1.6fr; gap: .6em; }
+.koppel .optie { font-size: .92em; }
+/* Tijdlijn */
+.tl-slot { display: flex; gap: .7em; align-items: center; border: 2px dashed var(--rand); border-radius: 14px; padding: .5em .8em; min-height: 2.8em; margin-bottom: .4em; background: #fafbff; }
+.tl-slot .nr { font-weight: 700; color: var(--blauw); width: 1.6em; }
+.tl-slot.goed { border-style: solid; border-color: var(--goed); background: var(--goed-l); }
+.tl-slot.fout { border-style: solid; border-color: var(--fout); background: var(--fout-l); }
+/* Neuron */
+.mail { display: grid; grid-template-columns: 1fr auto auto; gap: .5em; align-items: center; padding: .45em .7em; border-radius: 12px; border: 2px solid var(--rand); margin-bottom: .35em; font-size: .9em; }
+.mail.ok { border-color: var(--goed); background: var(--goed-l); }
+.mail.nok { border-color: var(--fout); background: var(--fout-l); }
+.mail .kenm { color: var(--zacht); font-size: .8em; }
+.schuif { display: grid; grid-template-columns: 1fr 140px 3.2em; gap: .6em; align-items: center; margin: .35em 0; }
+.schuif input { width: 100%; }
+.schuif b { text-align: right; font-variant-numeric: tabular-nums; }
+@media (max-width: 600px) { .schuif { grid-template-columns: 1fr; gap: .1em; } .schuif b { text-align: left; } }
+.formule { font-family: ui-monospace, Menlo, Consolas, monospace; background: #f1f3fa; padding: .5em .8em; border-radius: 10px; font-size: .85em; overflow-x: auto; }
+/* Volgende woord */
+.zinnetje { font-size: 1.3em; font-weight: 600; }
+.zinnetje .gat { display: inline-block; min-width: 4em; border-bottom: 3px solid var(--blauw); color: var(--blauw); }
+.kans { display: grid; grid-template-columns: 7em 1fr 4em; gap: .6em; align-items: center; margin: .3em 0; }
+.kans .balk { height: 20px; }
+.kans .balk > div { background: linear-gradient(90deg, #6c8cff, #7b4ce0); }
+.kans b { text-align: right; font-variant-numeric: tabular-nums; }
+/* Woordenboek */
+.zoek { width: 100%; font: inherit; padding: .55em .9em; border-radius: 14px; border: 2px solid var(--rand); }
+.term { padding: .6em 0; border-bottom: 1px solid var(--rand); }
+.term b { color: var(--blauw-d); }
+/* Diploma */
+.diploma { text-align: center; border: 8px double #c9a227; background: #fffdf3; padding: 2em 1em; }
+.diploma .groot-ico { font-size: 3.5em; }
+input[type=text] { font: inherit; padding: .45em .8em; border-radius: 12px; border: 2px solid var(--rand); width: 100%; max-width: 360px; }
+#confetti { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 50; }
+.snipper { position: absolute; top: -20px; width: 10px; height: 14px; border-radius: 3px; animation: val linear forwards; }
+@keyframes val { to { transform: translateY(110vh) rotate(720deg); } }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <button id="home" aria-label="Naar het begin" hidden>🏠</button>
+  <div class="titel" id="titel">🤖 AI-Academie</div>
+  <div class="xp-pil" title="Je ervaringspunten">⚡ <span id="xp">0</span> XP</div>
+  <button id="groter" aria-label="Tekst groter of kleiner" title="Tekst groter/kleiner">A±</button>
+</header>
+<main id="app"></main>
+<div id="confetti" aria-hidden="true"></div>
+
+<script>
+"use strict";
+// =====================================================================
+//  LESSTOF – alle vragen, begrippen en weetjes
+// =====================================================================
+const THEMAS = {
+  basis:   { naam: "De basis: wat is AI?",        ico: "🧠" },
+  leren:   { naam: "Hoe leert een machine?",      ico: "📈" },
+  taal:    { naam: "ChatGPT & taalmodellen",      ico: "💬" },
+  beeld:   { naam: "Beeld, stem & deepfakes",     ico: "🎨" },
+  praktijk:{ naam: "AI in je werk & leven",       ico: "💼" },
+  ethiek:  { naam: "Risico's, ethiek & wetgeving",ico: "⚖️" },
+  historie:{ naam: "Geschiedenis van AI",         ico: "📜" },
+};
+
+// v = vraag, a = antwoorden (eerste is GOED – wordt later geschud), u = uitleg
+const VRAGEN = {
+basis: [
+ { v: "Waar staat de afkorting AI voor?", a: ["Artificial Intelligence – kunstmatige intelligentie", "Automatische Informatieverwerking", "Analoge Interface", "Advanced Internet"],
+   u: "AI = Artificial Intelligence. Het zijn computersystemen die taken doen waarvoor je normaal menselijke intelligentie nodig hebt: taal begrijpen, beelden herkennen, voorspellen of beslissen." },
+ { v: "Wat is de relatie tussen AI en machine learning?", a: ["Machine learning is een onderdeel van AI: het systeem leert van voorbeelden in plaats van vaste regels", "Het is precies hetzelfde", "AI is een onderdeel van machine learning", "Machine learning is de hardware, AI de software"],
+   u: "Zie het als Russische poppetjes: AI is het grote geheel, machine learning zit erin, en deep learning zit weer in machine learning." },
+ { v: "Welke van deze is GEEN AI?", a: ["Een gewone rekenmachine", "Gezichtsherkenning op je telefoon", "De spamfilter van je e-mail", "Aanbevelingen op Netflix"],
+   u: "Een rekenmachine volgt vaste rekenregels en leert niets. Gezichtsherkenning, spamfilters en aanbevelingen zijn getraind op enorme hoeveelheden voorbeelden." },
+ { v: "Wat bedoelt men met ‘smalle AI’ (narrow AI)?", a: ["AI die erg goed is in één specifieke taak", "AI die alleen op kleine schermen werkt", "AI met weinig geheugen", "AI die maar één taal spreekt"],
+   u: "Bijna alle AI is ‘smal’: een schaakcomputer kan niet autorijden en een spamfilter kan geen gedicht schrijven. Grote taalmodellen zijn wel breder inzetbaar dan klassieke AI." },
+ { v: "Wat is AGI?", a: ["Algemene AI die vrijwel elke denktaak minstens zo goed kan als een mens", "Een Amerikaans overheidsbureau voor AI", "Een programmeertaal voor AI", "Een type computerchip"],
+   u: "AGI = Artificial General Intelligence. Grote AI-bedrijven noemen het hun doel. Wanneer (en of) het er komt, en hoe je het zou herkennen, is onder deskundigen sterk omstreden." },
+ { v: "Wat is een algoritme?", a: ["Een stappenplan: een reeks instructies om een probleem op te lossen", "Een soort robot", "Een computervirus", "Een database met wachtwoorden"],
+   u: "Een recept is ook een algoritme! In AI bepaalt het algoritme hoe het model leert van data." },
+ { v: "Wat is deep learning?", a: ["Machine learning met neurale netwerken die uit heel veel lagen bestaan", "AI die onder water werkt", "Leren door heel lang naar één voorbeeld te kijken", "Een filosofische stroming"],
+   u: "‘Deep’ slaat op de vele lagen in het netwerk. Elke laag herkent iets abstracters: eerst randjes, dan vormen, dan ‘een kat’." },
+ { v: "Wat heeft een AI-model vooral nodig om te leren?", a: ["Veel voorbeelden (data)", "Een internetverbinding", "Een programmeur die elke regel uitschrijft", "Een camera"],
+   u: "Data is de brandstof van AI. Een taalmodel leert van enorme hoeveelheden tekst, een beeldherkenner van miljoenen foto's." },
+ { v: "Wat is generatieve AI?", a: ["AI die nieuwe inhoud maakt: tekst, beelden, muziek, video of code", "AI die stroom opwekt", "AI van een bepaalde generatie computers", "AI die alleen dingen sorteert"],
+   u: "ChatGPT, Claude, Gemini (tekst) en Midjourney of DALL·E (beeld) zijn bekende voorbeelden van generatieve AI." },
+ { v: "Heeft een chatbot zoals ChatGPT bewustzijn of gevoelens?", a: ["Daar is geen wetenschappelijk bewijs voor; het herkent en produceert patronen in taal", "Ja, dat is bewezen", "Ja, maar alleen als je vriendelijk bent", "Alleen de betaalde versie"],
+   u: "Een taalmodel kan heel menselijk klinken omdat het van menselijke teksten leerde. Of zulke systemen ooit iets als ervaring kunnen hebben is een open filosofische vraag – maar ‘het klinkt menselijk’ is geen bewijs." },
+],
+leren: [
+ { v: "Wat is ‘supervised learning’ (gecontroleerd leren)?", a: ["Leren van voorbeelden waarbij het juiste antwoord (label) erbij staat", "Leren terwijl een mens meekijkt via de webcam", "Leren zonder data", "Leren door straf en beloning"],
+   u: "Voorbeeld: 10.000 mails met het label ‘spam’ of ‘geen spam’. Het model leert de patronen die bij elk label horen." },
+ { v: "Wat doet ‘unsupervised learning’?", a: ["Zelf patronen en groepen ontdekken in data zonder labels", "Leren zonder stroom", "Alleen leren ’s nachts", "Fouten negeren"],
+   u: "Bijvoorbeeld een supermarkt die klanten automatisch in groepen indeelt op basis van koopgedrag, zonder van tevoren te zeggen welke groepen er zijn." },
+ { v: "Hoe werkt ‘reinforcement learning’?", a: ["Uitproberen en leren van beloning en straf", "Data versterken met extra opslag", "Twee modellen samenvoegen", "Leren van een leraar die alles voorzegt"],
+   u: "Net als een hond trainen met snoepjes. Zo leerde AlphaGo Go spelen door miljoenen partijen tegen zichzelf te spelen." },
+ { v: "Wat is ‘overfitting’?", a: ["Het model leert de trainingsvoorbeelden uit het hoofd en werkt slecht op nieuwe gevallen", "Het model is te groot voor de computer", "Het model is te snel klaar", "Het model past niet in de cloud"],
+   u: "Zoals een leerling die de oefentoets uit het hoofd leert maar de echte toets niet snapt. Daarom test je altijd op data die het model nog niet gezien heeft." },
+ { v: "Waarom houd je een deel van de data apart als ‘testset’?", a: ["Om eerlijk te meten hoe goed het model werkt op onbekende voorbeelden", "Als reserve voor als de computer crasht", "Omdat het anders te duur is", "Dat is wettelijk verplicht"],
+   u: "Wie zijn eigen examen nakijkt met de antwoorden die hij al kende, krijgt een te mooi cijfer. Een testset voorkomt dat." },
+ { v: "Waar is een kunstmatig neuraal netwerk losjes op geïnspireerd?", a: ["Op de zenuwcellen in de hersenen", "Op het wegennet", "Op een spinnenweb", "Op het internet"],
+   u: "Kunstmatige ‘neuronen’ tellen signalen op met bepaalde gewichten en geven een signaal door. De gelijkenis met echte hersenen is wel beperkt." },
+ { v: "Wat zijn ‘gewichten’ (weights) in een neuraal netwerk?", a: ["Getallen die bepalen hoe zwaar elke invoer meetelt; die worden tijdens training aangepast", "Het gewicht van de server in kilo's", "De prijs per vraag", "Het aantal gebruikers"],
+   u: "Training = de gewichten stapje voor stapje bijstellen zodat de fouten kleiner worden. Probeer het zelf in het spel ‘Bouw een spamfilter’!" },
+ { v: "Wat betekent ‘garbage in, garbage out’?", a: ["Slechte of scheve data levert een slecht model op", "AI kan afval sorteren", "Oude computers moet je weggooien", "Verwijderde bestanden komen terug"],
+   u: "Een model is nooit beter dan zijn data. Zit er een vooroordeel in de data, dan neemt het model dat over." },
+ { v: "Waarom zijn GPU's (grafische chips) zo belangrijk voor AI?", a: ["Ze kunnen enorm veel eenvoudige berekeningen tegelijk doen", "Ze maken mooiere plaatjes van de AI", "Ze zijn goedkoper dan gewone processors", "Ze slaan meer data op"],
+   u: "Ooit gemaakt voor games, nu de motor van AI. Daardoor werd chipmaker Nvidia een van de waardevolste bedrijven ter wereld. Ook het Nederlandse ASML is cruciaal: het maakt de machines om zulke chips te produceren." },
+ { v: "Wat is het verschil tussen ‘training’ en ‘inferentie’?", a: ["Training = het model leren; inferentie = het getrainde model gebruiken om antwoorden te geven", "Training is gratis, inferentie niet", "Het is hetzelfde", "Inferentie is het testen door mensen"],
+   u: "Training van een groot model kost maanden en vele miljoenen. Elke keer dat jij een vraag stelt, is dat inferentie." },
+ { v: "Een groot taalmodel heeft ‘honderden miljarden parameters’. Wat zijn dat?", a: ["De instelbare getallen (gewichten) in het model", "Het aantal woorden dat het kent", "Het aantal gebruikers", "Het aantal servers"],
+   u: "Parameters en gewichten zijn grofweg hetzelfde. Meer parameters betekent meestal dat het model complexere patronen kan leren – maar ook dat het duurder is." },
+],
+taal: [
+ { v: "Waar staat LLM voor?", a: ["Large Language Model – groot taalmodel", "Lokaal Lerend Model", "Linked Logic Machine", "Low Latency Mode"],
+   u: "Een LLM is getraind op gigantische hoeveelheden tekst. ChatGPT, Claude, Gemini en Llama zijn gebouwd op LLM's." },
+ { v: "Wat doet een taalmodel in de kern?", a: ["Steeds voorspellen welk stukje tekst (token) waarschijnlijk volgt", "Antwoorden opzoeken in een grote database", "Elk antwoord kopiëren van Wikipedia", "Een mens typt stiekem mee"],
+   u: "Het model rekent per stap uit welk volgend token het meest passend is. Door dat duizenden keren te herhalen ontstaat een heel antwoord. Speel ‘Raad het volgende woord’!" },
+ { v: "Wat is een ‘token’?", a: ["Een stukje tekst: een woord of deel van een woord", "Een betaalmunt voor AI", "Een wachtwoord", "Een foutmelding"],
+   u: "‘Onvoorstelbaar’ kan in meerdere tokens worden opgeknipt. Daardoor zijn taalmodellen soms slecht in letters tellen: ze ‘zien’ geen losse letters." },
+ { v: "Waar staat GPT (zoals in ChatGPT) voor?", a: ["Generative Pre-trained Transformer", "General Purpose Technology", "Google Powered Text", "Global Prediction Tool"],
+   u: "Generative = maakt tekst, Pre-trained = eerst getraind op heel veel tekst, Transformer = het type neuraal netwerk (uitgevonden in 2017)." },
+ { v: "Wat bedoelt men met ‘hallucineren’ bij AI?", a: ["Overtuigend klinkende informatie verzinnen die niet klopt", "De AI ziet beelden die er niet zijn", "De AI loopt vast", "De AI praat in een andere taal"],
+   u: "Een taalmodel wil altijd een vloeiend antwoord geven, ook als het het niet weet. Controleer dus altijd feiten, bronnen, cijfers en citaten." },
+ { v: "Wat is het ‘contextvenster’?", a: ["Hoeveel tekst het model in één keer kan meenemen in een gesprek", "Het chatvenster op je scherm", "De tijd die het model nodig heeft", "Het venster met instellingen"],
+   u: "Alles wat binnen het contextvenster past (jouw vragen, documenten, eerdere antwoorden) kan het model gebruiken. Wat erbuiten valt, ‘vergeet’ het." },
+ { v: "Wat is een ‘prompt’?", a: ["De opdracht of vraag die je aan de AI geeft", "Een snelle AI", "Het antwoord van de AI", "Een abonnement"],
+   u: "Hoe beter je prompt (context, doel, gewenste vorm), hoe beter het antwoord. Oefen dit in ‘Prompt-coach’." },
+ { v: "Wat doet de instelling ‘temperatuur’ bij een taalmodel?", a: ["Bepaalt hoe voorspelbaar of juist creatief/willekeurig de woordkeuze is", "Regelt de koeling van de server", "Bepaalt hoe vriendelijk het model is", "Bepaalt de snelheid"],
+   u: "Lage temperatuur: kiest bijna altijd het meest waarschijnlijke woord (saai maar betrouwbaar). Hoge temperatuur: meer verrassing, maar ook meer onzin." },
+ { v: "Wat is RLHF?", a: ["Bijtrainen met menselijke feedback: mensen beoordelen antwoorden en het model leert daarvan", "Een snelle internetverbinding", "Een Europese AI-wet", "Een type chip"],
+   u: "Reinforcement Learning from Human Feedback. Hierdoor werd een ruwe tekstvoorspeller een behulpzame assistent die vragen beantwoordt in plaats van alleen tekst aan te vullen." },
+ { v: "Waarom weet een chatbot soms niets van recent nieuws?", a: ["Zijn kennis stopt bij de datum waarop de trainingsdata is verzameld, tenzij hij kan zoeken op internet", "Nieuws is verboden voor AI", "Hij wil het niet zeggen", "Nieuws staat in een andere taal"],
+   u: "Dit heet de ‘knowledge cutoff’. Veel chatbots kunnen tegenwoordig wel het web doorzoeken om actuele informatie op te halen." },
+ { v: "Wat is RAG (Retrieval-Augmented Generation)?", a: ["De AI zoekt eerst relevante documenten op en baseert het antwoord daarop", "Een methode om AI sneller te laten typen", "Een manier om AI te hacken", "Een virus voor taalmodellen"],
+   u: "Bedrijven gebruiken dit om een chatbot vragen te laten beantwoorden over hun eigen handleidingen of beleid. Het vermindert hallucinaties, maar sluit ze niet uit." },
+ { v: "Wat is een ‘AI-agent’?", a: ["AI die zelfstandig meerdere stappen uitvoert en hulpmiddelen gebruikt om een doel te bereiken", "Een geheim agent die AI gebruikt", "Een verkoper van AI-software", "Een virusscanner"],
+   u: "Een agent kan bijvoorbeeld zoeken op internet, code schrijven en uitvoeren, bestanden aanpassen of formulieren invullen. Krachtig, maar je moet goed opletten welke rechten je hem geeft." },
+ { v: "Welke van deze is GEEN AI-chatbot of taalmodel?", a: ["Excel", "Claude (Anthropic)", "Gemini (Google)", "ChatGPT (OpenAI)"],
+   u: "Excel is een spreadsheetprogramma (al zit er tegenwoordig wel een AI-assistent in). Claude, Gemini en ChatGPT zijn AI-assistenten van verschillende bedrijven." },
+ { v: "Wat betekent ‘multimodaal’?", a: ["Het model kan meerdere soorten invoer aan: tekst, beeld, geluid", "Het werkt op meerdere apparaten", "Het spreekt meerdere talen", "Het heeft meerdere abonnementen"],
+   u: "Je kunt een foto van een kapotte kraan of een ingewikkelde brief laten zien en er vragen over stellen." },
+ { v: "Wat is het kernidee van de ‘Transformer’-architectuur?", a: ["‘Attention’: het model bepaalt welke woorden in de tekst belangrijk zijn voor elkaar", "Het model verandert zichzelf in een robot", "Het vertaalt alles eerst naar het Engels", "Het gebruikt geen wiskunde"],
+   u: "In ‘De bank was te zacht om op te zitten’ helpt attention het model om te zien dat ‘bank’ hier een meubel is en geen geldinstelling." },
+ { v: "Wat betekent ‘open weights’ bij een model zoals Llama of Mistral?", a: ["De gewichten zijn te downloaden, zodat je het model zelf kunt draaien", "Het model is gratis te gebruiken via een website", "Het model weegt weinig", "Iedereen kan de makers mailen"],
+   u: "Je kunt zo'n model op je eigen computer of server laten draaien, zodat je data niet naar een ander bedrijf gaat. Mistral is een Frans bedrijf, Llama komt van Meta." },
+ { v: "Wat is een ‘systeemprompt’?", a: ["Verborgen instructies die de maker vooraf aan het model geeft over hoe het zich moet gedragen", "De eerste vraag van de gebruiker", "Een foutmelding van het systeem", "Het opstartscherm"],
+   u: "Bijvoorbeeld: ‘Je bent de klantenservice van bedrijf X, antwoord kort en vriendelijk.’ In veel apps kun je ook zelf vaste instructies instellen." },
+],
+beeld: [
+ { v: "Hoe maken beeldgeneratoren zoals Midjourney of DALL·E meestal een plaatje?", a: ["Ze beginnen met ruis en halen stap voor stap ruis weg richting jouw beschrijving", "Ze plakken bestaande foto's van internet aan elkaar", "Een kunstenaar tekent het razendsnel", "Ze zoeken de best passende foto op Google"],
+   u: "Dit heet een diffusiemodel. Het leerde van miljoenen beelden met bijschriften hoe ‘ruis wegpoetsen’ naar een passend beeld leidt." },
+ { v: "Wat is een deepfake?", a: ["Nep beeld, video of stem waarin iemand iets lijkt te zeggen of doen wat nooit gebeurde", "Een heel diep verborgen bestand", "Een fout in de AI", "Een computerspel"],
+   u: "Deepfakes worden gebruikt voor grappen en films, maar ook voor oplichting, chantage en desinformatie." },
+ { v: "Je krijgt een spraakbericht van je ‘zoon’: hij zit in de problemen en heeft snel geld nodig. Beste reactie?", a: ["Hang op en bel hem terug op zijn bekende nummer (of vraag naar een afgesproken codewoord)", "Snel overmaken, het klinkt echt als hem", "Om een foto vragen, dat is genoeg bewijs", "Terugsturen dat je het geld morgen stuurt"],
+   u: "Met een paar seconden audio (bijv. van sociale media) kan een stem al worden nagemaakt. Spreek met je gezin een codewoord af en verifieer altijd via een ander kanaal." },
+ { v: "Waaraan kon je AI-foto's vaak herkennen (al wordt het steeds moeilijker)?", a: ["Rare details: handen, tekst, sieraden, achtergronden, te gladde huid", "Ze zijn altijd zwart-wit", "Ze hebben altijd een watermerk", "Ze zijn altijd wazig"],
+   u: "Nieuwe modellen maken steeds minder van zulke fouten. Kijk daarom ook naar de bron: wie plaatst het, en melden betrouwbare media het ook?" },
+ { v: "Wat doet ‘computer vision’?", a: ["Computers laten begrijpen wat er op beelden en video te zien is", "Een bril met ingebouwde computer", "Een beeldscherm met hoge resolutie", "Webcambeveiliging"],
+   u: "Toepassingen: gezichtsontgrendeling, kentekenherkenning, zelfrijdende auto's, kwaliteitscontrole in fabrieken en het beoordelen van medische scans." },
+ { v: "Wat gebeurt er als je tegen Siri, Google Assistant of Alexa praat?", a: ["AI zet je spraak om in tekst, interpreteert die en spreekt een antwoord uit", "Een medewerker luistert altijd live mee", "Je stem wordt alleen opgenomen, niet verwerkt", "Er gebeurt niets slims, het zijn vaste opnames"],
+   u: "Drie AI-stappen: spraakherkenning (geluid → tekst), taalbegrip (wat bedoel je?) en spraaksynthese (tekst → stem)." },
+ { v: "Wat is ‘voice cloning’?", a: ["Met AI iemands stem nabootsen op basis van opnames", "Je stem harder maken", "Een telefoon met twee simkaarten", "Echo op een telefoonlijn"],
+   u: "Handig voor bijvoorbeeld mensen die hun stem verliezen door ziekte, maar ook misbruikt bij telefoonfraude." },
+ { v: "Kan AI ook muziek en video maken?", a: ["Ja, er zijn modellen die complete liedjes en realistische videoclips maken op basis van een tekst", "Nee, alleen tekst", "Alleen tekeningen", "Alleen klassieke muziek"],
+   u: "Dit roept grote vragen op over auteursrecht van muzikanten en acteurs, en over de echtheid van beelden." },
+ { v: "Wat is een ‘watermerk’ in de context van AI-beelden?", a: ["Een (vaak onzichtbaar) kenmerk dat aangeeft dat een beeld door AI is gemaakt", "Een vlek door waterschade", "Een logo van de fotograaf", "Een filter in Instagram"],
+   u: "Bedrijven en regelgevers werken aan zulke labels en ‘content credentials’, zodat je kunt nagaan waar een beeld vandaan komt. Waterdicht is het nog niet." },
+],
+praktijk: [
+ { v: "Wat kun je beter NIET in een gratis, openbare chatbot plakken?", a: ["Vertrouwelijke klantgegevens, wachtwoorden of je BSN", "Een recept voor appeltaart", "Een openbaar nieuwsbericht", "Een vraag over de geschiedenis van Rome"],
+   u: "Afhankelijk van de instellingen kan wat je invoert worden opgeslagen of gebruikt om modellen te verbeteren. Gebruik op het werk de AI-tools die je werkgever goedkeurt." },
+ { v: "Welke prompt geeft meestal het beste resultaat?", a: ["Een prompt met context, doel, doelgroep en gewenste vorm", "Eén woord, dan raadt de AI de rest", "Een prompt in hoofdletters", "Een prompt met zoveel mogelijk uitroeptekens"],
+   u: "Vergelijk: ‘Schrijf een mail’ versus ‘Schrijf een korte, vriendelijke mail aan mijn team (8 collega's) dat de vergadering van dinsdag naar donderdag 10:00 verschuift. Max. 5 zinnen.’" },
+ { v: "Een chatbot noemt een wetsartikel en een rechtszaak als bron. Wat doe je?", a: ["Zelf de bron opzoeken en controleren of die bestaat en klopt", "Overnemen, AI's citeren altijd correct", "De chatbot vragen of het zeker is – als hij ‘ja’ zegt, klopt het", "Negeren, AI noemt nooit bronnen"],
+   u: "Er zijn advocaten die in de problemen kwamen omdat ze door AI verzonnen rechtszaken bij de rechter indienden. De chatbot zelf om bevestiging vragen is geen controle." },
+ { v: "Wat is een ‘aanbevelingssysteem’?", a: ["AI die voorspelt wat jij leuk vindt op basis van je gedrag (Netflix, Spotify, YouTube, webshops)", "Een systeem dat werkgevers aanbevelingsbrieven stuurt", "Een recensiesite", "Een nieuwsbrief"],
+   u: "Het is een van de meest gebruikte vormen van AI. Het bepaalt voor een groot deel wat je ziet op sociale media." },
+ { v: "Wat verwachten de meeste onderzoekers van AI en banen?", a: ["AI verandert vooral taken binnen banen; sommige banen verdwijnen, nieuwe ontstaan, en wie met AI leert werken heeft voordeel", "Volgend jaar zijn alle banen weg", "AI heeft geen enkele invloed op werk", "Alleen fabrieksbanen veranderen"],
+   u: "Anders dan bij eerdere automatisering raakt AI juist ook kenniswerk: schrijven, analyseren, programmeren, klantcontact. De omvang en snelheid zijn onzeker." },
+ { v: "Wat is ‘few-shot prompting’?", a: ["Een paar voorbeelden van het gewenste resultaat in je prompt meegeven", "Weinig vragen stellen", "Een foto maken met AI", "Snel achter elkaar prompts sturen"],
+   u: "Bijvoorbeeld: ‘Maak producttitels in deze stijl: [voorbeeld 1] [voorbeeld 2] [voorbeeld 3]. Nu voor: …’ Het model pikt de stijl direct op." },
+ { v: "Je wilt een lastige brief aan de gemeente schrijven. Wat is de slimste aanpak met AI?", a: ["Laat AI een concept maken op basis van jouw feiten, lees het kritisch na en pas het aan", "Laat AI de brief schrijven en verstuur hem ongelezen", "AI is hier totaal ongeschikt voor", "Vraag AI om te doen alsof hij de wethouder is en het besluit te nemen"],
+   u: "AI is sterk als schrijfmaatje: structuur, toon en formuleringen. Jij blijft verantwoordelijk voor de inhoud en de feiten." },
+ { v: "Welke taak kun je het minst blind aan AI overlaten?", a: ["Een definitieve medische of juridische beslissing", "Een vergadering samenvatten", "Ideeën bedenken voor een verjaardagsfeest", "Een tekst vertalen voor eigen gebruik"],
+   u: "Bij beslissingen met grote gevolgen hoort altijd een deskundige mens die controleert en de verantwoordelijkheid draagt (‘human in the loop’)." },
+ { v: "Je vraagt een chatbot om ‘de omzet per maand op te tellen’ uit een lange tabel. Wat is verstandig?", a: ["Uitkomst narekenen of de AI laten rekenen met een rekentool/spreadsheet", "Altijd vertrouwen, computers rekenen foutloos", "Nooit AI voor cijfers gebruiken", "Het antwoord afronden op duizenden"],
+   u: "Een taalmodel ‘voorspelt’ tekst en kan zich verrekenen. Veel assistenten kunnen tegenwoordig code uitvoeren om exact te rekenen – vraag daar gerust om." },
+ { v: "Hoe verbeter je een antwoord van een chatbot dat net niet goed is?", a: ["Doorvragen en bijsturen: ‘Korter’, ‘formeler’, ‘voeg een voorbeeld toe’", "Opnieuw beginnen met precies dezelfde vraag", "Het antwoord met de hand overtypen", "Niets, het eerste antwoord is altijd het beste"],
+   u: "Een gesprek met AI is geen zoekopdracht maar samenwerking. De beste resultaten krijg je in een paar rondes." },
+],
+ethiek: [
+ { v: "Wat is ‘bias’ in AI?", a: ["Vooroordelen die het model overneemt uit scheve of onvolledige data", "Een snelle versie van AI", "Een technische storing", "Een Engels woord voor ‘slim’"],
+   u: "Klassiek voorbeeld: een sollicitatie-AI getraind op cv's van vooral mannen ging vrouwelijke kandidaten lager waarderen." },
+ { v: "Welk Nederlands schandaal draaide mede om discriminerende risicoprofilering door de overheid?", a: ["De toeslagenaffaire bij de Belastingdienst", "De Fyra-affaire", "De bouwfraude", "Het paspoortschandaal"],
+   u: "De Belastingdienst gebruikte onder meer een algoritme voor risicoselectie waarin nationaliteit meewoog. De Autoriteit Persoonsgegevens oordeelde dat dit discriminerend en onrechtmatig was." },
+ { v: "Wat is de EU AI Act?", a: ["Een Europese wet die AI-toepassingen indeelt naar risico, met strengere regels naarmate het risico hoger is", "Een Europese AI-chatbot", "Een subsidieregeling voor AI-startups", "Een verbod op alle AI"],
+   u: "De wet is in 2024 in werking getreden en wordt in stappen van kracht. Categorieën: onaanvaardbaar (verboden), hoog risico, beperkt risico (transparantieplicht) en minimaal risico." },
+ { v: "Welke toepassing is in de EU volgens de AI Act verboden?", a: ["‘Social scoring’: mensen een score geven op basis van hun gedrag, met nadelige gevolgen", "Een spamfilter", "Een AI die vakantiefoto's sorteert", "Een vertaal-app"],
+   u: "Ook verboden zijn o.a. manipulatieve AI die kwetsbaarheden uitbuit en emotieherkenning op de werkvloer of op school (met enkele uitzonderingen)." },
+ { v: "Wat bedoelt men met een AI als ‘black box’?", a: ["Je kunt moeilijk zien waarom het model tot een bepaald besluit kwam", "De AI zit in een zwarte kast", "De AI is gestolen", "De AI werkt alleen in het donker"],
+   u: "Vooral lastig bij beslissingen over mensen (lening, uitkering, sollicitatie). Onderzoek naar ‘uitlegbare AI’ probeert hier iets aan te doen." },
+ { v: "Waarom lopen er rechtszaken tegen AI-bedrijven over auteursrecht?", a: ["Modellen zijn getraind op werk van schrijvers, kunstenaars en media, vaak zonder toestemming of vergoeding", "Omdat AI-bedrijven geen logo hebben", "Omdat AI altijd plagiaat pleegt bij elk antwoord", "Omdat AI geen auteursrecht mag hebben op software"],
+   u: "Kranten, schrijvers, fotobureaus en muzieklabels hebben geprocedeerd. De uitkomsten verschillen per land en zaak; de juridische discussie is nog volop gaande." },
+ { v: "Wat is een belangrijk milieu-aspect van AI?", a: ["Datacenters voor AI gebruiken veel stroom en (voor koeling) water", "AI vermindert automatisch CO₂", "AI heeft geen enkele milieu-impact", "AI draait volledig op zonne-energie"],
+   u: "Het stroomverbruik van datacenters groeit hard door AI. Tegelijk wordt AI ook ingezet om energienetten en klimaatmodellen te verbeteren." },
+ { v: "Wat zegt de AVG (privacywet) over besluiten door computers?", a: ["Je hebt in principe het recht om niet onderworpen te worden aan een besluit dat volledig automatisch is genomen en je aanzienlijk raakt", "Computers mogen alles beslissen", "AVG geldt niet voor AI", "Je moet zelf betalen voor een menselijke beoordeling"],
+   u: "Dit staat in artikel 22 van de AVG. Er zijn uitzonderingen, maar je kunt vaak om menselijke tussenkomst en uitleg vragen." },
+ { v: "Wat betekent ‘alignment’ in AI-veiligheid?", a: ["Zorgen dat AI doet wat mensen echt bedoelen en in lijn is met menselijke waarden", "Alle servers op één lijn zetten", "De tekst netjes uitlijnen", "Het model sneller maken"],
+   u: "Hoe krachtiger AI wordt, hoe belangrijker dit is. Bedrijven als Anthropic, OpenAI en Google DeepMind hebben er aparte teams voor." },
+ { v: "Wat bedoelt men met ‘human in the loop’?", a: ["Een mens controleert of beslist mee over wat de AI doet", "Een mens zit vast in een computer", "Een mens herhaalt telkens dezelfde vraag", "Een rondje lopen tijdens je werk"],
+   u: "Bij belangrijke beslissingen, zoals in de zorg of rechtspraak, is dit een basisprincipe van verantwoorde AI." },
+ { v: "Waarom maakt AI desinformatie gevaarlijker?", a: ["Het wordt heel goedkoop en snel om geloofwaardig nepnieuws, nepbeelden en nepaccounts op grote schaal te maken", "AI verspreidt automatisch alle berichten", "Nepnieuws bestond niet vóór AI", "AI maakt alle nieuws onleesbaar"],
+   u: "Tip: wees extra kritisch bij berichten die sterke emoties oproepen, en check of betrouwbare nieuwsbronnen het ook melden." },
+],
+historie: [
+ { v: "Wie stelde in 1950 een test voor om te bepalen of een machine kan ‘denken’?", a: ["Alan Turing", "Albert Einstein", "Bill Gates", "Steve Jobs"],
+   u: "De Turingtest: als een mens via tekst niet kan onderscheiden of hij met een mens of machine praat, ‘slaagt’ de machine. Turing kraakte ook de Enigma-code in de Tweede Wereldoorlog." },
+ { v: "Waar werd de term ‘artificial intelligence’ in 1956 voor het eerst officieel gebruikt?", a: ["Op een zomerconferentie aan Dartmouth College (VS)", "Bij IBM in New York", "Op de universiteit van Delft", "In Silicon Valley bij Apple"],
+   u: "Organisator John McCarthy bedacht de term. De deelnemers dachten dat ze in één zomer flinke stappen konden zetten… het werd wat langer." },
+ { v: "Wat was ELIZA (1966)?", a: ["Een van de eerste chatbots, die een gesprekstherapeut nadeed", "De eerste robot met benen", "De eerste zelfrijdende auto", "Een vroege zoekmachine"],
+   u: "Gemaakt door Joseph Weizenbaum. Hoewel het programma alleen simpele trucjes gebruikte, raakten mensen er emotioneel aan gehecht – dat schrok hem enorm." },
+ { v: "Wat is een ‘AI-winter’?", a: ["Een periode waarin geld en interesse voor AI wegvielen na tegenvallende resultaten", "Een koude periode waarin servers beter werken", "Een AI die het weer voorspelt", "Een winterse promotie van techbedrijven"],
+   u: "Er waren AI-winters in de jaren '70 en eind jaren '80. Te hoge verwachtingen botsten met de beperkte rekenkracht en data van toen." },
+ { v: "Welke computer versloeg in 1997 wereldkampioen schaken Garri Kasparov?", a: ["Deep Blue van IBM", "AlphaGo van Google", "Watson van IBM", "HAL 9000"],
+   u: "Deep Blue rekende 200 miljoen stellingen per seconde door. Het was vooral rekenkracht en slimme regels, geen ‘lerende’ AI zoals nu." },
+ { v: "Wat gebeurde er in 2012 met ‘AlexNet’?", a: ["Een deep-learning-netwerk won een beeldherkenningswedstrijd met grote voorsprong – het begin van de deep-learning-golf", "Het eerste AI-bedrijf ging naar de beurs", "De eerste smartphone met AI kwam uit", "Er werd een AI-wet aangenomen"],
+   u: "AlexNet won de ImageNet-wedstrijd en liet zien dat neurale netwerken + veel data + GPU's een enorme sprong opleverden." },
+ { v: "Welk programma versloeg in 2016 topspeler Lee Sedol in het bordspel Go?", a: ["AlphaGo van Google DeepMind", "Deep Blue van IBM", "Siri van Apple", "ChatGPT van OpenAI"],
+   u: "Go heeft meer mogelijke stellingen dan er atomen in het heelal zijn. Zet 37 in partij 2 werd beroemd: zo creatief dat experts eerst dachten dat het een fout was." },
+ { v: "Welk onderzoeksartikel uit 2017 legde de basis voor ChatGPT en vergelijkbare modellen?", a: ["‘Attention Is All You Need’ (de Transformer)", "‘Computing Machinery and Intelligence’", "‘Deep Blue Wins’", "‘The Chatbot Manifesto’"],
+   u: "Geschreven door onderzoekers van Google. De ‘T’ in GPT staat voor deze Transformer." },
+ { v: "Wanneer werd ChatGPT voor het publiek gelanceerd?", a: ["November 2022", "Januari 2015", "Maart 2019", "December 2024"],
+   u: "Binnen enkele maanden had het naar schatting zo'n 100 miljoen gebruikers – destijds een van de snelst groeiende apps ooit." },
+ { v: "Wat kan AlphaFold van Google DeepMind?", a: ["De 3D-vorm van eiwitten voorspellen", "Origami vouwen met een robot", "Kleding vouwen", "Landkaarten netjes opvouwen"],
+   u: "Dit was een decennia-oud probleem in de biologie en helpt bij medicijnonderzoek. Demis Hassabis en John Jumper kregen er in 2024 (samen met David Baker) de Nobelprijs voor Scheikunde voor." },
+ { v: "Wie kregen in 2024 de Nobelprijs voor Natuurkunde voor fundamenteel werk aan neurale netwerken?", a: ["John Hopfield en Geoffrey Hinton", "Elon Musk en Sam Altman", "Alan Turing en John McCarthy", "Bill Gates en Paul Allen"],
+   u: "Hinton wordt wel de ‘peetvader van deep learning’ genoemd. Hij waarschuwt inmiddels ook publiekelijk voor de risico's van AI." },
+ { v: "Wat was de ‘perceptron’ (1958, Frank Rosenblatt)?", a: ["Een van de eerste kunstmatige neuronen dat kon leren van voorbeelden", "De eerste rekenmachine", "Een robotstofzuiger", "Een type beeldscherm"],
+   u: "Het simpele idee – invoer × gewichten optellen en een drempel – vormt nog steeds de basis van moderne neurale netwerken. Probeer het in ‘Bouw een spamfilter’!" },
+],
+};
+
+// Waar of fabel – w: true = waar
+const STELLINGEN = [
+ { s: "Een chatbot zoekt elk antwoord live op internet op.", w: false, u: "Veel antwoorden komen uit wat het model tijdens training leerde. Sommige assistenten kúnnen het web doorzoeken, maar dat is een extra functie." },
+ { s: "Een chatbot kan heel stellig iets zeggen wat niet klopt.", w: true, u: "Dit heet hallucineren. Stelligheid zegt niets over juistheid." },
+ { s: "AI kan vooroordelen hebben.", w: true, u: "Als de trainingsdata scheef is, neemt het model dat over – bijvoorbeeld bij sollicitaties of kredietbeoordeling." },
+ { s: "Hoe meer data, hoe beter het model – altijd.", w: false, u: "Kwaliteit telt minstens zo zwaar als kwantiteit. Veel slechte of eenzijdige data levert een slecht model." },
+ { s: "Met een korte opname van je stem kan AI je stem nabootsen.", w: true, u: "Soms is een paar seconden tot een minuut al genoeg. Spreek daarom een codewoord af met familie." },
+ { s: "AI-detectors kunnen betrouwbaar zien of een tekst door AI is geschreven.", w: false, u: "Zulke detectors maken veel fouten en beschuldigen soms ten onrechte mensen (vooral niet-moedertaalsprekers). Ga er niet blind op af." },
+ { s: "AI wordt in ziekenhuizen gebruikt om scans te helpen beoordelen.", w: true, u: "Bijvoorbeeld bij röntgenfoto's, borstkankerscreening en huidafwijkingen – als hulpmiddel naast de arts." },
+ { s: "Een taalmodel past zijn ‘hersenen’ (gewichten) direct aan tijdens jouw gesprek.", w: false, u: "Tijdens een gesprek veranderen de gewichten niet; het model gebruikt alleen wat in het contextvenster staat. Sommige apps hebben wel een ‘geheugen’-functie, en bedrijven kunnen gesprekken later voor training gebruiken (afhankelijk van je instellingen)." },
+ { s: "AI is uitgevonden in 2022, met ChatGPT.", w: false, u: "AI-onderzoek bestaat sinds de jaren '50. ChatGPT maakte het alleen voor het grote publiek zichtbaar." },
+ { s: "Taalmodellen hebben soms moeite met letters tellen in een woord.", w: true, u: "Ze zien tekst als tokens (stukjes woorden), niet als losse letters." },
+ { s: "Een gewone rekenmachine is ook AI.", w: false, u: "Een rekenmachine volgt vaste regels en leert niets van data." },
+ { s: "Er rijden al taxi's zonder chauffeur rond in sommige steden.", w: true, u: "Bijvoorbeeld robotaxi's van Waymo in meerdere Amerikaanse steden en van verschillende bedrijven in China." },
+ { s: "Als een AI iets weet, kan hij altijd uitleggen hoe hij tot zijn antwoord kwam.", w: false, u: "De uitleg die een model geeft is zelf ook gegenereerde tekst en hoeft niet overeen te komen met wat er werkelijk ‘binnenin’ gebeurde." },
+ { s: "De EU heeft een wet speciaal voor AI.", w: true, u: "De AI Act (2024), die AI indeelt naar risico. Sommige toepassingen, zoals social scoring, zijn verboden." },
+ { s: "AI-beeldgeneratoren plakken gewoon stukjes bestaande foto's aan elkaar.", w: false, u: "Ze genereren nieuwe pixels vanuit ruis op basis van geleerde patronen. Wel kunnen ze soms trainingsbeelden sterk nabootsen, wat juridische vragen oproept." },
+ { s: "Je kunt een chatbot vragen om een andere toon, lengte of vorm te gebruiken.", w: true, u: "‘Korter’, ‘in jip-en-janneketaal’, ‘als tabel’, ‘formeler’ – gewoon vragen!" },
+ { s: "Een AI-model trainen kost weinig energie.", w: false, u: "Het trainen van de grootste modellen vraagt duizenden chips gedurende weken tot maanden en veel stroom." },
+ { s: "Spamfilters gebruiken al jaren machine learning.", w: true, u: "Een van de oudste alledaagse toepassingen. Bouw er zelf een in het spel ‘Bouw een spamfilter’!" },
+ { s: "Als je beleefd bent tegen een chatbot, krijgt hij gevoelens voor je.", w: false, u: "Er is geen bewijs dat chatbots gevoelens hebben. Wel kan een duidelijke, vriendelijke vraag soms tot een beter antwoord leiden – simpelweg omdat het een betere prompt is." },
+ { s: "AI kan helpen nieuwe medicijnen te ontdekken.", w: true, u: "Bijvoorbeeld via eiwitstructuren (AlphaFold) en het doorzoeken van miljoenen mogelijke moleculen." },
+];
+
+// Begrippen: voor koppelspel én woordenboek
+const BEGRIPPEN = [
+ ["Agent", "AI die zelfstandig meerdere stappen uitvoert en tools gebruikt om een doel te bereiken."],
+ ["AGI", "Algemene kunstmatige intelligentie die vrijwel elke denktaak zo goed kan als een mens. Nog een (omstreden) doel."],
+ ["AI Act", "Europese wet die AI-toepassingen indeelt naar risico."],
+ ["Algoritme", "Een stappenplan of reeks instructies om een probleem op te lossen."],
+ ["Alignment", "Zorgen dat AI doet wat mensen bedoelen en in lijn is met menselijke waarden."],
+ ["Bias", "Vooroordeel dat een model overneemt uit scheve data."],
+ ["Black box", "Een model waarvan je moeilijk kunt zien hoe het tot een besluit komt."],
+ ["Chatbot", "Programma waarmee je in gewone taal een gesprek kunt voeren."],
+ ["Computer vision", "AI die beelden en video interpreteert."],
+ ["Contextvenster", "De hoeveelheid tekst die een model in één keer kan meenemen."],
+ ["Dataset", "Een verzameling voorbeelden waarmee een model getraind of getest wordt."],
+ ["Deep learning", "Machine learning met neurale netwerken met veel lagen."],
+ ["Deepfake", "Nep beeld, video of stem die echt lijkt."],
+ ["Diffusiemodel", "Beeldgenerator die stap voor stap ruis wegpoetst tot een afbeelding."],
+ ["Fine-tuning", "Een bestaand model bijtrainen voor een specifieke taak of stijl."],
+ ["Generatieve AI", "AI die nieuwe tekst, beelden, muziek, video of code maakt."],
+ ["Gewichten", "De getallen in een neuraal netwerk die tijdens training worden bijgesteld."],
+ ["GPU", "Chip die heel veel berekeningen tegelijk doet; de motor van AI-training."],
+ ["Hallucinatie", "Een verzonnen antwoord dat overtuigend klinkt."],
+ ["Inferentie", "Een getraind model gebruiken om een antwoord te geven."],
+ ["LLM", "Large Language Model: groot taalmodel getraind op enorme hoeveelheden tekst."],
+ ["Machine learning", "Computers laten leren van voorbeelden in plaats van vaste regels."],
+ ["Multimodaal", "Een model dat meerdere soorten invoer aankan: tekst, beeld, geluid."],
+ ["Neuraal netwerk", "Rekenmodel van verbonden ‘neuronen’, losjes geïnspireerd op de hersenen."],
+ ["Open weights", "Model waarvan de gewichten te downloaden zijn, zodat je het zelf kunt draaien."],
+ ["Overfitting", "Het model leert de voorbeelden uit het hoofd en werkt slecht op nieuwe gevallen."],
+ ["Parameter", "Instelbaar getal in een model; grote modellen hebben er miljarden."],
+ ["Prompt", "De opdracht of vraag die je aan een AI geeft."],
+ ["RAG", "De AI zoekt eerst relevante documenten op en baseert het antwoord daarop."],
+ ["Reinforcement learning", "Leren door uitproberen met beloning en straf."],
+ ["RLHF", "Bijtrainen met menselijke beoordelingen zodat het model behulpzamer en veiliger wordt."],
+ ["Supervised learning", "Leren van voorbeelden waarbij het juiste antwoord gegeven is."],
+ ["Systeemprompt", "Vooraf ingestelde instructies over hoe het model zich moet gedragen."],
+ ["Temperatuur", "Instelling voor hoe voorspelbaar of creatief de woordkeuze is."],
+ ["Token", "Stukje tekst (woord of deel van een woord) waarmee een taalmodel rekent."],
+ ["Training", "Het proces waarin een model van data leert door gewichten bij te stellen."],
+ ["Transformer", "Type neuraal netwerk (2017) met ‘attention’; de basis van moderne taalmodellen."],
+ ["Turingtest", "Test (1950) of een mens via tekst een machine van een mens kan onderscheiden."],
+ ["Unsupervised learning", "Zelf patronen ontdekken in data zonder labels."],
+];
+
+const MIJLPALEN = [
+ { j: 1950, t: "Alan Turing stelt de ‘imitation game’ (Turingtest) voor" },
+ { j: 1956, t: "De term ‘artificial intelligence’ ontstaat op de Dartmouth-conferentie" },
+ { j: 1958, t: "Frank Rosenblatt bouwt de perceptron, een lerend kunstmatig neuron" },
+ { j: 1966, t: "ELIZA, een van de eerste chatbots" },
+ { j: 1974, t: "Begin van de eerste ‘AI-winter’" },
+ { j: 1997, t: "Deep Blue verslaat schaakkampioen Garri Kasparov" },
+ { j: 2011, t: "IBM Watson wint de Amerikaanse quiz Jeopardy! en Siri verschijnt op de iPhone" },
+ { j: 2012, t: "AlexNet: doorbraak van deep learning in beeldherkenning" },
+ { j: 2016, t: "AlphaGo verslaat Go-topspeler Lee Sedol" },
+ { j: 2017, t: "Het Transformer-artikel ‘Attention Is All You Need’" },
+ { j: 2020, t: "GPT-3 verschijnt en AlphaFold kraakt het eiwitvouwingsprobleem" },
+ { j: 2022, t: "ChatGPT wordt gelanceerd" },
+ { j: 2024, t: "EU AI Act treedt in werking; Nobelprijzen voor AI-onderzoek" },
+];
+
+const PROMPTS = [
+ { v: "Je wilt een vakantie plannen. Welke prompt werkt het best?", a: [
+   "Plan een 5-daagse autovakantie in de Ardennen voor 2 volwassenen van 47 en 45 die van wandelen en goed eten houden. Budget ca. €1200. Geef per dag een korte planning en twee restauranttips.",
+   "Vakantie tips",
+   "Waar moet ik heen op vakantie?",
+   "Geef mij de beste vakantie ooit!!!"],
+   u: "Wie, wat, waar, budget, voorkeuren en gewenste vorm. Hoe meer relevante context, hoe persoonlijker het antwoord." },
+ { v: "Je wilt een lang rapport snel begrijpen. Welke prompt?", a: [
+   "Vat dit rapport samen in 5 bullets voor een manager zonder technische kennis. Noem daarna de 3 belangrijkste risico's. [rapport geplakt]",
+   "Wat staat hierin?",
+   "Lees dit.",
+   "Samenvatting maken van iets"],
+   u: "Geef aan voor wie de samenvatting is, hoe lang, en wat je specifiek wilt weten." },
+ { v: "Je wilt een moeilijk onderwerp (bijv. inflatie) echt snappen.", a: [
+   "Leg inflatie uit alsof ik een slimme leek ben. Gebruik een voorbeeld uit de supermarkt. Stel me daarna 3 vragen om te checken of ik het snap.",
+   "Inflatie?",
+   "Geef de Wikipedia-tekst over inflatie.",
+   "Leg inflatie uit in zoveel mogelijk vakjargon."],
+   u: "Vraag om een niveau, een herkenbaar voorbeeld en laat de AI je overhoren. Zo wordt AI een persoonlijke leraar." },
+ { v: "Je wilt een zakelijke e-mail laten schrijven om een factuur te betwisten.", a: [
+   "Schrijf een beleefde maar duidelijke e-mail aan leverancier X. Factuur 2024-118 rekent €450 voor werk dat niet is uitgevoerd (zie offerte van 3 maart). Vraag om een gecorrigeerde factuur binnen 14 dagen.",
+   "Schrijf een boze mail.",
+   "Mail over factuur.",
+   "Help."],
+   u: "Toon (beleefd maar duidelijk), de feiten en het gewenste resultaat. De AI kan geen feiten weten die jij niet geeft." },
+ { v: "Welke aanpak helpt om hallucinaties te verminderen?", a: [
+   "Geef de AI de brontekst en vraag: ‘Beantwoord alleen op basis van deze tekst. Staat het er niet in, zeg dat dan.’",
+   "Vraag: ‘Weet je het zeker?’ en geloof het als hij ja zegt.",
+   "Zet ‘GEEN FOUTEN MAKEN’ in hoofdletters in je prompt.",
+   "Stel dezelfde vraag drie keer en kies het langste antwoord."],
+   u: "Het model de bron geven (en toestemming om ‘ik weet het niet’ te zeggen) is een van de beste manieren. Controleer belangrijke feiten altijd zelf." },
+ { v: "Je wilt hulp bij een sollicitatiegesprek.", a: [
+   "Je bent een kritische recruiter voor de functie [functie]. Hier is de vacature en mijn cv. Stel me één voor één de 5 lastigste vragen en geef na elk antwoord feedback.",
+   "Hoe solliciteer ik?",
+   "Geef sollicitatietips.",
+   "Doe alsof je mij bent en solliciteer voor me."],
+   u: "Een rol geven + jouw materiaal + een interactieve opdracht maakt van AI een oefenpartner." },
+ { v: "Je wilt een Excel-formule maar weet niet hoe.", a: [
+   "In kolom A staan datums, in kolom B bedragen. Ik wil in cel D2 het totaal van alle bedragen uit maart 2025. Geef de formule en leg kort uit hoe hij werkt.",
+   "Excel formule",
+   "Hoe werkt Excel?",
+   "Maak mijn spreadsheet."],
+   u: "Beschrijf je data (welke kolommen), wat je wilt bereiken en waar. Vraag om uitleg, zodat je het ook leert." },
+ { v: "Je wilt dat de AI je schrijfstijl overneemt voor LinkedIn-berichten.", a: [
+   "Hier zijn 3 berichten die ik eerder schreef: [voorbeelden]. Schrijf in dezelfde stijl een bericht over ons nieuwe project. Max. 120 woorden.",
+   "Schrijf een LinkedIn-bericht.",
+   "Schrijf zoals ik.",
+   "Maak een viraal bericht."],
+   u: "Dit is ‘few-shot prompting’: met een paar voorbeelden pikt het model jouw toon en stijl op." },
+];
+
+// Volgende woord – kansen zijn illustratief (verzonnen voorbeeldcijfers)
+const VOLGENDE = [
+ { z: "’s Ochtends drink ik graag een kop", o: [["koffie", 58], ["thee", 34], ["soep", 6], ["beton", 0.1]] },
+ { z: "De hond rende blaffend achter de", o: [["kat", 45], ["bal", 30], ["postbode", 20], ["wolken", 0.5]] },
+ { z: "Het regent pijpenstelen, dus ik neem een", o: [["paraplu", 70], ["jas", 20], ["taxi", 8], ["ijsje", 0.5]] },
+ { z: "Na een lange werkdag plof ik op de", o: [["bank", 75], ["bed", 15], ["grond", 6], ["vergadering", 0.2]] },
+ { z: "De hoofdstad van Nederland is", o: [["Amsterdam", 88], ["Den Haag", 9], ["Rotterdam", 2], ["Parijs", 0.3]] },
+ { z: "Op mijn verjaardag kreeg ik een mooi", o: [["cadeau", 60], ["boek", 22], ["horloge", 14], ["parkeerbonnetje", 0.4]] },
+ { z: "Het Nederlands elftal speelt in het", o: [["oranje", 70], ["stadion", 20], ["buitenland", 8], ["zwembad", 0.3]] },
+ { z: "Voor de lekkerste pannenkoeken heb je melk, eieren en", o: [["bloem", 72], ["boter", 15], ["suiker", 10], ["zand", 0.1]] },
+];
+
+const RANGEN = [
+ [0, "🌱", "Nieuwsgierige beginner"], [150, "🔍", "AI-verkenner"], [400, "🛠️", "Slimme gebruiker"],
+ [800, "✍️", "Prompt-meester"], [1300, "🧠", "AI-kenner"], [2000, "🚀", "AI-expert"], [3000, "🏆", "AI-goeroe"],
+];
+
+// =====================================================================
+//  HULPJES & OPSLAG
+// =====================================================================
+const $app = document.getElementById("app");
+const rnd = (n) => Math.floor(Math.random() * n);
+const schud = (l) => { const a = l.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(i + 1); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function h(tag, eig = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(eig || {})) {
+    if (k === "class") e.className = v;
+    else if (k === "html") e.innerHTML = v;
+    else if (k.startsWith("on")) e.addEventListener(k.slice(2), v);
+    else if (v === true) e.setAttribute(k, "");
+    else if (v !== false && v != null) e.setAttribute(k, v);
+  }
+  for (const k of kids.flat()) if (k != null && k !== false) e.append(k instanceof Node ? k : document.createTextNode(k));
+  return e;
+}
+
+// Alle vragen krijgen een vaste id, zodat we bijhouden wat je al beheerst
+const ALLE_VRAGEN = [];
+for (const [thema, lijst] of Object.entries(VRAGEN)) lijst.forEach((q, i) => ALLE_VRAGEN.push({ ...q, thema, id: thema + "-" + i }));
+
+const SLEUTEL = "ai-academie-v1";
+const STANDAARD = { xp: 0, beheerst: {}, records: {}, naam: "", diploma: null, groot: false };
+let S = (() => { try { return { ...STANDAARD, ...JSON.parse(localStorage.getItem(SLEUTEL) || "{}") }; } catch (e) { return { ...STANDAARD }; } })();
+function bewaar() { try { localStorage.setItem(SLEUTEL, JSON.stringify(S)); } catch (e) {} document.getElementById("xp").textContent = S.xp; }
+
+function rang(xp = S.xp) {
+  let r = RANGEN[0], volgende = null;
+  for (let i = 0; i < RANGEN.length; i++) if (xp >= RANGEN[i][0]) { r = RANGEN[i]; volgende = RANGEN[i + 1] || null; }
+  return { ico: r[1], naam: r[2], van: r[0], tot: volgende ? volgende[0] : null, volgendeNaam: volgende ? volgende[2] : null };
+}
+function toast(t) {
+  const e = h("div", { class: "toast" }, t); document.body.append(e); setTimeout(() => e.remove(), 2200);
+}
+function geefXP(n) {
+  const oud = rang().naam; S.xp += n; bewaar();
+  const nieuw = rang();
+  if (nieuw.naam !== oud) { toast(`${nieuw.ico} Nieuwe rang: ${nieuw.naam}!`); confetti(); }
+}
+function confetti(n = 70) {
+  const c = document.getElementById("confetti"); const kl = ["#2f5bea", "#7b4ce0", "#ffd34d", "#1f9d55", "#ff6b6b"];
+  for (let i = 0; i < n; i++) {
+    const s = h("div", { class: "snipper" });
+    s.style.left = Math.random() * 100 + "vw"; s.style.background = kl[rnd(kl.length)];
+    s.style.animationDuration = 1.8 + Math.random() * 1.8 + "s"; s.style.animationDelay = Math.random() * .4 + "s";
+    c.append(s); setTimeout(() => s.remove(), 4200);
+  }
+}
+let ctx = null;
+function piep(goed) {
+  try {
+    ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+    const tonen = goed ? [660, 880] : [220, 180];
+    tonen.forEach((f, i) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.type = "sine";
+      g.gain.setValueAtTime(.12, ctx.currentTime + i * .1); g.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + i * .1 + .25);
+      o.connect(g).connect(ctx.destination); o.start(ctx.currentTime + i * .1); o.stop(ctx.currentTime + i * .1 + .3); });
+  } catch (e) {}
+}
+function scherm(titel) {
+  $app.innerHTML = ""; window.scrollTo(0, 0);
+  document.getElementById("titel").textContent = titel || "🤖 AI-Academie";
+  document.getElementById("home").hidden = !titel;
+}
+function record(spel, score) { if (!(S.records[spel] >= score)) { S.records[spel] = score; bewaar(); return true; } return false; }
+function aantalBeheerst(thema) { return ALLE_VRAGEN.filter((q) => (!thema || q.thema === thema) && S.beheerst[q.id]).length; }
+
+// =====================================================================
+//  STARTSCHERM
+// =====================================================================
+const SPELLEN = [
+ { id: "quiz", ico: "🎓", naam: "Kennisquiz", tekst: "10 vragen per thema, met uitleg bij elk antwoord.", start: () => themaKeuze() },
+ { id: "fabel", ico: "🕵️", naam: "Waar of fabel?", tekst: "Prik door de mythes over AI heen.", start: () => waarOfFabel() },
+ { id: "koppel", ico: "🔗", naam: "Begrippen koppelen", tekst: "Koppel het AI-jargon aan de juiste betekenis.", start: () => koppelSpel() },
+ { id: "woord", ico: "🔮", naam: "Denk als ChatGPT", tekst: "Raad het volgende woord en ontdek hoe een taalmodel ‘denkt’.", start: () => volgendWoord() },
+ { id: "neuron", ico: "🧪", naam: "Bouw een spamfilter", tekst: "Draai aan de knoppen van een echt kunstmatig neuron en train het.", start: () => neuronSpel() },
+ { id: "prompt", ico: "✍️", naam: "Prompt-coach", tekst: "Kies steeds de beste opdracht voor de AI.", start: () => promptCoach() },
+ { id: "tijdlijn", ico: "📜", naam: "Tijdlijn", tekst: "Zet de mijlpalen van AI in de juiste volgorde.", start: () => tijdlijn() },
+ { id: "examen", ico: "🏅", naam: "AI-diploma", tekst: "20 vragen door elkaar. 16 goed = diploma!", start: () => examen() },
+ { id: "boek", ico: "📖", naam: "AI-woordenboek", tekst: "Alle begrippen op een rij, met zoekfunctie.", start: () => woordenboek() },
+];
+
+function start() {
+  scherm();
+  const r = rang(), totaal = ALLE_VRAGEN.length, kennis = aantalBeheerst();
+  const pct = r.tot ? Math.round(((S.xp - r.van) / (r.tot - r.van)) * 100) : 100;
+  $app.append(
+    h("div", { class: "kaart held" },
+      h("h1", {}, "Welkom bij de AI-Academie 👋"),
+      h("p", {}, "Speel je in korte potjes van een paar minuten van ‘ik hoor er weleens wat over’ naar ‘ik snap hoe het werkt en kan het slim gebruiken’."),
+      h("p", { style: "margin-top:.8em" }, h("b", {}, `${r.ico} ${r.naam}`), " · ", `${S.xp} XP`),
+      h("div", { class: "balk" }, h("div", { style: `width:${pct}%` })),
+      h("p", { class: "zacht klein" }, r.tot ? `Nog ${r.tot - S.xp} XP tot ${r.volgendeNaam}` : "Hoogste rang bereikt! 🎉"),
+      h("p", { style: "margin-top:.8em" }, h("b", {}, `📚 Kennismeter: ${kennis} van ${totaal} quizvragen beheerst`)),
+      h("div", { class: "balk" }, h("div", { style: `width:${Math.round(kennis / totaal * 100)}%` })),
+      S.diploma ? h("p", { class: "klein", style: "margin-top:.6em" }, `🏅 Diploma behaald met ${S.diploma.score}/20`) : null,
+    ),
+    h("div", { class: "raster" }, SPELLEN.map((s) =>
+      h("button", { class: "tegel", onclick: s.start },
+        h("div", { class: "ico" }, s.ico), h("b", {}, s.naam), h("span", {}, s.tekst),
+        S.records[s.id] != null ? h("div", { class: "klein", style: "margin-top:.4em;color:var(--blauw-d)" }, `🏆 Record: ${S.records[s.id]}`) : null))),
+    h("p", { class: "zacht klein", style: "text-align:center;margin-top:1.5em" }, "Tip: begin met de Kennisquiz ‘De basis’ en speel daarna ‘Denk als ChatGPT’ en ‘Bouw een spamfilter’."),
+    h("p", { style: "text-align:center" }, h("button", { class: "knop wit klein", onclick: () => {
+      if (confirm("Weet je zeker dat je al je voortgang wilt wissen?")) { S = { ...STANDAARD, groot: S.groot }; bewaar(); start(); }
+    } }, "Voortgang wissen")),
+  );
+}
+
+// =====================================================================
+//  ALGEMENE VRAGEN-MOTOR (quiz, waar/fabel, prompt-coach, examen)
+// =====================================================================
+// items: [{ v, a:[goed, ...fout], u, id?, label? }]
+function speelVragen({ titel, spel, items, xpPerGoed = 10, naEinde }) {
+  let i = 0, score = 0;
+  const volgende = () => {
+    if (i >= items.length) return eindScherm();
+    const q = items[i];
+    const opties = q.vast ? q.a : schud(q.a);
+    const juist = q.goed || q.a[0];
+    scherm(titel);
+    const uitleg = h("div");
+    const verder = h("button", { class: "knop", hidden: true, onclick: () => { i++; volgende(); } }, i + 1 < items.length ? "Volgende →" : "Bekijk resultaat");
+    const knoppen = opties.map((o) => h("button", { class: "optie", onclick: () => kies(o) }, o));
+    function kies(o) {
+      const goed = o === juist;
+      knoppen.forEach((k) => { k.disabled = true; if (k.textContent === juist) k.classList.add("goed"); else if (k.textContent === o) k.classList.add("fout"); });
+      piep(goed);
+      if (goed) { score++; geefXP(xpPerGoed); if (q.id) { S.beheerst[q.id] = true; bewaar(); } }
+      uitleg.replaceWith(h("div", { class: "uitleg " + (goed ? "goed" : "fout") },
+        h("b", {}, goed ? "✅ Goed zo! " : "❌ Helaas. "), !goed && !q.vast ? h("span", {}, `Het juiste antwoord: ${juist}. `) : null, h("br"), q.u));
+      verder.hidden = false; verder.focus();
+    }
+    $app.append(h("div", { class: "kaart" },
+      h("div", { class: "voortgang" }, h("span", {}, `Vraag ${i + 1} van ${items.length}`), h("span", {}, `✅ ${score}`)),
+      h("div", { class: "balk" }, h("div", { style: `width:${(i / items.length) * 100}%` })),
+      q.label ? h("p", { style: "margin-top:.8em" }, h("span", { class: "label" }, q.label)) : null,
+      h("h2", { style: "margin-top:.6em" }, q.v),
+      h("div", { class: "opties" }, knoppen), uitleg, h("div", { class: "knoppen" }, verder)));
+  };
+  const eindScherm = () => {
+    scherm(titel);
+    const nieuwRecord = record(spel, score);
+    const pct = score / items.length;
+    if (pct >= .8) confetti();
+    const extra = naEinde ? naEinde(score) : null;
+    $app.append(h("div", { class: "kaart", style: "text-align:center" },
+      h("div", { style: "font-size:3em" }, pct >= .8 ? "🏆" : pct >= .5 ? "👍" : "📚"),
+      h("h1", {}, `${score} van ${items.length} goed`),
+      h("p", {}, pct >= .8 ? "Uitstekend! Je weet hier echt veel van." : pct >= .5 ? "Prima! Nog een rondje en je zit erboven." : "Goed bezig – elke fout is een les. Lees de uitleg en probeer het nog eens."),
+      nieuwRecord && score > 0 ? h("p", {}, "🎉 Nieuw record!") : null,
+      h("p", { class: "zacht" }, `${rang().ico} ${rang().naam} · ${S.xp} XP`),
+      extra,
+      h("div", { class: "knoppen", style: "justify-content:center" },
+        h("button", { class: "knop", onclick: () => speelVragen({ titel, spel, items: schud(items), xpPerGoed, naEinde }) }, "Nog een keer"),
+        h("button", { class: "knop wit", onclick: start }, "Naar het menu"))));
+  };
+  volgende();
+}
+
+function themaKeuze() {
+  scherm("🎓 Kennisquiz");
+  $app.append(h("div", { class: "kaart" },
+    h("h2", {}, "Kies een thema"),
+    h("p", { class: "zacht" }, "Vragen die je goed beantwoordt, tellen mee voor je kennismeter. De onbeheerste vragen komen eerst."),
+    Object.entries(THEMAS).map(([k, t]) => {
+      const tot = VRAGEN[k].length, b = aantalBeheerst(k);
+      return h("div", { class: "thema-rij" },
+        h("div", { style: "font-size:1.6em" }, t.ico),
+        h("div", { class: "naam" }, h("b", {}, t.naam), h("div", { class: "zacht klein" }, `${b}/${tot} beheerst${b === tot ? " ✅" : ""}`)),
+        h("div", { class: "balk" }, h("div", { style: `width:${b / tot * 100}%` })),
+        h("button", { class: "knop", onclick: () => startQuiz(k) }, "Start"));
+    }),
+    h("div", { class: "thema-rij" }, h("div", { style: "font-size:1.6em" }, "🎲"),
+      h("div", { class: "naam" }, h("b", {}, "Alles door elkaar")), h("button", { class: "knop", onclick: () => startQuiz(null) }, "Start"))));
+}
+function kiesVragen(thema, n) {
+  const pool = ALLE_VRAGEN.filter((q) => !thema || q.thema === thema);
+  const nieuw = schud(pool.filter((q) => !S.beheerst[q.id])), oud = schud(pool.filter((q) => S.beheerst[q.id]));
+  return nieuw.concat(oud).slice(0, n).map((q) => ({ ...q, label: THEMAS[q.thema].ico + " " + THEMAS[q.thema].naam }));
+}
+function startQuiz(thema) {
+  speelVragen({ titel: "🎓 " + (thema ? THEMAS[thema].naam : "Alles door elkaar"), spel: "quiz", items: kiesVragen(thema, 10) });
+}
+
+function waarOfFabel() {
+  // Knoppen staan altijd in de volgorde Waar – Fabel
+  const items = schud(STELLINGEN).slice(0, 10).map((st) => ({
+    v: "“" + st.s + "”", a: ["✅ Waar", "❌ Fabel"], goed: st.w ? "✅ Waar" : "❌ Fabel", u: st.u, vast: true }));
+  speelVragen({ titel: "🕵️ Waar of fabel?", spel: "fabel", items, xpPerGoed: 8 });
+}
+
+function promptCoach() {
+  speelVragen({ titel: "✍️ Prompt-coach", spel: "prompt", items: schud(PROMPTS).slice(0, 6), xpPerGoed: 15 });
+}
+
+function examen() {
+  const items = schud(ALLE_VRAGEN).slice(0, 20).map((q) => ({ ...q, label: THEMAS[q.thema].ico + " " + THEMAS[q.thema].naam }));
+  speelVragen({ titel: "🏅 AI-diploma", spel: "examen", items, xpPerGoed: 12, naEinde: (score) => {
+    if (score < 16) return h("p", {}, `Voor het diploma heb je 16 goed nodig. Nog ${16 - score} te gaan – oefen de thema's in de Kennisquiz en probeer het opnieuw!`);
+    if (!S.diploma || score > S.diploma.score) { S.diploma = { score, datum: new Date().toLocaleDateString("nl-NL") }; bewaar(); }
+    const naamVeld = h("input", { type: "text", placeholder: "Je naam voor op het diploma", value: S.naam || "" });
+    const vak = h("div");
+    const toonDiploma = () => {
+      S.naam = naamVeld.value.trim(); bewaar();
+      vak.replaceChildren(h("div", { class: "kaart diploma" },
+        h("div", { class: "groot-ico" }, "🏅"), h("h1", {}, "Diploma AI-Geletterdheid"),
+        h("p", {}, "Hierbij wordt verklaard dat"), h("h2", {}, S.naam || "de kandidaat"),
+        h("p", {}, `het examen van de AI-Academie heeft behaald met ${score} van de 20 vragen goed.`),
+        h("p", { class: "zacht" }, `Datum: ${S.diploma.datum}`),
+        h("button", { class: "knop wit", onclick: () => window.print() }, "🖨️ Afdrukken")));
+    };
+    return h("div", {}, h("h2", {}, "🎉 Geslaagd!"), naamVeld, h("div", { class: "knoppen", style: "justify-content:center" }, h("button", { class: "knop", onclick: toonDiploma }, "Toon mijn diploma")), vak);
+  } });
+}
+
+// =====================================================================
+//  KOPPELSPEL
+// =====================================================================
+function koppelSpel() {
+  const set = schud(BEGRIPPEN).slice(0, 6);
+  let gekozen = null, fouten = 0, klaar = 0;
+  scherm("🔗 Begrippen koppelen");
+  const status = h("p", { class: "zacht" }, "Tik op een begrip en daarna op de bijpassende betekenis.");
+  const links = set.map(([t]) => h("button", { class: "optie", onclick: (e) => kiesTerm(t, e.currentTarget) }, h("b", {}, t)));
+  const rechts = schud(set).map(([t, d]) => h("button", { class: "optie", "data-t": t, onclick: (e) => kiesDef(t, e.currentTarget) }, d));
+  function kiesTerm(t, el) { links.forEach((k) => k.classList.remove("gekozen")); gekozen = { t, el }; el.classList.add("gekozen"); }
+  function kiesDef(t, el) {
+    if (!gekozen) { status.textContent = "Kies eerst links een begrip."; return; }
+    if (gekozen.t === t) {
+      piep(true); [gekozen.el, el].forEach((k) => { k.classList.remove("gekozen"); k.classList.add("goed"); k.disabled = true; });
+      gekozen = null; klaar++;
+      if (klaar === set.length) einde();
+    } else {
+      piep(false); fouten++; el.classList.add("schud"); setTimeout(() => el.classList.remove("schud"), 400);
+      status.textContent = `Dat past niet. Fouten: ${fouten}`;
+    }
+  }
+  function einde() {
+    const score = Math.max(0, 6 - fouten);
+    geefXP(10 + score * 5); record("koppel", score); if (fouten === 0) confetti();
+    status.replaceWith(h("div", { class: "uitleg goed" }, h("b", {}, fouten === 0 ? "🎯 Foutloos! " : "✅ Allemaal gekoppeld! "), `Je maakte ${fouten} fout${fouten === 1 ? "" : "en"}. +${10 + score * 5} XP`));
+    $app.querySelector(".kaart").append(h("div", { class: "knoppen" },
+      h("button", { class: "knop", onclick: koppelSpel }, "Nieuwe begrippen"), h("button", { class: "knop wit", onclick: start }, "Naar het menu")));
+  }
+  $app.append(h("div", { class: "kaart" }, status, h("div", { class: "koppel" }, h("div", { class: "opties" }, links), h("div", { class: "opties" }, rechts))));
+}
+
+// =====================================================================
+//  DENK ALS CHATGPT – volgende woord + temperatuur
+// =====================================================================
+function volgendWoord() {
+  const rondes = schud(VOLGENDE).slice(0, 5);
+  let i = 0, score = 0, T = 1;
+  const kansenBij = (o, temp) => {
+    const w = o.map(([, p]) => Math.pow(Math.max(p, 1e-6), 1 / temp)); const som = w.reduce((a, b) => a + b, 0);
+    return w.map((x) => x / som * 100);
+  };
+  function ronde() {
+    if (i >= rondes.length) return einde();
+    const r = rondes[i]; const o = r.o.slice().sort((a, b) => b[1] - a[1]); const top = o[0][0];
+    scherm("🔮 Denk als ChatGPT");
+    const gat = h("span", { class: "gat" }, "…");
+    const vak = h("div");
+    const knoppen = schud(o).map(([w]) => h("button", { class: "optie", onclick: () => kies(w) }, w));
+    function kies(w) {
+      const goed = w === top; piep(goed); if (goed) { score++; geefXP(10); }
+      knoppen.forEach((k) => { k.disabled = true; if (k.textContent === top) k.classList.add("goed"); else if (k.textContent === w) k.classList.add("fout"); });
+      gat.textContent = top;
+      const balken = h("div");
+      const tekenBalken = () => balken.replaceChildren(...kansenBij(o, T).map((p, j) =>
+        h("div", { class: "kans" }, h("span", {}, o[j][0]), h("div", { class: "balk" }, h("div", { style: `width:${p}%` })), h("b", {}, p < 1 ? p.toFixed(1) + "%" : Math.round(p) + "%"))));
+      const tLabel = h("b", {}, T.toFixed(1));
+      const uitkomst = h("p");
+      const schuif = h("input", { type: "range", min: "0.1", max: "2", step: "0.1", value: String(T), oninput: (e) => { T = +e.target.value; tLabel.textContent = T.toFixed(1); tekenBalken(); } });
+      const dobbel = () => {
+        const k = kansenBij(o, T); let x = Math.random() * 100, j = 0; while (j < k.length - 1 && (x -= k[j]) > 0) j++;
+        uitkomst.replaceChildren("🎲 Het model kiest: ", h("b", {}, `“${r.z} ${o[j][0]}”`));
+      };
+      tekenBalken();
+      vak.replaceWith(h("div", { class: "uitleg " + (goed ? "goed" : "fout") },
+        h("b", {}, goed ? "✅ Precies wat het model ook zou kiezen! " : `❌ Het meest waarschijnlijke woord is „${top}”. `),
+        h("p", {}, "Zo ziet de kansverdeling van een taalmodel eruit (voorbeeldcijfers):"), balken,
+        h("div", { class: "schuif" }, h("span", {}, "🌡️ Temperatuur"), schuif, tLabel),
+        h("p", { class: "klein" }, "Schuif naar links (laag): het model kiest bijna altijd het populairste woord. Naar rechts (hoog): de kansen worden gelijker en het model wordt creatiever – of onzinniger."),
+        h("button", { class: "knop wit", onclick: dobbel }, "🎲 Laat het model kiezen"), uitkomst));
+      verder.hidden = false;
+    }
+    const verder = h("button", { class: "knop", hidden: true, onclick: () => { i++; ronde(); } }, i + 1 < rondes.length ? "Volgende zin →" : "Resultaat");
+    $app.append(h("div", { class: "kaart" },
+      h("div", { class: "voortgang" }, h("span", {}, `Zin ${i + 1} van ${rondes.length}`), h("span", {}, `✅ ${score}`)),
+      h("p", { class: "zacht" }, "Een taalmodel doet niets anders dan steeds het volgende stukje tekst voorspellen. Welk woord vindt het model het meest waarschijnlijk?"),
+      h("p", { class: "zinnetje" }, r.z + " ", gat),
+      h("div", { class: "twee" }, knoppen), vak, h("div", { class: "knoppen" }, verder)));
+  }
+  function einde() {
+    scherm("🔮 Denk als ChatGPT"); record("woord", score); if (score >= 4) confetti();
+    $app.append(h("div", { class: "kaart" },
+      h("h1", {}, `${score} van ${rondes.length} goed voorspeld`),
+      h("h3", {}, "Wat heb je net geleerd?"),
+      h("p", {}, "• Een taalmodel ‘weet’ niet wat waar is: het berekent wat het meest waarschijnlijk volgt, op basis van miljarden zinnen die het tijdens training zag."),
+      h("p", {}, "• Een volledig antwoord ontstaat door dit woord-voor-woord (eigenlijk token-voor-token) te herhalen."),
+      h("p", {}, "• Daarom klinkt het altijd vloeiend, ook als het onzin is: zo ontstaan hallucinaties."),
+      h("p", {}, "• Met de temperatuur stel je in hoe voorspelbaar of creatief die keuzes zijn."),
+      h("div", { class: "knoppen" }, h("button", { class: "knop", onclick: volgendWoord }, "Nog een keer"), h("button", { class: "knop wit", onclick: start }, "Naar het menu"))));
+  }
+  ronde();
+}
+
+// =====================================================================
+//  BOUW EEN SPAMFILTER – een echt perceptron
+// =====================================================================
+const MAILS = [
+ { o: "Vergadering verplaatst naar dinsdag", x: [0, 0, 1], spam: false },
+ { o: "GRATIS iPhone!!!! Klik nu", x: [4, 1, 0], spam: true },
+ { o: "U heeft GEWONNEN! Claim uw prijs", x: [2, 1, 0], spam: true },
+ { o: "Foto's van de verjaardag!", x: [1, 0, 1], spam: false },
+ { o: "Gratis parkeren bij de club zaterdag", x: [0, 1, 1], spam: false },
+ { o: "Laatste kans!!! Uw pakket wacht", x: [3, 0, 0], spam: true },
+ { o: "Hoera!! Gefeliciteerd met je verjaardag!", x: [2, 0, 1], spam: false },
+ { o: "Uw account wordt geblokkeerd!", x: [1, 0, 0], spam: true },
+ { o: "Offerte aangevraagd via de website", x: [0, 0, 0], spam: false },
+];
+const KENMERKEN = ["Aantal uitroeptekens", "Bevat ‘gratis’ of ‘gewonnen’", "Afzender staat in je contacten"];
+function neuronSpel() {
+  let w = [0, 0, 0], d = 0, gehaald = false, bezig = false;
+  scherm("🧪 Bouw een spamfilter");
+  const lijst = h("div"), scoreEl = h("h3"), formule = h("div", { class: "formule" });
+  const schuiven = [];
+  const maakSchuif = (label, min, max, get, set) => {
+    const waarde = h("b", {}, get().toFixed(1));
+    const inp = h("input", { type: "range", min, max, step: "0.5", value: String(get()), oninput: (e) => { set(+e.target.value); teken(); } });
+    schuiven.push({ inp, waarde, get });
+    return h("div", { class: "schuif" }, h("span", {}, label), inp, waarde);
+  };
+  const somVan = (m) => m.x.reduce((s, x, k) => s + x * w[k], 0);
+  function teken() {
+    schuiven.forEach((s) => { s.inp.value = String(s.get()); s.waarde.textContent = s.get().toFixed(1); });
+    let goed = 0;
+    lijst.replaceChildren(...MAILS.map((m) => {
+      const som = somVan(m), voorspelt = som > d, ok = voorspelt === m.spam; if (ok) goed++;
+      return h("div", { class: "mail " + (ok ? "ok" : "nok") },
+        h("div", {}, h("div", {}, m.o), h("div", { class: "kenm" }, `❗${m.x[0]} · gratis/gewonnen: ${m.x[1] ? "ja" : "nee"} · bekend: ${m.x[2] ? "ja" : "nee"} · score ${som.toFixed(1)}`)),
+        h("span", { class: "klein" }, voorspelt ? "🚫 spam" : "📥 inbox"),
+        h("span", {}, ok ? "✅" : "❌"));
+    }));
+    scoreEl.textContent = `${goed} van ${MAILS.length} mails goed gesorteerd`;
+    formule.textContent = `score = ${w[0].toFixed(1)} × uitroeptekens + ${w[1].toFixed(1)} × gratis + ${w[2].toFixed(1)} × bekend  →  spam als score > ${d.toFixed(1)}`;
+    if (goed === MAILS.length && !gehaald && !bezig) {
+      gehaald = true; confetti(); geefXP(50); record("neuron", MAILS.length);
+      toast("🎉 Perfecte spamfilter! +50 XP");
+    }
+  }
+  function train() {
+    if (bezig) return; bezig = true; let ronde = 0; const lr = 0.5;
+    log.textContent = "";
+    const stap = () => {
+      ronde++; let fouten = 0;
+      for (const m of MAILS) {
+        const voorspelt = somVan(m) > d ? 1 : 0, echt = m.spam ? 1 : 0, fout = echt - voorspelt;
+        if (fout !== 0) { fouten++; w = w.map((wk, k) => wk + lr * fout * m.x[k]); d -= lr * fout; }
+      }
+      log.textContent = fouten ? `Trainingsronde ${ronde}: ${fouten} fout${fouten === 1 ? "" : "en"} gevonden → gewichten bijgesteld.` : `Trainingsronde ${ronde}: geen fouten meer.`;
+      teken();
+      if (fouten > 0 && ronde < 60) setTimeout(stap, 650);
+      else { bezig = false; log.textContent += fouten === 0 ? " Klaar, alle mails goed! Dit is precies wat ‘trainen’ betekent." : ""; teken(); }
+    };
+    stap();
+  }
+  const log = h("p", { class: "klein zacht" });
+  $app.append(
+    h("div", { class: "kaart" },
+      h("h2", {}, "Jij bent nu een AI-ontwikkelaar"),
+      h("p", {}, "Dit is één kunstmatig neuron – het bouwsteentje van elk neuraal netwerk, ook van ChatGPT. Het geeft elk kenmerk van een mail een ", h("b", {}, "gewicht"), ", telt alles op en vergelijkt de score met een ", h("b", {}, "drempel"), "."),
+      h("p", {}, h("b", {}, "Opdracht:"), " stel de schuifjes zo in dat alle 9 mails goed gesorteerd worden. Lukt het niet? Laat de computer zelf ", h("i", {}, "leren"), "."),
+      maakSchuif("⚖️ Gewicht: " + KENMERKEN[0], -5, 5, () => w[0], (v) => w[0] = v),
+      maakSchuif("⚖️ Gewicht: " + KENMERKEN[1], -5, 5, () => w[1], (v) => w[1] = v),
+      maakSchuif("⚖️ Gewicht: " + KENMERKEN[2], -5, 5, () => w[2], (v) => w[2] = v),
+      maakSchuif("🚧 Drempel", -5, 8, () => d, (v) => d = v),
+      formule,
+      h("div", { class: "knoppen" },
+        h("button", { class: "knop", onclick: train }, "🤖 Laat de AI zelf leren"),
+        h("button", { class: "knop wit", onclick: () => { w = [0, 0, 0]; d = 0; gehaald = false; log.textContent = ""; teken(); } }, "↺ Reset")),
+      log),
+    h("div", { class: "kaart" }, scoreEl, lijst),
+    h("div", { class: "kaart" },
+      h("h3", {}, "💡 Wat leer je hiervan?"),
+      h("p", {}, "• ", h("b", {}, "Trainen"), " = automatisch de gewichten bijstellen bij elke fout, net zo lang tot het model klopt. Dat deed de knop ‘Laat de AI zelf leren’ (dit heet de perceptron-regel, uit 1958)."),
+      h("p", {}, "• Een negatief gewicht bij ‘bekende afzender’ betekent: dat maakt spam ", h("i", {}, "minder"), " waarschijnlijk."),
+      h("p", {}, "• ChatGPT werkt met hetzelfde principe, maar dan met honderden miljarden gewichten in vele lagen, getraind op enorme hoeveelheden tekst."),
+      h("p", {}, "• Het filter is zo goed als zijn voorbeelden: met andere of scheve mails leert het iets anders (", h("b", {}, "bias"), ").")));
+  teken();
+}
+
+// =====================================================================
+//  TIJDLIJN
+// =====================================================================
+function tijdlijn() {
+  const set = schud(MIJLPALEN).slice(0, 5); const juist = set.slice().sort((a, b) => a.j - b.j);
+  let volgorde = [];
+  scherm("📜 Tijdlijn");
+  const slots = h("div"), kaartjes = h("div", { class: "opties" }), knoppen = h("div", { class: "knoppen" });
+  function teken() {
+    slots.replaceChildren(...set.map((_, k) => h("div", { class: "tl-slot" }, h("span", { class: "nr" }, k + 1 + "."), volgorde[k] ? volgorde[k].t : h("span", { class: "zacht" }, "…"))));
+    kaartjes.replaceChildren(...set.filter((m) => !volgorde.includes(m)).map((m) => h("button", { class: "optie", onclick: () => { volgorde.push(m); teken(); } }, m.t)));
+    knoppen.replaceChildren(
+      h("button", { class: "knop", disabled: volgorde.length < set.length, onclick: controleer }, "Controleer"),
+      h("button", { class: "knop wit", disabled: !volgorde.length, onclick: () => { volgorde.pop(); teken(); } }, "↶ Ongedaan maken"));
+  }
+  function controleer() {
+    let goed = 0;
+    slots.replaceChildren(...juist.map((m, k) => {
+      const ok = volgorde[k] === m; if (ok) goed++;
+      return h("div", { class: "tl-slot " + (ok ? "goed" : "fout") }, h("span", { class: "nr" }, m.j), h("span", {}, m.t, ok ? " ✅" : h("span", { class: "zacht klein" }, ` (jij had hier: ${volgorde[k].t})`)));
+    }));
+    kaartjes.replaceChildren(); piep(goed === set.length);
+    geefXP(goed * 8); record("tijdlijn", goed); if (goed === set.length) confetti();
+    knoppen.replaceChildren(h("p", { style: "width:100%" }, h("b", {}, `${goed} van ${set.length} op de juiste plek. +${goed * 8} XP`)),
+      h("button", { class: "knop", onclick: tijdlijn }, "Nieuwe tijdlijn"), h("button", { class: "knop wit", onclick: start }, "Naar het menu"));
+  }
+  $app.append(h("div", { class: "kaart" },
+    h("p", { class: "zacht" }, "Tik de gebeurtenissen aan in volgorde: van oud naar nieuw."), slots, h("h3", { style: "margin-top:1em" }, "Gebeurtenissen"), kaartjes, knoppen));
+  teken();
+}
+
+// =====================================================================
+//  WOORDENBOEK
+// =====================================================================
+function woordenboek() {
+  scherm("📖 AI-woordenboek");
+  const lijst = h("div");
+  const zoek = h("input", { class: "zoek", type: "search", placeholder: "🔍 Zoek een begrip…", oninput: (e) => teken(e.target.value) });
+  function teken(q = "") {
+    q = q.toLowerCase().trim();
+    const res = BEGRIPPEN.slice().sort((a, b) => a[0].localeCompare(b[0], "nl")).filter(([t, d]) => !q || t.toLowerCase().includes(q) || d.toLowerCase().includes(q));
+    lijst.replaceChildren(...(res.length ? res.map(([t, d]) => h("div", { class: "term" }, h("b", {}, t), h("div", {}, d))) : [h("p", { class: "zacht" }, "Niets gevonden.")]));
+  }
+  $app.append(h("div", { class: "kaart" }, zoek, lijst));
+  teken();
+}
+
+// =====================================================================
+//  OPSTARTEN
+// =====================================================================
+document.getElementById("home").onclick = start;
+document.getElementById("groter").onclick = () => { S.groot = !S.groot; document.body.classList.toggle("groot", S.groot); bewaar(); };
+document.body.classList.toggle("groot", S.groot);
+bewaar();
+start();
+</script>
+</body>
+</html>
