@@ -869,11 +869,16 @@ function instellingenScherm() {
     rij("Ander lettertype (Verdana)", "verdana", "Kies het lettertype dat het prettigst leest."),
     maak("div", { class: "knoppenrij" },
       maak("button", { class: "knop", onclick: startScherm }, "✔ Klaar"),
-      maak("button", { class: "knop secundair", onclick: () => {
-        if (confirm("Weet je zeker dat je alle sterren en records wilt wissen?")) {
+      (() => {
+        // Eerst één keer tikken, daarna bevestigen (geen pop-up nodig)
+        const k = maak("button", { class: "knop secundair" }, "🗑️ Alles wissen");
+        let zeker = false;
+        k.onclick = () => {
+          if (!zeker) { zeker = true; k.textContent = "⚠️ Echt alles wissen? Tik nog een keer"; return; }
           opslag = JSON.parse(JSON.stringify(standaard)); bewaar(); pasInstellingenToe(); startScherm();
-        }
-      } }, "🗑️ Alles wissen")),
+        };
+        return k;
+      })()),
   ));
 }
 
