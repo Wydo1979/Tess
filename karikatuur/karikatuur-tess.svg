@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="40%" r="70%">
+      <stop offset="0" stop-color="#9fd3e6"/><stop offset="1" stop-color="#3f86a6"/>
+    </radialGradient>
+    <radialGradient id="iris" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#d9e6a0"/><stop offset=".55" stop-color="#8fb39a"/><stop offset="1" stop-color="#4f7f86"/>
+    </radialGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c98a4a"/><stop offset=".5" stop-color="#e2b46e"/><stop offset="1" stop-color="#f6dfa5"/>
+    </linearGradient>
+  </defs>
+  <g stroke="#2b1d14" stroke-linejoin="round" stroke-linecap="round">
+  <!-- achtergrond -->
+  <rect width="800" height="1000" fill="url(#bg)" stroke="none"/>
+  <g fill="#ffe066" stroke-width="5">
+    <path d="M90 140 l14 30 32 4 -24 22 7 32 -29 -16 -29 16 7 -32 -24 -22 32 -4z"/>
+    <path d="M700 110 l10 22 24 3 -18 16 5 24 -21 -12 -21 12 5 -24 -18 -16 24 -3z"/>
+    <path d="M720 560 l8 18 20 2 -15 13 4 20 -17 -10 -17 10 4 -20 -15 -13 20 -2z"/>
+  </g>
+  <!-- zwevende letters -->
+  <g font-family="Comic Sans MS, Chalkboard, sans-serif" font-weight="bold" font-size="64" stroke-width="4" paint-order="stroke">
+    <text x="60" y="420" fill="#ff6fa8" transform="rotate(-15 60 420)">A</text>
+    <text x="110" y="560" fill="#ffd23f" transform="rotate(12 110 560)">b</text>
+    <text x="40" y="690" fill="#7ee081" transform="rotate(-8 40 690)">c</text>
+  </g>
+
+  <!-- haar achter -->
+  <path d="M180 330 C150 520 140 760 120 1000 L680 1000 C660 760 650 520 620 330 Z" fill="url(#hair)" stroke-width="7"/>
+
+  <!-- shirt met ruches -->
+  <path d="M90 1000 C100 860 170 800 260 790 L540 790 C630 800 700 860 710 1000 Z" fill="#ff8a7a" stroke-width="7"/>
+  <path d="M90 900 C60 860 120 820 110 790 C150 800 170 760 210 790 C230 760 270 780 270 800" fill="#ff9d8e" stroke-width="6"/>
+  <path d="M710 900 C740 860 680 820 690 790 C650 800 630 760 590 790 C570 760 530 780 530 800" fill="#ff9d8e" stroke-width="6"/>
+  <!-- col -->
+  <path d="M320 730 L320 800 C360 830 440 830 480 800 L480 730 Z" fill="#ffa596" stroke-width="6"/>
+  <g stroke-width="2.5" stroke="#d96b5e"><path d="M345 745v60M370 745v68M395 745v70M420 745v70M445 745v66"/></g>
+
+  <!-- groot hoofd -->
+  <path d="M400 210 C560 210 640 330 630 470 C620 620 520 740 400 745 C280 740 180 620 170 470 C160 330 240 210 400 210 Z" fill="#fde0cf" stroke-width="8"/>
+  <!-- oor + oorbel -->
+  <ellipse cx="630" cy="500" rx="26" ry="40" fill="#f9cfb9" stroke-width="6"/>
+  <circle cx="632" cy="535" r="7" fill="#ffd1ec" stroke-width="3"/>
+
+  <!-- blosjes -->
+  <ellipse cx="265" cy="575" rx="48" ry="30" fill="#ff9fae" opacity=".55" stroke="none"/>
+  <ellipse cx="540" cy="575" rx="48" ry="30" fill="#ff9fae" opacity=".55" stroke="none"/>
+  <g fill="#c98a6a" stroke="none"><circle cx="370" cy="555" r="3"/><circle cx="385" cy="567" r="3"/><circle cx="420" cy="560" r="3"/><circle cx="435" cy="550" r="3"/><circle cx="292" cy="520" r="4"/></g>
+
+  <!-- wenkbrauwen (ondeugend: één omhoog) -->
+  <path d="M235 385 C270 350 320 350 350 368" fill="none" stroke="#b07a45" stroke-width="12"/>
+  <path d="M450 375 C485 345 535 345 570 372" fill="none" stroke="#b07a45" stroke-width="12"/>
+
+  <!-- enorme ogen -->
+  <g stroke-width="7">
+    <ellipse cx="295" cy="450" rx="72" ry="66" fill="#fff"/>
+    <ellipse cx="510" cy="450" rx="72" ry="66" fill="#fff"/>
+    <circle cx="305" cy="455" r="46" fill="url(#iris)" stroke-width="5"/>
+    <circle cx="520" cy="455" r="46" fill="url(#iris)" stroke-width="5"/>
+    <circle cx="305" cy="455" r="20" fill="#1a1a1a" stroke="none"/>
+    <circle cx="520" cy="455" r="20" fill="#1a1a1a" stroke="none"/>
+  </g>
+  <g fill="#fff" stroke="none"><circle cx="320" cy="438" r="11"/><circle cx="535" cy="438" r="11"/><circle cx="292" cy="470" r="5"/><circle cx="507" cy="470" r="5"/></g>
+  <g fill="none" stroke-width="5"><path d="M228 420 l-14 -12 M240 400 l-10 -16 M572 420 l14 -12 M560 400 l10 -16"/></g>
+
+  <!-- neusje -->
+  <path d="M385 525 C375 555 395 570 410 565 C425 570 432 555 420 540" fill="#f6c4ad" stroke-width="5"/>
+
+  <!-- brede scheve grijns -->
+  <path d="M310 610 C350 660 450 665 505 600" fill="#c9455f" stroke-width="7"/>
+  <path d="M325 622 C370 640 450 642 495 612" fill="#fff" stroke="none"/>
+  <path d="M370 650 C395 665 430 665 455 650" fill="#ff8fa3" stroke="none"/>
+  <path d="M500 590 C512 594 518 604 515 614" fill="none" stroke-width="6"/>
+  <path d="M310 610 C350 660 450 665 505 600" fill="none" stroke-width="7"/>
+
+  <!-- lange plukken langs gezicht -->
+  <path d="M178 380 C170 600 200 760 160 1000 L230 1000 C250 820 240 640 212 380 Z" fill="#efcf8c" stroke-width="6"/>
+  <!-- haar voor: opgestoken kuifje + lange plukken -->
+  <path d="M175 470 C150 330 220 190 380 175 C470 120 560 150 600 220 C660 290 650 400 628 470 C610 380 580 320 540 300 C520 330 470 340 420 315 C400 335 330 345 300 315 C260 330 220 380 210 470 Z" fill="url(#hair)" stroke-width="8"/>
+  <path d="M385 180 C360 110 420 70 450 110 C470 70 540 100 510 160" fill="#d29a55" stroke-width="7"/>
+  <g fill="none" stroke="#9c6a35" stroke-width="5"><path d="M300 200 C330 250 350 290 360 320 M420 190 C430 240 430 280 420 312 M500 200 C510 240 520 270 540 300 M250 260 C240 320 225 390 215 450"/></g>
+  <!-- vlechtje met roze elastiekje -->
+  <g fill="#f3d79a" stroke-width="5">
+    <ellipse cx="600" cy="640" rx="16" ry="26"/><ellipse cx="604" cy="690" rx="16" ry="26"/><ellipse cx="608" cy="740" rx="16" ry="26"/>
+    <ellipse cx="612" cy="790" rx="16" ry="26"/><ellipse cx="616" cy="840" rx="16" ry="26"/>
+  </g>
+  <rect x="598" y="862" width="38" height="28" rx="10" fill="#ff2d87" stroke-width="5"/>
+  <path d="M606 890 C590 940 600 980 590 1000 L650 1000 C640 960 650 930 630 890 Z" fill="#f6dfa5" stroke-width="5"/>
+
+  <!-- robotvriendje (AI) -->
+  <g transform="translate(650 300) rotate(10)">
+    <line x1="40" y1="-10" x2="40" y2="-40" stroke-width="5"/>
+    <circle cx="40" cy="-46" r="9" fill="#ff2d87" stroke-width="4"/>
+    <rect x="0" y="-10" width="80" height="66" rx="18" fill="#e8f1f5" stroke-width="6"/>
+    <circle cx="25" cy="20" r="11" fill="#7ee0ff" stroke-width="4"/>
+    <circle cx="55" cy="20" r="11" fill="#7ee0ff" stroke-width="4"/>
+    <path d="M24 40 C34 50 46 50 56 40" fill="none" stroke-width="4"/>
+    <rect x="12" y="58" width="56" height="40" rx="10" fill="#c7dbe4" stroke-width="6"/>
+    <path d="M12 70 l-25 -22 M68 70 l25 -22" stroke-width="6"/>
+  </g>
+
+  <!-- boek met ABC -->
+  <g transform="translate(40 820) rotate(-10)">
+    <path d="M0 0 C40 -15 80 -15 110 0 C140 -15 180 -15 220 0 L220 110 C180 95 140 95 110 110 C80 95 40 95 0 110 Z" fill="#fff8e1" stroke-width="6"/>
+    <line x1="110" y1="0" x2="110" y2="110" stroke-width="5"/>
+    <text x="22" y="70" font-family="Comic Sans MS, sans-serif" font-size="40" font-weight="bold" fill="#3f86a6" stroke="none">ABC</text>
+    <text x="140" y="72" font-size="44" stroke="none">⭐</text>
+  </g>
+
+  <!-- tekst -->
+  <text x="400" y="100" text-anchor="middle" font-family="Comic Sans MS, Chalkboard, sans-serif" font-weight="bold" font-size="96" fill="#ffd23f" stroke-width="7" paint-order="stroke" transform="rotate(-4 400 100)">Tess!</text>
+  </g>
+</svg>
