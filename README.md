@@ -49,3 +49,24 @@ Open `ai-academie.html` in een browser (computer, tablet of telefoon). Niets te 
 | 📖 AI-woordenboek | Alle begrippen met zoekfunctie. |
 
 XP en rangen (van 🌱 Nieuwsgierige beginner tot 🏆 AI-goeroe) houden je gemotiveerd. Vragen en begrippen staan bovenin het `<script>` en zijn makkelijk aan te vullen.
+
+---
+
+# 🧭 Topotopper – topografie van de Randstad
+
+Open `topotopper.html` (alles in één bestand). Oefent alle topo van de bladzijde "De Randstad":
+Noord-Holland, Zuid-Holland en Utrecht, inclusief de extra (+) namen.
+
+| Spel | Wat oefen je? |
+|---|---|
+| 🔭 Ontdekken | Tik op de kaart: naam, plek, weetje en spellingtip, met voorlezen. |
+| 👆 Wijs aan | Waar ligt het? Tik op de goede stip, provincie of gebied. |
+| 🏷️ Hoe heet het? | Kies de goede naam bij de knipperende stip. |
+| ✏️ Schrijf goed | Typ de naam zonder fouten (met hint- en spiekknop). |
+| 🧩 Welke provincie? | In welke provincie ligt de plaats? |
+| 🏆 De toets | Alles door elkaar: aanwijzen én schrijven, met een cijfer. |
+
+- 🔊 Elke vraag, tip en elk weetje kan worden voorgelezen (automatisch voorlezen staat aan; uit te zetten bij ⚙️).
+- Bij een fout komt eerst een tip en een tweede kans. Wat nog lastig is, komt vaker terug.
+- Per naam zijn 3 sterren te verdienen (aanwijzen, benoemen, schrijven). Voortgang wordt op het apparaat bewaard.
+- Bij ⚙️ kun je de extra (+) topo en de provincies aan- of uitzetten.

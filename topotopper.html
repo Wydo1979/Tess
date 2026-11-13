@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Topotopper – De Randstad</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --creme: #FFF7E3;
+  --kaart: #ffffff;
+  --inkt: #1F2A44;
+  --zacht: #5B6785;
+  --zee: #7CC4EE;
+  --zee-donker: #2E7DB5;
+  --nh: #EE8A62;
+  --zh: #F4DC4F;
+  --ut: #AD9EE3;
+  --groen: #2FA866;
+  --groen-licht: #DDF6E6;
+  --rood: #E5484D;
+  --rood-licht: #FFE5E5;
+  --geel: #FFC83D;
+  --blauw: #2563EB;
+  --schaduw: 0 6px 0 rgba(31, 42, 68, .12);
+  --rond: 22px;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: "Lexend", Verdana, Tahoma, sans-serif;
+  font-size: 18px;
+  line-height: 1.55;
+  letter-spacing: .02em;
+  color: var(--inkt);
+  background: var(--creme);
+  background-image:
+    radial-gradient(circle at 12% 8%, rgba(124, 196, 238, .28) 0 120px, transparent 121px),
+    radial-gradient(circle at 92% 18%, rgba(244, 220, 79, .35) 0 90px, transparent 91px),
+    radial-gradient(circle at 85% 92%, rgba(173, 158, 227, .28) 0 140px, transparent 141px);
+  background-attachment: fixed;
+  min-height: 100vh;
+  -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; cursor: pointer; letter-spacing: inherit; }
+[hidden] { display: none !important; }
+
+/* ---------- kop ---------- */
+.kop {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 18px;
+  max-width: 1180px; margin: 0 auto;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  font-weight: 800; font-size: 1.35rem;
+  background: none; border: 0; padding: 4px;
+}
+.logo .kompas {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--zee-donker); color: #fff;
+  display: grid; place-items: center; font-size: 1.5rem;
+  box-shadow: var(--schaduw);
+}
+.logo small { display: block; font-weight: 400; font-size: .8rem; color: var(--zacht); line-height: 1.1; }
+.kop .ruimte { flex: 1; }
+.pil {
+  background: #fff; border-radius: 999px; padding: 6px 14px;
+  font-weight: 600; box-shadow: var(--schaduw); white-space: nowrap;
+}
+.rondknop {
+  width: 46px; height: 46px; border-radius: 50%; border: 0;
+  background: #fff; box-shadow: var(--schaduw); font-size: 1.3rem;
+  display: grid; place-items: center; flex: none;
+}
+.rondknop:active, .knop:active, .spelkaart:active, .optie:active { transform: translateY(3px); box-shadow: 0 2px 0 rgba(31,42,68,.12); }
+
+main { max-width: 1180px; margin: 0 auto; padding: 6px 18px 40px; }
+
+/* ---------- start ---------- */
+.held {
+  background: linear-gradient(135deg, #2E7DB5, #4FA3DC);
+  color: #fff; border-radius: var(--rond); padding: 22px 26px;
+  box-shadow: var(--schaduw);
+  display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;
+}
+.held h1 { margin: 0 0 4px; font-size: 1.7rem; line-height: 1.2; }
+.held p { margin: 0; opacity: .95; }
+.rang { font-weight: 800; font-size: 1.05rem; margin-top: 12px; }
+.balk { height: 16px; border-radius: 99px; background: rgba(255,255,255,.3); overflow: hidden; margin-top: 6px; }
+.balk > i { display: block; height: 100%; background: var(--geel); border-radius: 99px; transition: width .6s; }
+.held .groot { font-size: 4.2rem; line-height: 1; }
+
+h2 { font-size: 1.15rem; margin: 26px 0 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  border: 3px solid transparent; background: #fff; border-radius: 999px;
+  padding: 8px 18px; font-weight: 600; box-shadow: var(--schaduw);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.chip .bol { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(0,0,0,.2); }
+.chip[aria-pressed="true"] { border-color: var(--inkt); background: #FFF1B8; }
+
+.spellen { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.spelkaart {
+  text-align: left; border: 0; background: #fff; border-radius: var(--rond);
+  padding: 18px 20px; box-shadow: var(--schaduw);
+  display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; align-items: center;
+  border-bottom: 8px solid var(--tint, var(--zee));
+}
+.spelkaart .emoji { font-size: 2.6rem; grid-row: span 2; }
+.spelkaart b { font-size: 1.15rem; }
+.spelkaart span { color: var(--zacht); font-size: .92rem; line-height: 1.35; }
+.spelkaart.toets { background: #1F2A44; color: #fff; --tint: var(--geel); }
+.spelkaart.toets span { color: #C9D2EA; }
+
+.album { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+.album section { background: #fff; border-radius: var(--rond); padding: 14px 16px; box-shadow: var(--schaduw); border-top: 10px solid var(--tint); }
+.album h3 { margin: 0 0 8px; font-size: 1.05rem; }
+.album ul { list-style: none; margin: 0; padding: 0; }
+.album li { display: flex; justify-content: space-between; gap: 8px; padding: 3px 0; }
+.album li button { border: 0; background: none; padding: 0; text-align: left; }
+.album li button:hover { text-decoration: underline; }
+.sterren { letter-spacing: 1px; color: #C9CEDA; white-space: nowrap; }
+.sterren b { color: #F5A800; font-weight: 400; }
+.plus { color: var(--zacht); font-size: .8em; }
+
+/* ---------- spel ---------- */
+.speelveld { display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 420px); gap: 18px; align-items: start; }
+.kaartdoos {
+  background: var(--zee); border-radius: var(--rond); box-shadow: var(--schaduw);
+  overflow: hidden; border: 5px solid #fff; position: sticky; top: 8px;
+}
+#kaart { display: block; width: 100%; height: auto; max-height: calc(100vh - 100px); touch-action: manipulation; user-select: none; -webkit-user-select: none; }
+.paneel { background: #fff; border-radius: var(--rond); box-shadow: var(--schaduw); padding: 18px 20px 20px; }
+.voortgang { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-size: .9rem; color: var(--zacht); font-weight: 600; }
+.voortgang .balk { flex: 1; background: #E8ECF4; margin: 0; height: 12px; }
+.voortgang .balk > i { background: var(--groen); }
+.vraagregel { display: flex; gap: 12px; align-items: flex-start; }
+.vraag { font-size: 1.45rem; font-weight: 600; line-height: 1.3; margin: 0; flex: 1; }
+.vraag b { font-weight: 800; color: var(--zee-donker); }
+.uitleg { color: var(--zacht); margin: 8px 0 0; }
+.luister {
+  flex: none; width: 52px; height: 52px; border-radius: 50%; border: 0;
+  background: var(--geel); font-size: 1.5rem; box-shadow: var(--schaduw);
+}
+.luister.klein { width: 40px; height: 40px; font-size: 1.1rem; }
+.opties { display: grid; gap: 10px; margin-top: 16px; }
+.optie {
+  border: 3px solid #D8DEEA; background: #fff; border-radius: 16px;
+  padding: 12px 16px; font-weight: 600; font-size: 1.1rem; text-align: left;
+  box-shadow: var(--schaduw); display: flex; align-items: center; gap: 10px;
+}
+.optie:hover:not(:disabled) { border-color: var(--zee-donker); }
+.optie.goed { background: var(--groen-licht); border-color: var(--groen); }
+.optie.fout { background: var(--rood-licht); border-color: var(--rood); opacity: .75; }
+.optie:disabled { cursor: default; }
+.optie .bol { width: 20px; height: 20px; border-radius: 50%; border: 2px solid rgba(0,0,0,.2); flex: none; }
+.schrijf { margin-top: 16px; }
+.schrijf input {
+  width: 100%; font: inherit; font-size: 1.4rem; font-weight: 600; letter-spacing: .06em;
+  padding: 12px 16px; border-radius: 16px; border: 3px solid #D8DEEA; color: var(--inkt); background: #FFFDF5;
+}
+.schrijf input:focus { outline: none; border-color: var(--zee-donker); }
+.hintletters { font-size: 1.4rem; font-weight: 800; letter-spacing: .22em; margin: 10px 0 0; color: var(--zee-donker); min-height: 1.5em; word-break: break-word; }
+.rij { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px; }
+.knop {
+  border: 0; border-radius: 16px; padding: 12px 22px; font-weight: 800; font-size: 1.05rem;
+  background: var(--groen); color: #fff; box-shadow: var(--schaduw);
+}
+.knop.twee { background: #EEF2FA; color: var(--inkt); font-weight: 600; }
+.knop.groot { font-size: 1.2rem; padding: 14px 28px; }
+.terug { border: 0; background: none; color: var(--zacht); font-weight: 600; padding: 6px 0; margin-bottom: 6px; }
+.melding { border-radius: 16px; padding: 14px 16px; margin-top: 16px; animation: plop .25s; }
+.melding h3 { margin: 0 0 4px; font-size: 1.2rem; }
+.melding p { margin: 4px 0 0; }
+.melding.goed { background: var(--groen-licht); border: 3px solid var(--groen); }
+.melding.fout { background: var(--rood-licht); border: 3px solid var(--rood); }
+.melding.tip { background: #FFF4CC; border: 3px solid var(--geel); }
+.melding .weetje { display: flex; gap: 10px; align-items: flex-start; }
+.melding .weetje p { flex: 1; margin: 0; }
+.spelling { font-size: 1.35rem; font-weight: 800; letter-spacing: .08em; }
+.spelling s { color: var(--rood); }
+@keyframes plop { from { transform: scale(.94); opacity: 0; } }
+
+.ontdek h3 { font-size: 1.6rem; margin: 0; line-height: 1.2; }
+.ontdek .soort { display: inline-block; border-radius: 99px; padding: 2px 12px; font-size: .85rem; font-weight: 600; margin: 6px 0 10px; }
+.ontdek dl { margin: 0; }
+.ontdek dt { font-weight: 800; margin-top: 10px; font-size: .9rem; color: var(--zacht); }
+.ontdek dd { margin: 0; }
+
+/* ---------- kaart ---------- */
+.land { fill: #DDE2E8; stroke: #fff; stroke-width: 1.2; }
+.prov { stroke: #fff; stroke-width: 2.5; stroke-linejoin: round; transition: fill .3s; }
+.prov.NH { fill: var(--nh); } .prov.ZH { fill: var(--zh); } .prov.UT { fill: var(--ut); }
+#kaart.grijs .prov { fill: #F1E3C4; stroke: #F1E3C4; }
+.prov.doel { stroke: var(--inkt); stroke-width: 5; animation: knipper 1s infinite alternate; }
+.randstad { fill: none; stroke: #1F2A44; stroke-opacity: .16; stroke-width: 38; stroke-linecap: round; stroke-linejoin: round; }
+.randstadlijn { fill: none; stroke: #1F2A44; stroke-opacity: .5; stroke-width: 38; stroke-linecap: round; stroke-linejoin: round; }
+.groenehart { fill: #3DBB6E; fill-opacity: .5; stroke: #1E8A4B; stroke-width: 2.5; stroke-dasharray: 7 5; }
+.randstad.doel { stroke-opacity: .55; stroke: var(--blauw); animation: knipper 1s infinite alternate; }
+.groenehart.doel { fill-opacity: .95; stroke-width: 5; animation: knipper 1s infinite alternate; }
+#kaart.grijs .gebieden { display: none; }
+#kaart[data-doel="prov"] .gebieden { pointer-events: none; }
+.stippen { pointer-events: none; }
+.stip circle { fill: #fff; stroke: var(--inkt); stroke-width: 3; transition: r .15s; }
+.stip text { font-size: 19px; text-anchor: middle; dominant-baseline: central; }
+.stip.goed circle { fill: var(--groen); stroke: #0E5A30; }
+.stip.fout circle { fill: var(--rood); stroke: #7A1418; }
+.stip.doel circle { fill: var(--geel); stroke-width: 4; }
+.stip.dim { opacity: .35; }
+.puls { fill: none; stroke: var(--inkt); stroke-width: 4; pointer-events: none; animation: puls 1.2s infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes puls { from { transform: scale(.5); opacity: 1; } to { transform: scale(2.2); opacity: 0; } }
+@keyframes knipper { from { opacity: 1; } to { opacity: .55; } }
+.labels { pointer-events: none; }
+.labels text { font-size: 17px; font-weight: 800; fill: var(--inkt); paint-order: stroke; stroke: #fff; stroke-width: 5px; stroke-linejoin: round; }
+.labels text.fout { fill: #B4232A; }
+.labels text.goed { fill: #0E6B38; }
+.water { font-size: 15px; font-style: italic; fill: #fff; opacity: .9; pointer-events: none; letter-spacing: .12em; }
+.windroos { pointer-events: none; }
+
+/* ---------- einde ---------- */
+.einde { text-align: center; background: #fff; border-radius: var(--rond); padding: 30px 22px; box-shadow: var(--schaduw); max-width: 640px; margin: 20px auto; }
+.einde > .groot { font-size: 4.5rem; line-height: 1; }
+.einde h2 { font-size: 1.7rem; margin: 10px 0 6px; }
+.cijfer { width: 150px; height: 150px; border-radius: 50%; margin: 14px auto; display: grid; place-items: center; font-size: 3.4rem; font-weight: 800; background: var(--geel); border: 8px solid #fff; box-shadow: 0 0 0 5px var(--inkt); }
+.einde .sterren { font-size: 2.6rem; }
+.einde .rij { justify-content: center; }
+.einde .chips { justify-content: center; margin-top: 10px; }
+
+/* ---------- instellingen ---------- */
+dialog { border: 0; border-radius: var(--rond); padding: 24px; max-width: 440px; width: calc(100% - 32px); color: var(--inkt); box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+dialog::backdrop { background: rgba(31,42,68,.5); }
+dialog h2 { margin-top: 0; font-size: 1.4rem; }
+.schakel { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 2px solid #EEF2FA; }
+.schakel input { width: 26px; height: 26px; accent-color: var(--groen); flex: none; }
+.schakel small { display: block; color: var(--zacht); line-height: 1.3; }
+
+.confetti { position: fixed; top: -30px; font-size: 1.6rem; pointer-events: none; z-index: 50; animation: val linear forwards; }
+@keyframes val { to { transform: translateY(110vh) rotate(720deg); } }
+
+@media (max-width: 860px) {
+  body { font-size: 17px; }
+  .speelveld { grid-template-columns: 1fr; }
+  .kaartdoos { position: static; }
+  #kaart { max-height: 56vh; }
+  .held { grid-template-columns: 1fr; }
+  .held .groot { display: none; }
+  .logo small { display: none; }
+  .vraag { font-size: 1.25rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="kop">
+  <button class="logo" id="naarStart" aria-label="Naar het begin">
+    <span class="kompas">🧭</span>
+    <span>Topotopper<small>De Randstad</small></span>
+  </button>
+  <span class="ruimte"></span>
+  <span class="pil" id="sterTeller" title="Jouw sterren">⭐ 0</span>
+  <button class="rondknop" id="instelKnop" aria-label="Instellingen">⚙️</button>
+</header>
+
+<main>
+  <!-- START -->
+  <div id="schermStart">
+    <section class="held">
+      <div>
+        <h1>Hoi topotopper! 👋</h1>
+        <p>Leer alle plaatsen van de Randstad. Speel elke dag een paar spelletjes, dan haal jij een 10!</p>
+        <div class="rang" id="rang"></div>
+        <div class="balk"><i id="rangBalk" style="width:0"></i></div>
+      </div>
+      <div class="groot" aria-hidden="true">🗺️</div>
+    </section>
+
+    <h2>1. Wat wil je oefenen?</h2>
+    <div class="chips" id="filterChips"></div>
+
+    <h2>2. Kies een spel</h2>
+    <div class="spellen" id="spellen"></div>
+
+    <h2>Mijn topo <span class="plus">– 3 sterren = je kent het helemaal! Tik op een naam om hem te horen.</span></h2>
+    <div class="album" id="album"></div>
+  </div>
+
+  <!-- SPEL -->
+  <div id="schermSpel" hidden>
+    <button class="terug" id="stopKnop">← Stoppen</button>
+    <div class="speelveld">
+      <div class="kaartdoos"><svg id="kaart" role="img" aria-label="Kaart van de Randstad"></svg></div>
+      <div class="paneel" id="paneel" aria-live="polite"></div>
+    </div>
+  </div>
+
+  <!-- EINDE -->
+  <div id="schermEinde" hidden></div>
+</main>
+
+<dialog id="instellingen">
+  <h2>⚙️ Instellingen</h2>
+  <label class="schakel"><input type="checkbox" id="insVoorlezen"><span>🔊 Automatisch voorlezen<small>Elke vraag wordt vanzelf voorgelezen.</small></span></label>
+  <label class="schakel"><input type="checkbox" id="insGeluid"><span>🎵 Geluidjes<small>Een vrolijk geluidje bij goed of fout.</small></span></label>
+  <label class="schakel"><input type="checkbox" id="insPlus"><span>➕ Extra topo erbij<small>De namen met een + in je boek: Zandvoort, Groene Hart, Vlaardingen, Nieuwegein en Woerden.</small></span></label>
+  <label class="schakel"><input type="checkbox" id="insProv"><span>🗺️ Provincies ook oefenen<small>Noord-Holland, Zuid-Holland en Utrecht aanwijzen en schrijven.</small></span></label>
+  <div class="rij">
+    <button class="knop" id="insKlaar">Klaar</button>
+    <button class="knop twee" id="insWis">Alles wissen</button>
+  </div>
+</dialog>
+
+<script>
+"use strict";
+const KAART = {"NH":"M435.6,512.3L437,513.1L435.5,514.9L435.2,514.6L435.4,515.2L433.2,516.3L432.5,514.9L432,515.2L431.1,514.4L432.4,512.6L433.4,513.4L434.4,512.5L433.5,513.5L435,514.7L435.7,513.7L434.5,512.5L434.8,512ZM482.1,454L484.2,454.6L490.2,453.5L490.7,454L490.7,455.1L484.8,457.8L481,458.9L479.4,461.1L476.7,461.1L475.1,462.2L474.5,460.5L477.2,455.7L478.3,451.4L475,438.4L478.3,450.3L481.5,453ZM361.3,153.3L360.8,154.4L359.7,153.9L357.5,155L359.2,158.7L363,163L363.6,161.4L359.2,156.6L360.3,156L360.8,157.6L361.9,158.2L365.2,158.1L366.2,154.9L363.5,153.3L365.7,152.7L367.3,152.7L368.4,155.4L367.4,159.7L364.1,165.2L363.6,169.5L368.7,181.8L370.3,182.4L371.4,183.4L370.3,184L373.1,186.1L394.4,198.4L396.6,198.3L406.4,195L410.7,191.8L416.2,189.6L417.8,188.5L423.7,181.5L425.4,176L428.6,173.3L435.7,172.2L441.7,170L446.1,171.1L448.2,170.5L450.4,168.4L450.9,167L452.6,168.4L452.6,169.4L454.2,171L454.8,171L453.7,169.4L457.5,172.6L457.5,174.3L455.9,172.1L454.8,172.7L454.3,177.5L454.8,178.6L458.1,177L467.5,195.2L468.5,195.8L469.6,197.4L469.7,199L482.3,224.3L478.6,266.9L479.7,266.4L481.9,266.9L484.6,269.1L485.2,270.7L484.6,270.7L484.1,275.5L487.9,280.4L488.5,280.9L489,280.4L491.2,283.6L494.5,286.8L497.2,287.9L499.9,287.3L501,288.4L501,286.8L505.3,287.3L506.4,286.8L511.3,278.1L515.1,278.1L523.3,279.7L535.2,279.2L539.6,282.9L535.2,283.5L535.2,284L539.6,284L540.1,283.5L543.9,286.2L545.6,289.4L545.6,291.6L544.5,292.1L544.5,292.6L545,298.6L546.1,302.3L548.8,305L551,306.1L552.6,306.1L553.2,305.6L553.2,307.2L548.3,311.5L542.9,313.7L542.9,314.2L544,315.3L539.6,319.1L538,318.5L535.8,319.1L534.7,320.2L533.7,319.6L531,320.2L529.9,322.3L529.9,325L527.2,336.9L525,339.6L516.4,344.5L514.2,347.2L513.1,349.3L510.4,349.3L505.5,351L499.6,356.4L499.1,357.5L495.3,356.9L487.1,359.6L486.6,358L487.7,355.9L484.9,352.1L483.3,351.6L479.5,352.7L477.3,351.1L477.3,350.5L474.1,346.8L473,347.8L470.8,346.2L469.2,346.2L468.1,346.8L468.1,347.9L465.2,350.4L463.8,348.9L463.3,351.7L460.5,351.1L461.1,348.4L459.4,346.3L456.7,346.3L455.1,348.5L451.3,350.1L447.5,353.3L446.5,356.6L446.5,360.4L447.6,364.1L447.6,367.4L449.3,371.7L447.7,373.8L450.9,380.3L452.6,387.3L451.5,390.5L452.6,392.2L455.9,394.8L460.2,404L460.3,408.3L461.4,408.8L464.1,414.2L464.6,417.4L467.9,421.7L470.1,423.4L471.7,429.3L469.6,432.5L468.5,435.8L465.8,437.4L463.6,437.4L462.6,438.5L462,440.1L462.6,445.5L464.2,446.6L465.9,448.7L465.3,450.3L463.2,450.9L458.8,449.8L454.5,452.5L452.6,451.8L452.4,452.2L452.9,453.1L455.6,454.7L457.2,454.7L458.3,453.6L460.5,454.1L460.5,455.2L458.3,459L457.8,462.2L457.8,466L458.4,467.6L463.8,469.2L464.9,468.1L470.8,469.2L473,470.3L474.6,467.6L475.1,462.3L475.1,467L473,470.8L471.9,470.3L468.7,474.1L467.1,476.8L467.1,478.9L464.9,483.2L461.7,482.7L459.5,483.3L457.4,487L452,490.8L451,492.5L449.9,497.9L447.2,500L445.1,500.6L445.6,503.8L444.6,507.1L443.5,507.6L440.8,506.5L439.7,504.4L436.5,505L434.3,507.1L433.2,507.1L430.5,503.4L427.3,501.2L425.5,502.3L425.2,502.9L426.2,503.9L434.8,510.8L439.2,511.5L445.7,510.6L441.2,511.3L438,511.6L433.7,510.4L430.6,510.4L431.7,512L429,512L428.9,510.4L425.2,510.4L425.2,512L427.9,514.2L430.6,515.2L431.1,516.8L436.5,516.8L435.4,515.7L437.6,514.7L444.1,519.5L445.2,519.5L446.8,523.8L447.3,522.7L450,522.1L451.1,522.7L453.3,524.8L452.7,527L450,528.1L450.1,529.2L450.6,528.6L451.7,531.3L453.8,531.3L453.8,528.6L456.5,530.2L460.8,528.6L466.2,529.1L468.9,527.4L474.8,528L481.3,533.3L486.1,533.8L487.8,536L489.4,534.9L491,536.5L495.9,544.1L499.6,547.8L504,548.9L506.6,548.3L508.3,547.3L511.5,546.2L524.4,544.5L529.2,544.5L530.3,545.6L531.9,541.8L533.5,546.1L534.6,547.2L537.3,547.7L542.6,549.8L547.5,553.7L550.2,552.6L553.5,549.9L553.5,548.3L556.7,550.9L555.6,550.4L551.3,553.1L548.6,557.4L549.2,559L552.9,565L537.9,562.3L529.8,578.5L529.8,580.1L527.7,583.9L522.4,596.3L522.9,596.3L519.7,608.7L511.2,624.9L485.9,622.8L482.7,623.4L468.8,627.8L457.5,632.1L455.9,621.3L452.7,620.8L454.2,614.3L454.2,612.7L451.5,612.2L448.8,610.1L448.8,609L453.7,610L454.2,608.4L453.7,605.7L452.6,605.7L454.1,596.5L455.2,593.3L461.6,590L457.3,585.2L457.3,582L456.2,577.7L455.1,577.7L453.5,579.8L452.5,578.8L449.2,569.1L449.2,567.4L451.3,568L452.4,566.4L454.5,565.3L456.1,564.7L458.3,565.2L458.8,562.5L462.6,560.4L463.1,560.4L463.7,562.5L464.2,563.1L464.7,562.5L464.2,560.4L462,557.7L458.8,558.8L456.1,562L451.3,558.8L449.1,562.6L448.6,561.5L448.5,549.6L444.8,549.1L441.6,552.4L441,555.6L439.4,557.8L434.6,557.3L430.3,560.5L428.4,563.9L426,564.3L419.6,564.4L416.3,562.8L413.1,563.3L414.2,569.3L412.6,572.5L410.5,574.7L410.5,576.3L410,577.4L407.9,579.6L404.6,579.6L403,580.7L400.9,579.6L397.1,579.1L395.5,579.6L394.4,580.7L392.8,579.7L392.3,580.7L388,582.9L386.9,586.2L385.9,586.2L385.9,588.3L384.3,587.8L382.7,590L381.1,590.5L378.4,592.7L370.4,595.5L365,595.5L361.8,594.5L358.5,595L358,596.6L353.2,600.5L350,601L346.3,602.7L343.1,607.6L339.8,604.4L338.7,601.7L339.2,592L331.6,591L329,592.1L325.8,595.3L324.2,595.9L322,595.9L319.3,592.7L317.7,594.9L315,596L310.8,598.7L305.4,601.5L300.6,602.6L294.7,602.7L287.7,600L284,601.2L278,600.1L275.3,595.3L277.4,592.1L279.5,591L280.6,588.2L281.1,584.5L282.1,581.2L282.6,575.3L282,570.4L287.8,564.4L289.4,563.3L293.1,552.5L297.8,544.4L297.8,543.3L293.5,541.2L288.7,540.7L287.6,540.2L283.8,542.4L282.2,541.3L280.1,545.6L254.7,534.6L272.5,490.7L276.1,481L278.2,473.9L279.7,465.3L278.6,460.4L276.4,454.5L285.5,454.4L286.1,456L288.8,457.6L288.8,457.1L287.2,455.5L287.2,454.4L292,456.7L291,455.5L287.7,453.9L288.8,452.8L292.5,452.2L292.5,451.7L287.7,451.7L289.3,451.2L295.8,451.1L294.1,448.4L292,448.4L293,447.9L296.8,448.4L296.8,447.8L293.6,446.8L286,449.6L281.2,450.7L276.9,450.8L274.7,449.7L277.5,450.5L281.2,450.5L287,437.7L290.6,426.3L295.7,399.3L301.8,355L302.2,347.5L303.8,337.7L304.2,331.3L306.3,319.9L306.2,315.1L307.7,304.3L307.6,294.6L308.2,294.6L311.8,277.8L312.9,272.9L312.3,272.9L317.1,263.2L318.7,257.2L321.3,250.7L329.2,219.4L329.7,218.8L333.9,201L335.4,181.6L335.3,171.9L336.3,164.9L337.4,161.1L341.1,154.6L344.9,152.9L359.1,152.3L361.3,151.7ZM320.8,141.8L323.5,143.9L319.7,142.4L318.1,142.4L317.5,142.9L317.5,144.5L318.1,145.1L322.5,145.6L324.6,145L328.5,145.5L333.9,144.9L325.3,151.5L325.2,150.4L326.9,148.8L323.6,148.8L322.5,149.9L322.5,152.6L320.4,154.8L318.2,155.3L316,154.8L313.8,152.7L313.8,148.9L314.8,144L316.4,141.9L319.1,141.3ZM462.4,165.6L460.2,169.4L458.1,168.3L458.6,167.2L461.9,165.1L501.1,131.5L501.6,132Z","ZH":"M203.2,889.1L204.8,891.3L204.3,892.4L202.2,892.9L196.9,895.7L190,895.3L184.1,893.7L180.4,891.1L180.4,890L179.8,890L171.8,884.2L168.6,882.7L168,881.6L170.1,878.9L177,879.8L188.8,883.4L197.3,887.6ZM57.1,864.7L59.8,865.7L59.8,866.2L53.4,865.3L47.6,866L41.3,868.8L38.1,869.4L37.5,868.9L39.1,868.3L44.9,862.8L46.9,859L50.1,857.3L49.6,858.4ZM79.2,821.6L80.3,822.7L76.5,821.7L71.2,823.4L66.5,826.7L64.4,826.8L61.7,827.9L63.9,827.9L67.1,826.7L71.8,826.1L76.6,826L78.8,827L78.8,830.3L82.1,833.4L83.7,834L84.2,834.5L84.3,835.6L86.4,837.1L87.5,836.6L87.5,836L85.8,834.5L85.8,833.9L88.5,834.4L90.1,833.8L93.2,829.4L91.1,832.2L88.6,837.6L87.5,838.7L89.1,840.9L91.2,838.7L93.4,838.6L93.4,840.3L96.6,843.4L102,845.5L102,846L107.9,848.6L115.4,853.9L120.8,856.5L119.2,858.1L125.1,859.6L125.6,858.6L133.7,863.8L143.3,866.9L144.4,866.9L145.5,869.5L153.1,877L164.4,886L163.8,886.5L169.3,893.4L169.8,895L175.7,898.7L183.2,901.3L190.7,908.2L194.5,909.8L199.2,909.7L202.4,910.2L207.7,909.6L209.3,910.1L215.2,910L219.4,906.7L219.9,909.9L221,912.1L221.6,912.1L218.4,915.4L218.4,914.3L217.3,913.2L213.6,912.7L213.6,914.3L212,915.4L210.5,915.5L208.8,914.4L208.8,913.9L206.2,915L205.7,914.5L205.1,911.2L204,910.7L200.3,910.8L204,911.2L204.6,911.8L203.5,912.9L204.1,914.5L205.2,916.1L207.3,916.6L208.9,920.3L207.4,924.7L204.3,929L190.6,935.2L187.4,935.8L183.2,935.8L176.3,938.6L173.1,938.7L161.9,936.2L159.3,935.1L155.5,930.9L154.4,928.7L154.9,927.6L154.4,927.1L148,924.5L144.8,924L142.6,921.9L135.2,921.5L133.6,919.9L130.9,921L133,918.3L130.3,913.5L118,907.8L114.2,906.8L107.9,907.4L98.8,906.5L95.6,904.9L91.9,904.5L91.3,903.4L91.8,900.7L88,894.8L88.5,893.2L85.8,888.4L85.7,885.7L86.2,885.2L84.6,883L84.1,883L84.1,885.7L83.1,886.3L82,885.8L80.3,879.9L80.3,878.3L84,877.1L83.4,875.5L81.3,876.1L80.2,875L81.2,872.8L81.7,869.1L80.5,863.1L75.1,856.8L73.9,853.6L69.1,849.9L62.7,851.1L61.6,849.5L57.9,849L54.7,849.6L53.7,850.7L49.5,853L48.4,852.5L42.6,854.2L37.8,856.4L35.7,855.4L33.6,856L33.1,857.6L33.6,859.2L35.3,860.8L34.2,861.9L30,864.2L28.4,863.7L26.2,862.1L21.7,872.4L22.2,874L23.9,876.2L27.1,878.2L27.7,879.3L26.1,881L24,881L19.2,879.5L19.1,879L17.5,877.4L15.9,877.4L14.3,876.4L18.5,874.1L21.6,870.8L23.6,864.3L24.1,859.4L20.7,851.4L20.1,847.6L21.1,844.4L24.2,840.5L36.9,836L38.5,836.5L62.2,825.7L64.9,825.2L71.2,822.3L76.5,821.1ZM274.2,543L280.1,545.6L282.2,541.3L283.8,542.4L287.6,540.2L288.7,540.7L293.5,541.2L297.8,543.3L297.8,544.4L293.1,552.5L289.4,563.3L287.8,564.4L282,570.4L282.6,575.3L282.1,581.2L281.1,584.5L280.6,588.2L279.5,591L277.4,592.1L275.3,595.3L278,600.1L284,601.2L287.7,600L294.7,602.7L300.6,602.6L305.4,601.5L310.8,598.7L315,596L317.7,594.9L319.3,592.7L322,595.9L324.2,595.9L325.8,595.3L329,592.1L331.6,591L339.2,592L338.7,601.7L339.8,604.4L343.1,607.6L346.3,602.7L350,601L353.2,600.5L358,596.6L358.5,595L361.8,594.5L365,595.5L365,597.1L366.1,599.3L367.7,600.9L367.8,610.6L372.1,610.6L375.3,613.8L375.3,615.4L380.2,619.7L380.8,621.3L383.5,623.4L387.2,623.9L400.7,634.1L394.3,637.9L394.4,648.1L387.4,649.3L381,647.2L379.3,645L374.5,646.1L371.8,647.2L370.8,648.3L369.7,650.5L370.3,652.1L369.8,654.3L367.6,656.4L364.4,657L363.9,658.1L364.7,658.3L376.3,667.2L375.8,668.2L375.2,668.2L376.4,686.6L379.1,686.5L379.7,687.6L378.1,691.4L382.9,689.8L394.1,690.2L391.5,694L387.7,696.2L384.5,696.8L377.6,701.7L373.4,709.2L371.3,710.9L370.2,713.6L370.2,715.7L366.5,717.9L368.2,722.8L373,723.3L376.2,721.1L382,721.6L384.2,720.5L388,728L373.6,731.4L380,739.9L379.5,739.9L383.8,746.4L385.4,746.9L389.2,750.7L393.5,759.3L393.5,760.9L395.7,768.9L402.1,767.3L404.3,767.3L410.1,765.1L411.7,763.4L416.5,754.8L418.6,753.2L421.8,753.1L426.1,755.3L429.3,755.2L433,752L434.6,748.7L437.8,745.5L441,744.9L444.2,746.5L447.9,749.8L451.1,750.3L452.7,749.7L453.8,748.1L454.9,744.9L460.2,745.4L464,752.9L461.8,755.1L460.8,758.5L472.5,761.5L477.9,763.6L488.1,770.6L489.1,769L495,770.6L494.5,772.2L495,773.8L488.6,783L483.9,792.2L483.4,796L482.3,798.1L481.8,798.7L479.1,798.2L473.8,798.2L472.7,799.3L472.2,803L470.1,805.7L467.4,806.8L463.1,806.9L461,807.4L460,809L459.4,811.7L463.7,814.9L462.7,816L460,816.6L456.8,816.1L450.4,816.1L442.4,816.7L438.7,814.5L438.1,815.1L439.8,818.8L440.3,823.1L439.8,824.8L443.5,825.8L452,826.9L450,840.4L443.6,838.8L436.1,838.8L425.5,836.2L417,834.6L413.8,834.6L405.3,836.8L398.9,840.7L398.4,841.7L388.9,849.9L384.1,852.1L380.4,852.7L369.7,851.1L366,851.7L360.2,853.9L354.3,857.7L350.7,862.6L349.1,865.9L347,873.4L343.9,877.8L339.1,882.7L331.8,889.2L328.1,892L323.8,894.2L321.2,896.9L310.1,900.2L309.6,900.2L308.5,897.5L304.2,899.2L303.2,899.2L300.5,897.6L295.8,901.5L292.6,902L289.4,904.2L286.2,904.3L283.6,905.4L278.3,908.7L275.7,908.7L269.8,910.4L267.7,910.4L262.9,909.4L261.3,908.9L260.3,907.8L252.8,904.7L244.8,902.6L241.6,902.1L234.7,902.2L233.1,901.1L225.1,899.1L214.4,893.3L214.4,892.8L209,889.6L206.9,889.1L201.5,885.4L182.8,877.6L173.2,875L171.6,875.1L169,874L164.7,871.9L158.2,863.9L158.7,862.9L161.3,863.3L165,860.6L164,860.1L161.3,860.1L158.1,858.5L151.6,851.6L145.2,849L141.4,849.1L140.4,848.6L134.4,841.1L132.2,839L131.7,839L131.7,838.5L130.6,838L127.4,838.6L125.8,837.5L124.8,838.1L124.3,839.7L120.5,839.8L117.8,837.6L116.7,836.1L114.6,835L112.5,835L110.9,835.6L108.2,834L100.6,826.1L93.2,829.4L94.2,827.8L97.9,825.1L98.4,824L98.4,822.4L97.8,820.2L85.2,801L84.7,799.4L84.6,796.7L89.8,787.5L90.3,787.4L89.3,790.2L92.9,783.6L92.9,784.7L95,782L89,777.2L87.4,777.2L74.2,781.3L75.3,782.3L72,781.3L71,781.9L68.8,779.2L71.4,773.8L76.6,765.6L79.1,760.1L79.6,758L78.5,755.3L76.4,754.8L75.7,749.4L78.8,742.9L80.9,740.7L84.1,739L86.2,739L88.9,740L90.9,734.6L109.2,740.7L120.3,731.3L132.8,714.4L136,711.1L145.9,698.5L151.8,692.4L167.5,672.8L170.7,673.9L173.3,671.7L172.8,671.1L171.2,672.8L169.1,671.7L169,670.1L171.2,668.5L176.4,662.5L184.9,654.8L192.2,645.5L211.2,619.3L236.9,573.1L254.7,534.6Z","UT":"M447,549.4L448.5,549.7L448.6,561.5L449.1,562.6L451.3,558.8L456.1,562L458.8,558.8L462,557.7L464.2,560.4L464.7,562.5L464.2,563.1L463.7,562.5L463.1,560.4L462.6,560.4L458.8,562.5L458.3,565.2L456.1,564.7L454.5,565.3L452.4,566.4L451.3,568L449.2,567.4L449.2,569.1L452.5,578.8L453.5,579.8L455.1,577.7L456.2,577.7L457.3,582L457.3,585.2L461.6,590L455.2,593.3L454.1,596.5L452.6,605.7L453.7,605.7L454.2,608.4L453.7,610L448.8,609L448.8,610.1L451.5,612.2L454.2,612.7L454.2,614.3L452.7,620.8L455.9,621.3L457.5,632.1L468.8,627.8L482.7,623.4L485.9,622.8L511.2,624.9L519.7,608.7L522.9,596.3L522.4,596.3L527.7,583.9L529.8,580.1L529.8,578.5L537.9,562.3L552.9,565L554,566.6L557.8,567.7L562.1,567.1L564.8,569.3L569.1,570.4L571.2,569.8L573.9,570.3L581.4,578.4L588.4,583.3L586.3,593.5L584.7,598.9L590,603.2L590.6,600L599.7,608.1L601.8,608.6L601.3,627.5L601.8,628.6L604.5,630.8L616.3,631.9L616.3,632.9L614.1,632.9L613.6,633.5L614.1,634.5L616.3,634.5L617.9,636.7L617.4,641L618.4,642.1L620,642.6L623.8,643.2L622.7,646.4L628.1,648.6L629.1,649.7L627,652.9L623.2,653.4L622.2,656.7L622.7,659.9L625.9,659.4L627,663.2L625.4,663.1L623.8,661.5L619.5,661.5L618.9,662.1L621.6,664.8L618.4,668L618.4,673.4L618.9,675L614.6,677.2L609.8,682L609.3,682L608.7,683.1L611.4,685.8L617.8,689.6L621.6,688.5L623.7,688.5L625.9,687.4L625.9,685.3L627.5,684.2L631.2,683.7L632.3,684.7L635.5,682L635.5,681L633.9,680.4L635,677.7L637.7,678.3L638.2,672.9L636.1,671.3L635.5,670.2L642.5,668L644.1,671.3L644.6,676.1L644.1,678.8L644.6,679.9L646.2,681L646.7,684.2L645.1,702L649.9,702.6L648.8,707.4L656.8,710.7L656.8,712.8L655.8,712.8L655.7,719.3L656.8,719.3L656.8,722L655.7,722L655.2,724.2L657.3,726.9L657.3,729.6L657.9,730.6L661.6,734.4L664.2,735.5L665.8,737.1L665.8,742L670.1,746.9L669.5,749L667.9,751.7L670.6,757.1L670.6,759.8L670,760.3L667.9,760.3L666.8,761.9L662.6,765.7L655.6,760.8L645.5,758.1L641.8,755.4L638.6,751.1L627.9,747.3L624.2,744L618.8,741.3L615.6,741.3L614,741.9L600.7,740.2L598.5,741.3L593.7,745.6L586.8,747.3L584.1,748.9L580.9,749.9L577.7,749.9L574,748.9L570.8,749.4L568.1,750.5L565.4,754.8L564.9,754.8L562.8,757L560.1,758L556.9,758.6L550.5,754.3L544.6,753.8L539.3,752.1L534.4,748.9L530.2,744.6L529.1,744.1L527,744.1L524.8,745.7L522.7,751.1L519,754.9L515.8,756L510.4,753.8L506.7,750.6L496.1,771.1L495,771.1L495,770.6L489.1,769L488.1,770.6L477.9,763.6L472.5,761.5L460.8,758.5L461.8,755.1L464,752.9L460.2,745.4L454.9,744.9L453.8,748.1L452.7,749.7L451.1,750.3L447.9,749.8L444.2,746.5L441,744.9L437.8,745.5L434.6,748.7L433,752L429.3,755.2L426.1,755.3L421.8,753.1L418.6,753.2L416.5,754.8L411.7,763.4L410.1,765.1L404.3,767.3L402.1,767.3L395.7,768.9L393.5,760.9L393.5,759.3L389.2,750.7L385.4,746.9L383.8,746.4L379.5,739.9L380,739.9L373.6,731.4L388,728L384.2,720.5L382,721.6L376.2,721.1L373,723.3L368.2,722.8L366.5,717.9L370.2,715.7L370.2,713.6L371.3,710.9L373.4,709.2L377.6,701.7L384.5,696.8L387.7,696.2L391.5,694L394.1,690.2L382.9,689.8L378.1,691.4L379.7,687.6L379.1,686.5L376.4,686.6L375.2,668.2L375.8,668.2L376.3,667.2L364.7,658.3L363.9,658.1L364.4,657L367.6,656.4L369.8,654.3L370.3,652.1L369.7,650.5L370.8,648.3L371.8,647.2L374.5,646.1L379.3,645L381,647.2L387.4,649.3L394.4,648.1L394.3,637.9L400.7,634.1L387.2,623.9L383.5,623.4L380.8,621.3L380.2,619.7L375.3,615.4L375.3,613.8L372.1,610.6L367.8,610.6L367.7,600.9L366.1,599.3L365,597.1L365,595.5L370.4,595.5L378.4,592.7L381.1,590.5L382.7,590L384.3,587.8L385.9,588.3L385.9,586.2L386.9,586.2L388,582.9L392.3,580.7L392.8,579.7L394.4,580.7L395.5,579.6L397.1,579.1L400.9,579.6L403,580.7L404.6,579.6L407.9,579.6L410,577.4L410.5,576.3L410.5,574.7L412.6,572.5L414.2,569.3L413.1,563.3L416.3,562.8L419.6,564.4L426,564.3L428.4,563.9L430.3,560.5L434.6,557.3L439.4,557.8L441,555.6L441.6,552.4L444.8,549.1Z","texel":"M396,37.1L396.5,38.2L398.2,37.6L399.8,38.7L406.5,50L407.1,51.6L404.3,52.2L403.4,71L404,79.1L402.9,84.5L399.1,87.8L396.4,88.9L395.8,91L393.6,92.7L393.7,98.1L389.3,102.4L388.3,105.5L387.5,104.9L386.6,105.2L385,107.8L385.6,108.4L383.9,111.1L381.2,112.7L374.1,113.8L364.4,126.3L364.4,127.9L365.5,128.5L364.4,130.1L361.7,130.1L360,130.7L357.3,128L355.6,128L350.1,125.4L348.5,126.5L350.2,128.6L352.4,130.2L355.7,131.3L357.3,132.3L357.3,133.4L351.9,134.5L347.5,134.6L346.4,135.6L347,136.7L347,137.3L345.3,138.4L338.3,140.6L337.2,140L337.1,132.5L333.7,122.8L334.2,111.5L335.7,102.8L338.4,93.1L343.7,81.2L347.5,74.2L365.4,47.6L366.5,48.3L365.9,50.3L367,51.9L369.2,51.3L369.8,50.3L373.6,46.4L375.2,45.4L375.8,45.9L378,45.9L377.9,44.8L373.5,41.1L373,43.8L371.4,46.5L368.1,47L367,48.7L365.9,47.6L373.5,34.6L383.2,20.5L387.6,20.5L388.7,21L388.7,21.5L393.7,28L395.4,34.4L395.4,36.6Z","overig":"M514.7,120.7L501.6,132L501.1,131.5L548,91L559,87.7L560.6,87.7L552.9,89.9L549.1,91.5L518.5,117.4L518.5,119L516.9,120.1ZM575.4,85.5L577,88.2L580.3,88.2L582,89.8L584.1,95.8L585.2,96.9L585.2,97.9L580.3,97.9L578.1,96.9L574.3,89.3L574.3,86.6L575.4,86.1ZM498.9,-45.9L498.9,-45.4L497.2,-45.9L495,-45.3L492.8,-43.2L489.5,-41.6L487.9,-39.9L485.1,-38.8L484.6,-37.2L484,-37.2L482.4,-39.4L482.4,-42.1L482.9,-43.1L486.7,-46.9L489.5,-48L492.8,-48ZM474.6,-46.4L473.5,-45.8L472.4,-46.3L468.6,-46.3L463.1,-44.7L462.5,-43.6L458.7,-40.4L452.1,-37.1L435.6,-31.1L430.2,-27.8L430.2,-25.6L431.9,-21.3L426.9,-19.7L423.6,-16.4L424.2,-16.4L423.6,-14.8L415.4,-11L417.1,-8.9L416.6,-5.1L415.5,-4L413.3,-2.9L408.4,2L407.3,2.5L399.6,2L394.1,3.2L389.7,7L389.7,8L391.9,6.9L392.5,8L388.1,8.6L385.3,3.8L385.3,-0L386.9,-2.2L395.1,-7.1L412.6,-19.6L417,-22.9L422.5,-28.8L441.1,-41.9L452.1,-48.9L463,-53.3L469.1,-53.3L476.3,-51.2L476.8,-50.1ZM874.4,-117.2L877.2,-116.1L877.5,-115L876.1,-115.1L876.1,-115.6L875,-116.7L872.8,-116.7L865.6,-113.6L866.7,-113.5L866.7,-113L865,-108.7L864.4,-104.9L864.9,-100.6L866.5,-99L867.2,-95.9L867.6,-93L867,-90.9L866.9,-87.7L869,-78.5L870.1,-75.2L872.8,-72.5L871.1,-68.7L873.3,-61.7L871.6,-60.7L866.6,-59.6L866.1,-59.1L872.1,-60.1L873.8,-61.2L873.8,-62.2L872.7,-63.9L871.7,-67.7L873.9,-72L877.7,-68.7L880.4,-68.3L880.6,-69.1L878.8,-68.7L877.8,-69.8L877.8,-70.8L871.8,-78.4L871.8,-81.7L874.1,-83.3L879.5,-80.5L880.1,-78.4L879.5,-73.5L880.5,-71.9L881.7,-74L881.1,-76.7L882.3,-81L883.4,-81.6L887.3,-81L887.8,-79.9L887.2,-76.1L888.8,-73.9L891,-72.3L891.5,-71.2L891.5,-69.1L893.2,-70.7L894.8,-69.6L900.9,-67.9L895.4,-70.1L893.8,-71.2L888.3,-77.7L889.4,-79.3L890.5,-77.7L891,-75.5L894.3,-73.3L896.5,-74.4L900.4,-77.6L904.3,-75.9L907.6,-75.9L910.3,-73.7L912.5,-73.1L910.1,-56.4L912.8,-55.9L915,-54.8L915,-53.7L913.9,-52.1L910,-50.5L908.3,-48.4L905.5,-43L905,-43.6L902.8,-43.6L900.6,-42L900,-39.3L899.9,-35L901,-31.2L901,-29.6L899.3,-29.1L897.7,-29.6L896.5,-28.6L894.9,-25.3L894.3,-23.2L892.6,-22.7L893.7,-20.5L892,-15.7L888.1,-14.6L887.6,-13.6L889.2,-12.5L885.9,-8.7L888.6,-7.6L889.7,-6.5L891.8,-2.2L891.8,0.5L887.9,8L884,11.2L882.3,11.2L880.7,12.2L880.6,15.5L878.4,17.1L874.5,26.7L872.2,31L872,50.4L882.8,61.9L895.4,63.1L903.7,62.7L908,64.9L911.3,67.1L914,71.4L914.9,71.9L915.9,71.5L916.1,72.5L923.2,74.8L919.3,82.8L942.2,91.2L940.3,111.1L964.3,148.1L952,171.7L942.6,178L929.9,187.5L918.6,176.1L901.7,174.8L897.9,177.4L897.3,179.6L892.4,183.3L883.5,196.7L866.5,207.8L851.1,219L842.3,224.3L839.6,225.4L837.9,227.5L836.8,228L829.7,228L826.5,229L827.5,232.8L829.1,235.5L828.1,236.3L828.2,235.7L823.6,239.8L818.7,242.4L816.6,238.1L810.6,239.1L806.8,241.2L806.2,241.2L803.5,238.5L802.5,238.5L801.4,235.3L798.7,230.9L797.1,226.1L792.2,227.6L791.1,228.7L791.6,230.9L791.1,231.4L787.8,228.7L786.2,229.7L782.3,230.3L780.2,231.3L779.1,232.9L779.6,237.2L776.3,239.4L775.2,242.1L770.8,244.2L769.7,246.9L764.2,249L763.2,250.6L762.1,250.6L756.1,248.4L752.8,247.9L749.9,248.3L750.3,246.9L749.3,248.2L747.4,247.8L747.4,246.2L746.3,244.6L744.7,243.5L743.1,243.5L741.4,241.8L741.4,240.9L737.6,242.9L730,249.3L728.4,240.7L715.4,227.7L706.1,224.9L707.2,229.8L706.7,230.3L702.3,228.7L702.3,227.1L703.4,226L700.7,226L700.1,229.2L698.5,228.7L696.9,227.1L696.9,224.9L694.7,224.4L692,223.8L690.9,224.3L681.6,224.8L681.1,223.8L681.1,220L681.7,218.9L676.8,215.1L675.7,215.1L669.1,218.9L667.5,221L660.9,219.9L655,221.5L653.3,227.4L651.1,229.6L643.5,231.7L640.2,231.7L620.1,222L610.8,219.8L607,218.2L605.4,218.7L604.8,219.8L605.4,220.5L598.3,221.4L596.7,222.5L592.3,220.9L586.3,217.1L581.4,211.7L577.6,208.5L577.1,209L573.2,207.4L572.1,203.1L570,199.9L572.7,195.5L576,192.3L580.9,190.1L582.5,188.5L584.1,188L584.7,188.5L587.4,188L589.6,185.3L590.7,178.3L589.6,176.1L587.4,168L585.8,165.9L588,164.3L590.1,163.7L591.2,158.3L589.6,155.1L591.2,155.1L598.9,148.6L596.2,150.2L592.9,153.5L592.3,153.5L589.6,145.9L588.5,140.5L587.4,138.4L586.3,130.8L585.8,129.8L589.1,126L589.6,124.4L590.2,118.4L588.5,118.4L586.3,117.4L585.8,116.3L585.8,114.1L588.5,112.5L589.1,103.9L588.5,103.9L587.4,108.7L587.4,111.4L586.9,112L585.8,112L584.7,111.4L583.1,107.1L581.4,104.4L579.8,102.8L578.7,98.5L586.9,98.5L588,100.1L588.5,100.1L588,98.5L585.2,94.7L583.6,89.8L584.1,88.2L580.9,80.7L579.8,76.4L577,77.4L569.4,85L566.1,87.2L564.4,87.7L563.9,87.2L561.7,87.3L568.3,85L579.2,74.2L580.3,72.6L580.9,68.8L579.2,66.7L586.9,61.8L589.1,58.6L590.7,48.9L591.3,40.2L592.9,32.2L592.4,30L588.5,27.3L588,25.7L589.1,27.3L590.7,28.6L592,29.5L592.9,29.5L591.8,28.9L590.7,26.8L591.3,25.7L594.6,24.1L594,23.5L592.9,23.5L600.1,18.1L601.7,14.9L600.1,14.4L599,16L600.1,16.5L600.1,17.1L599.5,17.6L598.4,17.6L597.9,19.2L596.8,20.3L592.4,22.5L590.7,25.7L589.1,26.2L590.7,25.1L591.8,21.9L595.1,20.3L601.2,5.2L604.5,-0.2L607.8,-3.4L610,-4.5L613.8,-9.3L617.7,-13.1L620.4,-14.2L625.4,-18L629.8,-20.1L634.2,-23.3L637.5,-27.1L638.1,-28.2L637.5,-28.2L640.8,-31.9L644.1,-34.1L646.3,-39.5L655.7,-49.2L666.7,-54.5L670,-55.1L672.2,-56.7L680.5,-60.9L690.4,-63.1L704.2,-69.5L708.1,-72.7L721.4,-79.6L728.6,-82.8L734.1,-84.4L736.8,-86.6L740.7,-88.2L744,-90.3L750.7,-93L751.8,-94.6L759,-97.2L762.9,-101.5L764,-101.5L764.5,-101L765.6,-101.5L762.9,-105.8L764,-105.8L765.6,-102L767.8,-100.9L775,-102L778.3,-101.4L782.7,-101.4L792.1,-105.1L799.3,-106.1L810.4,-109.8L820.3,-110.8L830.8,-112.8L834.1,-112.8L838.5,-111.1L841.3,-114.3L841.8,-113.3L849,-112.6L858.4,-110.9L872.2,-117.3ZM643.2,-133.3L643.8,-132.2L644.3,-125.8L643.2,-127.4L642.7,-132.8L640.5,-129L630,-125.8L628.9,-126.3L627.2,-125.8L622.8,-122.6L616.7,-119.9L614,-121L611.8,-122.6L610.7,-124.2L610.1,-123.1L614,-119.3L614.5,-117.2L610.1,-117.7L605.7,-120.4L604,-120.4L604,-119.9L607.9,-116.6L616.7,-115L615.1,-113.4L607.3,-111.3L589.7,-111.3L584.2,-110.7L578.6,-108.6L574.8,-105.3L572,-102.1L566.5,-98.3L562.7,-97.8L559.9,-95.6L555.5,-96.7L554.9,-95.6L553.3,-94.5L550,-94L548.9,-91.3L548.3,-90.8L542.3,-92.9L541.2,-92.9L539,-91.3L534.5,-92.4L533.4,-90.7L529.6,-88.6L527.9,-89.1L521.3,-87.5L520.2,-85.3L520.2,-83.2L519.7,-82.6L517.5,-82.6L512,-79.4L512.5,-78.8L514.2,-78.8L514.2,-78.3L510.9,-76.7L508.1,-76.1L508.1,-76.7L507,-77.2L502.6,-77.7L499.3,-80.4L497.6,-79.9L496.5,-80.4L496,-82.6L497.1,-86.3L502,-92.8L508.1,-98.8L508.1,-100.4L513,-105.8L517.4,-107.4L532.9,-110.7L541.7,-113.4L586.4,-124.2L603.5,-129.6L617.8,-135L628.3,-137.6L633.9,-137.6L638.3,-136.6ZM827.2,-138.7L826.6,-136.6L824.4,-138.2L825,-140.9L827.2,-143L830,-141.9L830.5,-140.9L830,-139.8ZM694.1,-149.3L690.8,-148.3L689.1,-149.3L684.2,-149.4L683.6,-148.3L686.9,-146.7L693,-145L708.5,-144.4L728.4,-145.4L783.6,-149.9L788.6,-149.8L796.3,-148.2L797.4,-147.1L796.9,-144.9L795.2,-143.3L791.9,-142.3L773.1,-142.9L765.9,-139.2L746.5,-134.5L736,-131.3L729.9,-131.4L725.5,-131.9L723.9,-132.5L716.1,-133L708.4,-134.7L705.1,-133.6L703.4,-130.4L698.4,-126.7L693.5,-125.1L690.1,-123.5L687.9,-123.5L686.3,-122.4L687.9,-122.4L685.7,-120.8L679.1,-123L670.3,-127.8L668.1,-130L665.9,-133.8L665.3,-137.6L666.5,-141.3L667,-141.3L671.5,-146.7L674.2,-148.9L680.9,-150.4L685.8,-151ZM824.6,-156.6L826.2,-154.4L824.6,-154.9L821.2,-151.7L817.9,-151.2L818.5,-153.4L823.5,-156.6ZM853.4,-160.1L853.9,-154.7L852.1,-147.7L851,-145.5L849.9,-147.1L848.8,-150.4L850.5,-153.6L851.7,-160.1L850.6,-157.9L851.2,-160.6L853.4,-164.9L857.3,-167L857.9,-166.5L856.7,-165.4ZM939.8,-172L933.1,-169.4L927.6,-170L917,-164.7L912.6,-163.7L908.1,-161.6L907,-160L905.3,-158.9L904.8,-160L902.5,-157.4L903.6,-157.3L901.4,-155.8L896.4,-154.2L895.3,-155.3L894.8,-156.9L892.1,-160.7L894.2,-156.4L894.2,-155.3L892,-154.2L890.9,-154.8L889.2,-154.8L885.9,-154.3L878.7,-152.2L869.3,-152.3L865.4,-151.3L864.3,-147L862.6,-143.8L858.7,-140.1L859.2,-137.9L857.6,-137.9L855.9,-139L852.7,-145.5L853.8,-147.1L856.6,-148.7L854.9,-149.8L854.4,-154.1L857.3,-162.2L858.4,-163.8L865.1,-168.6L860.6,-168.6L858.4,-165.4L859,-169.7L910.5,-172.9L931.5,-177L937.6,-177.4L942.1,-177.4L943.1,-176.3L943.1,-175.2ZM778.2,441.9L780.2,447L784.5,445.5L789.4,441.2L792.1,441.2L794.8,445.5L810,428.9L811.7,427.9L814.4,428.4L816,427.9L817.6,425.8L821.9,427.4L827.3,431.8L828.4,432.9L830.5,438.3L833.2,441.6L840.1,445.4L843.9,449.2L844.9,451.9L845.4,458.9L844.8,464.3L845.9,465.9L847.5,467L851.2,471.4L850.6,475.7L849,479.5L849.5,482.7L847.8,486.5L851,489.7L855.3,491.4L853.1,496.2L853.6,500L852,503.8L837.4,507.9L836.3,509.5L835.7,512.8L836.8,513.9L840.5,515L842.1,517.1L839.4,519.3L836.2,519.8L835.1,520.9L835.1,524.6L835.6,527.3L833.3,538.1L831.7,538.6L831.7,540.8L833.8,541.3L836.5,540.8L838,550.5L840.7,551.6L844,551.1L844.5,550.6L845.6,552.8L846.1,555.5L848.2,558.2L848.1,563L848.7,564.7L851.9,567.9L852.9,573.3L853.9,574.4L852.8,580.4L857.6,582L860.3,583.7L862.5,582.1L863.5,583.2L864,584.8L859.7,588.5L859.1,591.2L861.3,594.5L866.6,597.2L867.1,598.3L867.1,600.5L867.6,601L869.3,598.9L867.2,595.1L868.3,592.9L874.2,590.8L876.8,594.1L881.7,593.6L887,595.8L886,592.6L887.1,592.6L889.2,594.2L893.5,593.7L895.1,594.8L901,594.9L903.2,594.4L906.9,595.5L912.3,593.4L915,592.9L916.1,594L916.6,596.2L925.2,595.8L926.8,595.2L931.6,595.3L931.7,589.9L932.8,589.9L936,586.2L941.9,586.3L947.3,583.6L947.9,584.7L950.5,585.8L954.8,585.4L960.2,586L960.2,589.2L962.8,592L964.9,597.4L971.2,603.9L974.9,610.5L979.7,612.2L979.6,615.9L983.3,621.9L987,623.6L989.2,625.2L995.1,622.6L1011.2,625.1L1024.1,622L1029.9,627.5L1028.8,630.2L1030.3,632.9L1031.9,633.5L1034.1,632.4L1035.2,630.3L1038.5,627.7L1040.1,628.2L1042.2,631L1043.9,626.7L1054,632.3L1055,636L1054.4,638.2L1054.8,646.8L1050.4,653.2L1056.2,656L1063.2,657.2L1070.1,660.6L1086.7,660.4L1084.8,673.3L1084.3,674.3L1083.8,673.8L1082.7,673.8L1081.1,674.8L1080.5,676.4L1081,677.5L1082.6,678.6L1083.1,680.3L1077.1,686.6L1069.6,687.6L1062.6,689.6L1063.1,691.2L1059.7,699.8L1059.6,707.3L1069.2,707.5L1083.5,714.2L1090.4,720.9L1105.1,732.5L1104,734.6L1110.9,735.3L1111.9,739.6L1111.8,745L1112.8,746.6L1112.8,748.3L1111.7,753.1L1105.8,753L1105.8,754.1L1100.4,756.1L1099.7,765.3L1100.2,765.8L1098.5,770.1L1095.8,772.7L1096.8,773.8L1089.7,781.8L1088.7,781.8L1083.8,783.8L1084.3,785.5L1083.3,787.1L1081.1,788.1L1077.9,788.6L1076.2,792.3L1072.5,793.9L1063.5,785.6L1062.5,781.8L1060.4,782.3L1058.3,781.7L1058.3,780.7L1055.1,781.7L1052.9,783.3L1041.6,789L1040,790.6L1037.9,791.1L1036.8,790L1035.2,791.1L1022.3,795.1L1016.4,798.3L1012.1,802.5L1010,800.9L1010,799.8L1006.8,800.8L1005.7,803L999.7,807.2L996,807.7L991.7,810.8L991.1,814.1L984.1,817.2L980.9,819.3L977.7,818.2L975.6,816.5L973,812.2L968.2,814.3L966,815.8L964,812L961.3,811.5L959.2,809.3L956.6,809.2L954.9,809.8L952.8,809.2L951.3,807L950.7,807L949.6,812.4L949.6,814.5L951.1,814.6L954.3,817.8L957.5,819.5L955.8,822.2L955.3,824.9L957.3,829.7L955.2,829.7L956.7,834.6L954.6,835.1L950.4,831.3L944.5,830.6L942.4,831.7L940.8,830.6L940.3,830L940.8,828.4L940.3,825.7L938.8,823L934,820.8L923.9,820.7L919.6,822.2L918.6,819.5L917.6,813L916.6,811.9L917.1,810.9L910.2,807L907,806.4L906,806.9L904.9,809.6L903.2,810.7L897.9,809.5L892.1,809.5L886.2,811L878.3,805.5L874.6,801.7L874.1,800.1L877.8,799.1L877.3,796.4L874.1,795.2L869.9,790.9L868.8,790.9L868.3,792.5L865.1,788.1L864.1,788.1L853.3,792.3L850.7,790.1L847.5,793.9L848,794.4L845.3,796L846.4,796.6L849.6,796.1L853.8,797.7L857.5,799.9L859.6,804.3L860.1,808.6L860.6,809.7L862.7,811.8L864.3,811.9L868.6,814.6L867.5,816.2L867.5,819.4L868,821.1L868.4,827L863.7,824.8L857.8,823.1L846.7,822.5L844,821.9L840.8,820.3L830.8,812.1L829.1,816.9L826.5,817.4L827.5,820.1L819.5,826L817.9,824.4L813.6,826.5L813,829.2L805.6,832.9L802.4,832.8L796.5,831.2L793.9,829.5L787.4,837.6L792.2,841.4L790,842.5L789.5,841.9L787.9,841.9L787.4,842.4L787.9,843.5L789,844.1L788.4,844.6L789.5,845.2L791.6,845.2L799.5,852.8L799,854.9L797.9,856L797.3,857.7L797.9,860.3L800,859.8L803.2,861.4L801,864.1L801.6,866.3L804.2,869.5L803.6,871.7L799.9,875.4L797.8,876L791.9,880.8L791.4,880.2L789.7,881.8L790.3,882.9L789.7,885.1L786.5,886.7L783.3,886.6L781.8,885L781.8,883.4L782.8,882.3L776.5,880.1L775.4,877.9L775.4,875.8L774.9,874.2L772.8,872L768.6,865L766,864.4L759,866L758.5,867.6L758.5,870.8L759.5,873.5L757.9,876.7L753.7,875.6L737.7,877.7L726.5,880.3L722.8,880.3L719.1,879.2L713.8,875.9L712.2,873.8L710.6,870L708,867.8L705.3,866.7L699.5,865.6L697.9,864L694.7,858.1L692.1,856.4L685.7,855.9L683.6,854.8L678.8,847.7L677.8,843.4L676.2,841.3L674,839.6L667.1,839.6L662.9,836.4L656.5,833.7L652.2,834.7L644.8,835.2L643.2,836.3L641.6,840.1L640.5,841.2L636.8,841.7L634.7,840.6L629.9,839.5L625.6,834.7L623,833L620.3,833L618.2,834.1L617.1,835.7L615.5,841.1L613.4,843.8L611.2,844.9L601.7,845.4L597.9,844.9L595.8,843.3L592.6,838.4L589.4,837.9L587.3,840L584.6,844.3L581.4,848.1L575.6,857.8L573.5,864.3L572.4,874.5L570.3,878.3L558.1,883.7L550.6,889.1L549,889.1L544.3,887.5L538.9,887.5L532,891.3L530.4,890.8L525.1,886.5L521.4,885.4L511.8,887L506,886L500.2,886L493.2,887.1L487.4,888.7L486.3,885.5L487.4,883.9L491.1,881.2L492.7,878.5L490.6,876.9L490,874.7L491.6,869.3L491.1,867.7L484.1,865L480.4,861.3L477.2,859.1L474,859.1L468.7,864L466.6,864L465.5,863.5L462.3,859.7L461.8,857.6L458,852.7L446.3,846.8L444.7,845.2L444.1,841.5L440.9,838.8L443.6,838.8L450,840.4L452,826.9L443.5,825.8L439.8,824.8L440.3,823.1L439.8,818.8L438.1,815.1L438.7,814.5L442.4,816.7L450.4,816.1L456.8,816.1L460,816.6L462.7,816L463.7,814.9L459.4,811.7L460,809L461,807.4L463.1,806.9L467.4,806.8L470.1,805.7L472.2,803L472.7,799.3L473.8,798.2L479.1,798.2L481.8,798.7L482.3,798.1L483.4,796L483.9,792.2L490.2,780.3L495,773.8L494.5,772.2L495,771.1L496.1,771.1L506.7,750.6L510.4,753.8L515.8,756L519,754.9L522.7,751.1L524.8,745.7L527,744.1L529.1,744.1L530.2,744.6L534.4,748.9L539.3,752.1L544.6,753.8L550.5,754.3L556.9,758.6L560.1,758L562.8,757L564.9,754.8L565.4,754.8L568.1,750.5L570.8,749.4L574,748.9L577.7,749.9L580.9,749.9L584.1,748.9L586.8,747.3L593.7,745.6L598.5,741.3L600.7,740.2L614,741.9L615.6,741.3L618.8,741.3L624.2,744L627.9,747.3L638.6,751.1L641.8,755.4L645.5,758.1L655.6,760.8L662.6,765.7L666.8,761.9L667.9,760.3L670,760.3L670.6,759.8L670.6,757.1L667.9,751.7L669.5,749L670.1,746.9L665.8,742L665.8,737.1L664.2,735.5L661.6,734.4L657.9,730.6L657.3,729.6L657.3,726.9L655.2,724.2L655.7,722L656.8,722L656.8,719.3L655.7,719.3L655.8,712.8L656.8,712.8L656.8,710.7L648.8,707.4L649.9,702.6L645.1,702L646.7,684.2L646.2,681L644.6,679.9L644.1,678.8L644.6,676.1L644.1,671.3L642.5,668L635.5,670.2L636.1,671.3L638.2,672.9L637.7,678.3L635,677.7L633.9,680.4L635.5,681L635.5,682L632.3,684.7L631.2,683.7L627.5,684.2L625.9,685.3L625.9,687.4L623.7,688.5L621.6,688.5L617.8,689.6L611.4,685.8L608.7,683.1L609.3,682L609.8,682L614.6,677.2L618.9,675L618.4,673.4L618.4,668L621.6,664.8L618.9,662.1L619.5,661.5L623.8,661.5L625.4,663.1L627,663.2L625.9,659.4L622.7,659.9L622.2,656.7L623.2,653.4L627,652.9L629.1,649.7L628.1,648.6L622.7,646.4L623.8,643.2L620,642.6L618.4,642.1L617.4,641L617.9,636.7L616.3,634.5L614.1,634.5L613.6,633.5L614.1,632.9L616.3,632.9L616.3,631.9L604.5,630.8L601.8,628.6L601.3,627.5L601.8,608.6L599.7,608.1L590.6,600L590,603.2L584.7,598.9L586.3,593.5L588.4,583.3L592.7,584.4L596.5,581.7L600.2,580.1L607.2,579L609.9,577.9L613.1,575.8L614.8,577.4L619.6,573.6L624.4,572.5L634.1,573.1L635.2,571.5L635.2,568.8L637.3,568.2L639,565L644.4,548.3L645.5,546.2L646.5,540.8L648.2,539.7L651.9,535.4L655.2,532.7L656.8,532.2L664.9,524.1L666,517.1L667.6,514.9L670.3,517.1L672.5,514.4L676.8,510.7L678.4,510.7L680,512.8L688.1,506.4L689.7,504.2L693.5,504.2L697.3,502.6L700,499.4L703.2,498.9L707.6,495.7L707.6,495.1L711.4,493L716.8,488.7L727.1,479.6L730.3,477.5L737.9,470.5L742.8,461.3L742.8,459.7L740.1,457.6L744.5,449.5L744.5,450.6L742.3,453.8L742.9,455.4L743.9,456.5L745.6,456L747.2,451.7L748.8,451.7L749.4,449L751.6,444.1L753.3,434.4L755.4,431.2L758.2,419.9L762,418.3L763.1,418.3L764.7,420L771.1,428.1L773.8,432.4ZM129,1123.9L122.7,1125.1L121.1,1123L120.6,1123L120.5,1121.3L122.1,1120.8L123.7,1122.4L123.2,1120.8L123.7,1119.7L120.5,1120.8L120,1120.3L121.6,1119.2L120,1118.7L121.5,1117L120.5,1117.6L117.3,1116.5L116.8,1116L117.3,1115.5L115.2,1116L114.6,1115.5L114.6,1114.4L118.3,1112.8L122.5,1113.8L124.1,1114.8L126.3,1118L126.3,1119.1L128.4,1121.2L127.9,1121.8L127.9,1122.8ZM129,1123.9L128.5,1122.8L128.4,1121.7L129,1121.7L130.6,1123.3L132.2,1123.3L133.2,1124.4L134.9,1130.3L135.9,1128.6L134.9,1128.1L135.9,1127L137.5,1127L134.3,1126L133.7,1123.3L138.5,1123.2L140.1,1125.9L140.6,1125.9L140.1,1124.8L140.1,1123.2L137.9,1122.1L132.1,1121.7L131.1,1120.6L131.6,1120.1L132.7,1121.1L134.7,1120.6L136.9,1121.1L140.5,1119.9L143.7,1121.5L144.8,1121.5L142.1,1119.4L138.9,1119.4L136.4,1118.2L137.4,1118.9L136.8,1119.4L132.6,1119L129.9,1115.2L128.8,1112.6L129.3,1110.4L131.9,1110.4L133.5,1110.9L133.5,1109.2L136.7,1109.7L136.8,1114L136.3,1116.2L137.8,1115.1L138.9,1116.2L140.5,1116.7L144.7,1119.3L145.3,1118.8L143.1,1117.7L144.2,1116.6L142.6,1117.2L139.9,1115.6L138.3,1114L138.3,1112.4L138.8,1111.9L139.3,1109.2L140.4,1109.1L139.9,1111.8L141.5,1114L140.9,1112.9L142,1112.3L143.6,1112.3L140.4,1111.8L140.9,1108L141.4,1107L142.9,1105.9L146.1,1105.8L148.8,1106.8L150.9,1109L147.3,1111.7L147.3,1112.8L151.4,1110L152,1111.1L151.5,1112.2L152.5,1112.2L152.6,1114.3L152,1114.3L152.1,1115.4L154.1,1114.3L154.7,1114.8L155.8,1116.4L155.2,1119L155.8,1118.6L159.5,1122.8L134.8,1155.1L96.9,1183.3L96.4,1184.9L88.5,1186.7L86.9,1184L85.4,1185.6L82.7,1186.8L81.1,1184.1L79,1184.7L75.4,1186.4L68.6,1190.8L65.6,1196.3L60.3,1196.9L59.9,1199.1L58.3,1201.8L54.1,1201.9L53.1,1202.5L52.6,1203.6L50,1204.1L47.8,1199.3L46.2,1201L44.1,1201L42.6,1202.7L43.7,1207L37,1209.8L34.3,1209.9L31.7,1211L31.2,1209.4L28.5,1206.7L33.2,1203.4L34.1,1200.2L32.5,1197.5L27.8,1200.3L22.2,1204.7L20.6,1204.8L19.5,1203.7L16.9,1203.8L12.7,1204.4L10.1,1206.1L7.5,1206.1L3.8,1204.1L1.6,1203.6L1.7,1205.2L-0.4,1205.2L-3.1,1203.1L-3.6,1202.1L-4,1184.3L-1.5,1177.7L-5.2,1176.2L-9.5,1173.1L-11,1175.8L-13.7,1174.2L-15.9,1170L-17.5,1169.5L-18,1170L-28,1167.6L-29.6,1168.1L-29.6,1168.7L-32.2,1168.2L-38.6,1165.6L-40.2,1163L-44.5,1163.1L-45,1162.6L-45,1161.5L-51.9,1157.3L-57.2,1157.5L-57.2,1158L-58.2,1158.6L-76.4,1148.2L-76.9,1148.2L-80.5,1152.6L-77.8,1155.8L-79.8,1159.1L-81.9,1158.6L-83.5,1157L-83.5,1156.5L-86.8,1153.9L-88.3,1154.5L-88.8,1156.6L-90.3,1157.8L-92,1156.7L-94.1,1156.8L-94.5,1158.9L-96.1,1161.1L-97.6,1161.2L-99.3,1158.5L-104.5,1159.2L-103.4,1162.9L-99.7,1183.4L-120.1,1186.1L-129.6,1186.3L-134.9,1184.3L-136.5,1184.9L-137.6,1181.1L-137.7,1178.4L-140.9,1175.3L-142.4,1177.5L-144,1177.5L-145.7,1173.8L-148.9,1172.3L-151.1,1167.5L-154.3,1166.5L-155.4,1165.4L-155.4,1163.8L-153.4,1162.7L-154,1159.5L-154.5,1158.4L-157.7,1156.3L-159.4,1152.6L-158.9,1151.5L-155.3,1149.8L-161.8,1142.4L-152.1,1130.8L-152.7,1126.5L-156,1122.3L-155.7,1116.4L-156.8,1112.6L-158.5,1109.4L-157,1107.2L-153.3,1104.4L-146,1101.5L-137.2,1097L-135.6,1096.9L-131.9,1097.9L-125.1,1095L-122.5,1094.9L-115.2,1092.6L-112.5,1091.4L-109.4,1089.2L-109.5,1088.1L-108.4,1087.5L-102.1,1086.8L-93.1,1088.2L-92.6,1088.8L-93.1,1090.4L-88.8,1091.9L-85.1,1092.3L-81.3,1094.9L-80.8,1095.5L-81.3,1096L-77.5,1099.7L-70.7,1100.6L-68,1102.2L-67.4,1103.2L-57.9,1106.2L-41.5,1108.5L-39.3,1111.7L-39.3,1112.8L-36.6,1115.4L-36.1,1114.9L-30.7,1119.1L-29.1,1121.2L-26.4,1122.2L-15.3,1123L-14.8,1123.5L-16.3,1125.2L-16.3,1127.4L-11.5,1129.9L-10.5,1129.4L-11.1,1122.4L-10.6,1121.3L-3.8,1121.7L-2.7,1123.3L-0.6,1124.8L3.7,1125.3L2.7,1126.9L2.7,1128.5L5.4,1133.3L5.9,1133.3L4.8,1129.6L5.3,1125.8L6.3,1126.3L6.9,1129.5L7.4,1129.5L7.9,1126.8L10.5,1126.2L13.2,1129.4L21.2,1130.3L24.8,1129.7L26.9,1126.4L27.9,1123.7L31,1123.1L33.6,1121.9L35.2,1119.8L38.8,1117L43,1114.7L50.3,1113.5L54,1111.3L56.6,1110.7L57.1,1111.8L58.2,1112.3L60.1,1102.5L61.7,1100.9L60.5,1095L61,1092.8L63.5,1087.9L64.6,1087.3L70.9,1088.3L71.5,1089.4L74.1,1089.3L79.9,1090.8L79.4,1091.9L80,1093L81.6,1092.4L82.7,1095.1L85.3,1095.6L84.2,1095.6L85.4,1102L86.5,1102.5L89.8,1109L91.9,1111.6L102.5,1113L105.1,1113L111,1117.2L112,1116.1L112.6,1116.6L112,1117.2L114.5,1119.4L115.8,1119.8L123.9,1130.5L124.9,1130.4L126.5,1131.5L129.1,1132L130.2,1131.4L131.3,1132.5L130.7,1130.9L126.5,1130.9L123.8,1129.4L123.8,1128.3L122.8,1128.3L122.2,1126.2L129,1125L130.1,1126.6L131.7,1127.1L130.1,1126ZM-38.7,1017L-38.6,1017.3L-39,1017.2L-39.5,1016.4ZM-39.8,1014.6L-39.9,1015.2L-40.4,1014.7L-40.1,1013.1L-39.7,1013.4ZM-38.5,1006L-38.5,1006.5L-39.6,1006L-40.1,1009.2L-41.1,1009.3L-41.7,1005.5L-43.4,1001.2L-42.9,999.6L-40.8,1000.6L-38.6,1003.3ZM-43.1,970.5L-43.6,970.5L-42.2,960.2L-44.9,958.1L-48.1,958.7L-48.6,958.2L-47.1,957.6L-43.9,957.5L-42.8,957L-37.2,948.7L-35.6,948.7L-31.4,945.9L-29.4,941.6L-28.4,941.6L-29.3,942.1L-31.9,948.1L-31.4,948.6L-29.8,947.5L-29.8,948L-30.3,949.1L-32.4,950.8L-32.3,952.4L-27.5,955L-25.5,951.7L-28.2,949.6L-24.9,951.7L-28.5,956.6L-32.8,953.5L-35,954.1L-33.8,956.7L-34.9,957.3L-37.6,954.1L-39.6,958L-38,959L-36.4,959L-36.9,960.1L-40.7,959.1L-41.7,960.2ZM-43.1,970.5L-42.5,972.6L-39.8,973.1L-36.7,972.5L-33.4,974.5L-29.7,973.9L-28.1,976.6L-22.3,974.1L-17.6,973.1L-14.9,973L-13.9,971.9L-9.1,972.9L-7,970.2L-1.7,970L-0.2,968.9L-0.2,968.4L4.6,968.3L7.3,969.8L13,968.1L14.1,968.1L15.2,969.1L18.4,969.1L18.9,970.1L22.6,971.1L25.9,973.8L25.4,974.3L27,976.4L29.2,981.8L32.5,986.6L32.5,987.6L35.8,993.5L36.3,993L35.8,995.1L34.3,996.2L27.4,998L26.9,998.6L23.8,1003.5L23.9,1005.1L24.9,1005.1L24.5,1006.6L23.9,1006.6L23.9,1005.6L22.8,1005.1L19.6,1004.6L16.4,1001.5L16.4,1000.4L13.7,997.8L9.4,997.8L5.8,999.5L2.1,1002.9L-4.8,1001.4L-9.1,998.8L-14.4,998.4L-23.3,1003.4L-25.3,1006.2L-32.1,1011.2L-34.1,1015.6L-35.7,1015.6L-36.2,1015.1L-37.4,1010.8L-36.4,1007L-35.9,1006.4L-37,1003.2L-40.8,997.9L-38.3,994.2L-40.3,996.8L-41.4,997.4L-44.6,995.3L-46.8,992.7L-54.3,989.1L-55.5,984.2L-56.5,982.6L-57.1,980.5L-57.2,979.4L-56.1,978.9L-56.6,978.3L-62.4,980.1L-62.9,981.2L-62.8,986.6L-62.2,988.7L-59,991.9L-58.4,994L-54.6,996.1L-49.2,1000.8L-47.6,1001.3L-46.5,1002.9L-41.5,1016.8L-36.1,1023.7L-34.3,1024.2L-30.2,1023L-33.4,1023.6L-35,1021.5L-31.9,1020.9L-29.3,1018.1L-27.7,1019.2L-26.1,1017L-27.2,1016.5L-27.2,1015.9L-24.7,1008.3L-16.9,1002.8L-13.2,1004.3L-12.1,1005.9L-6.8,1005.8L-2.5,1006.7L0.6,1006.1L1.6,1004.5L7.4,1001.7L8.5,1002.2L12.7,1002.6L16.5,1005.2L17,1006.9L18.1,1007.9L22.4,1008.4L24.5,1007.8L23.9,1006.7L25,1007.2L31.8,1006L36.1,1007L41.3,1004.2L43.4,1005.2L45.6,1005.2L46.1,1004.6L47.7,1007.3L47.2,1009.5L49.4,1013.2L52.1,1016.4L57.9,1013L61.1,1013.5L62.7,1015.1L63.7,1014.5L71.2,1018.1L75.4,1018.6L77.6,1020.2L78.6,1019.6L79.7,1020.7L81.4,1023.9L87.2,1028.1L89.4,1030.2L92.6,1029.6L93.1,1030.1L93.2,1036.1L94.8,1039.3L94.4,1043.6L95,1046.3L97.1,1047.9L102.5,1055.9L103.1,1056.4L104.1,1056.4L107.4,1063.9L111.7,1064.9L119.1,1070.1L120.2,1069.6L122.4,1072.8L128.7,1072.7L131.8,1069.9L134.4,1068.8L137,1066.6L139.7,1065.5L147.6,1066.9L152.9,1069.5L154.5,1069.5L155.5,1068.4L153.8,1057.7L154.8,1053.9L153.5,1038.8L152.9,1037.2L151.9,1036.1L137.5,1029.9L136.4,1026.1L138.4,1022.3L135.2,1020.2L133.6,1017.5L128.8,1017.1L125.7,1018.8L123.5,1016.6L116.7,1017.3L107.7,1016.4L106.6,1015.3L101.8,1015.9L97,1010.6L95.3,1006.9L95.8,1004.7L92.6,1003.2L91.5,1000L86.2,999L83.5,997.4L84.5,993.6L82.3,991L78.1,989.4L75.9,986.8L70.1,985.8L67.4,983.2L67.8,979.4L69.9,976.1L71.4,975L73,975.5L76.2,973.8L77.8,974.3L80.9,972.6L82,973.2L87.2,969.8L90.4,968.7L93,965.9L96.7,964.3L101.4,963.6L111,965.6L111.5,966.1L111.6,967.2L117.5,972.5L116.4,970.4L127,969.1L129.1,969.6L132.8,968.5L137,967.9L137.5,966.8L137,966.2L137,965.2L138.5,961.9L137.4,960.8L135.8,961.4L135.3,962.5L134.3,963.1L131.6,963.6L125.8,963.2L120,963.8L116.7,957.4L113.5,953.7L111.3,953.7L110.3,952.7L109.6,947.8L110.1,945.7L117.4,939.1L123.8,940L128.1,941.6L142,948.9L143.1,950.5L144.1,950.5L144.1,946.7L141.9,943.5L138.7,941.4L137.7,943L136.6,943.1L130.7,939.4L130.7,938.3L131.7,936.1L131.2,936.1L129.1,938.3L124.3,936.8L124.3,936.3L131.2,935.1L140.7,934.9L140.7,936.5L135.4,936.1L134.4,937.7L135.5,938.8L140.2,939.2L140.3,941.4L144.6,946.2L145.1,948.9L146.7,947.7L152.1,948.7L153.2,950.3L157.9,951.3L159.5,950.8L160.6,951.3L152.2,954.7L148.5,957.4L145.9,960.7L143.4,967.8L143.4,973.1L144.6,976.9L146.2,980.1L157.5,993.9L159.7,998.2L160.3,1001.5L159.8,1005.2L154.3,1023.1L153.9,1028.5L174.7,1076.2L171,1079.5L170,1081.7L172.2,1091.4L171.8,1098.4L171.3,1099.5L171.9,1101.6L174,1101.6L175.1,1105.3L176.1,1105.9L163,1106.6L162.9,1100.7L158.6,1094.3L151.1,1091.2L149,1091.7L148.5,1089L146.3,1087.5L144.2,1087.5L140.6,1089.7L137.4,1090.3L131.2,1094.7L130.1,1094.7L124.3,1093.8L122.7,1092.2L111,1089.7L102,1086.6L100.4,1084.5L96.2,1082.9L92.4,1079.2L90.7,1075.5L92.3,1073.8L85.9,1071.8L84.3,1070.2L79.5,1067.6L75.8,1067.1L75.8,1065L69.3,1059.2L66.6,1055.5L64.5,1053.9L59.3,1057.8L55,1057.8L49.3,1062.3L46.1,1060.7L45.1,1061.3L46.2,1064L44.6,1064.5L45.2,1067.8L46.3,1068.8L46.3,1071L43.8,1074.8L42.8,1078.6L36.8,1094.4L34.1,1095L31,1094.5L30.4,1093.4L26.2,1093L22.5,1095.2L22.6,1096.3L21.5,1096.8L7.4,1099.9L4.7,1099.9L-3.3,1092.5L-3.9,1091.5L-8.7,1088.3L-8.2,1085.6L-8.8,1085.1L-13,1085.2L-16.8,1082.6L-20.9,1084.8L-23.6,1084.9L-27.3,1082.8L-29,1075.3L-30.6,1075.4L-33.9,1070.6L-42,1063.2L-44.1,1062.2L-45.7,1062.8L-41.6,1057.3L-40,1057.2L-35.2,1060.9L-34.1,1062.5L-36.1,1065.2L-35.1,1066.3L-32.5,1063.5L-29.8,1066.2L-28.8,1064.5L-32,1060.8L-26.8,1057.5L-26.8,1056.9L-27.4,1056.4L-30.5,1058.6L-32,1059.2L-33.1,1058.7L-34.7,1059.8L-39.5,1056.1L-33.3,1052.2L-31.1,1053.3L-30.1,1050L-31.2,1048.9L-32.3,1049L-34.5,1045.2L-35.5,1046.9L-34.4,1049L-35.4,1051.2L-41.6,1055.1L-42.7,1054.1L-45.4,1054.1L-51.1,1056.4L-52.1,1059.7L-48.9,1061.2L-48.3,1062.8L-49.4,1061.8L-52.1,1060.8L-56.8,1061.4L-57.8,1063.1L-58.3,1065.2L-61.5,1066.4L-63.6,1065.9L-69.9,1067.1L-72.6,1065.6L-73.2,1060.2L-74.3,1060.2L-74.1,1065.6L-73,1067.2L-80.4,1066.9L-82.5,1068L-84.7,1067L-85.2,1065.4L-89,1061.7L-91.1,1061.7L-96.5,1057L-98.6,1056.5L-100.3,1053.3L-104.7,1047L-105.8,1043.9L-110.8,1035.3L-118.3,1030.6L-128.6,1022.3L-129.7,1020.7L-129.7,1019.6L-134.1,1015.4L-134.6,1014.3L-133.2,1006.7L-131.2,1004.5L-122.8,1000L-121.3,998.3L-117.6,996.1L-111.4,991.1L-96.8,983.1L-95.2,980.9L-87.4,976.9L-80,974.6L-76.9,974.5L-67.8,975.9L-64.6,978L-67.3,977L-66.7,977.5L-64.6,978.5L-60.9,978.4L-54.6,976.7L-48.8,974.4L-44.6,972.1ZM43.3,890.3L41.7,890.9L40.6,889.3L42.2,887.6L44.8,887.6L49.1,889.7L49.1,890.2ZM52.3,887.4L50.7,887.5L50.6,884.2L52.7,883.1L55.9,883.1L59.6,883.5L55.4,886.8ZM77.9,896.1L75.8,896.1L74.2,895.1L72.5,891.9L70.3,884.4L67,880.7L65.4,879.6L67,877.4L70.1,876.3L72.3,876.8L71.8,879L75.7,889.7L78.9,893.4L79.5,895L79,896.1ZM14.9,878.5L15.4,880.1L13.9,881.8L12.8,881.3L14.4,879.6L13.8,879.1L11.7,879.7L10.2,881.8L9.8,888.3L14.6,888.2L17.2,887.1L20.9,888.6L26.7,886.3L33.6,885.1L37.9,888.8L39.1,891.5L41.7,892.5L46.5,892.4L52.9,890.7L53.9,891.2L62.4,891L63.5,891.5L62.5,895.3L63.1,895.9L64.1,893.1L65.2,896.4L66.2,895.8L67.3,896.3L67.4,899.5L66.9,900.6L70.1,903.3L76.1,909.6L77.7,912.8L78.9,919.3L81,920.9L84.2,921.9L85.8,920.8L89.5,920.7L93.3,922.8L101.3,928.6L105.1,928.5L107.7,930.6L113,925.1L115.6,924L118.2,924L117.7,924.5L118.3,925L128.3,923.8L130.4,921.6L130.9,922.1L131.6,927L132.7,929.1L134.8,931.2L133.2,932.3L131.7,932.3L131.6,930.2L131.1,928.6L128.3,924.3L125.7,926.5L124.6,925.5L122.5,925.5L111.9,927.8L107.8,931.2L110.4,933.3L112.1,936.5L109.5,941.9L103.8,946.3L99.6,951.8L96.5,954L94.4,954.6L91.7,952.5L85.9,956.4L82.3,957.5L77,960.9L70.6,960.4L68,962.6L61.7,962.8L54.7,956.4L53.6,956.5L51.4,951.1L49.8,950.1L47.2,954.4L46.2,954.5L46.7,953.4L44,952.9L43,954L41.9,954L36,952.5L35,951.4L39.6,947.6L39.1,947L34.4,951.5L32.9,952L33.3,945.6L31.6,942.3L32.1,941.3L31.5,938L29.4,936.5L27.7,933.8L28.2,931.1L24.9,927.4L21.2,924.8L18.5,925.4L16.4,924.9L8.9,921.3L8.3,920.7L9.4,918.5L9.3,916.9L5.5,912.7L-2.4,914L-4,915.6L-3.4,917.8L-2.9,917.2L1.3,916.6L2.4,917.6L1.4,917.1L-6.5,920L-16.5,926.1L-16.5,927.2L-18.6,927.8L-19.6,927.3L-27.5,930.2L-28.4,932.9L-28.3,935.3L-27.9,937.7L-26.3,939.3L-26.8,941.5L-29.4,941.5L-31,939.4L-30.5,938.3L-28.4,938.3L-28.5,933.4L-29.1,932.4L-33.4,930.8L-37.1,928.8L-40.4,924.5L-43.2,918.7L-44.4,914.4L-44.5,907.9L-43,904.1L-39.9,898.6L-30.6,889.8L-28.5,889.2L-23.1,889.6L-9.9,885.5L-4.1,885.4L7.1,886.8L8.6,885.1L8.6,883.5L8.1,883L8.6,881.3L12.2,877.5L14.3,876.4L15.9,877.4ZM648.2,1198.8L646.1,1198.2L644.5,1187.5L644,1183.1L645.1,1174L644.5,1171.3L640.3,1168.6L634,1162.1L630.9,1157.8L629.9,1154.5L618.3,1151.3L617.8,1151.3L615.6,1154L615.1,1156.7L610.9,1161L602.5,1162L600.9,1165.8L599.3,1165.8L593.5,1173.9L567.3,1165.8L567.3,1168L566.2,1172.3L564.1,1173.4L556.2,1173.4L548.9,1174.5L537.3,1171.2L527.8,1174.5L523.6,1170.2L529.4,1148.1L514.1,1137.8L512.5,1139.5L510.4,1139.5L504.1,1142.2L499.9,1145.4L489.9,1142.2L488.8,1123.4L486.6,1121.2L484.5,1118L483.5,1114.8L466.5,1095.4L478.6,1072.7L469.5,1048.5L458.9,1048.5L457.3,1049.1L456.3,1046.4L454.1,1043.7L455.2,1039.4L452.5,1038.8L452,1039.9L448.9,1042.6L444.7,1048L443.1,1051.3L443.1,1054L444.2,1056.1L444.2,1059.4L443.1,1060.5L442.1,1064.8L426.9,1077.8L414.3,1094.1L411.2,1095.2L409,1094.6L410.1,1093.6L412.2,1093.5L412.2,1092.5L407.4,1089.8L406.9,1088.7L407.4,1087.1L402.6,1083.4L398.4,1081.2L394.2,1082.3L391.6,1084.5L392.1,1085.6L391.6,1086.1L388.9,1085.1L388.9,1083.5L385.2,1082.9L384.7,1084L381.5,1082.4L367.3,1084.7L363.1,1085.8L357.3,1083.2L355.7,1080.5L355.6,1074L357.7,1072.4L359.8,1071.8L361.9,1071.8L363,1074L368.8,1075L375.7,1077.6L381,1080.3L381.5,1079.7L382,1078.1L379.4,1078.1L378.3,1077.6L376.7,1073.3L375.6,1062.5L377.7,1060.9L379.8,1056L381.3,1057.6L382.4,1057.6L382.9,1056L380.3,1054.4L382.3,1043.1L380.2,1042L377.5,1042.5L374.9,1041.5L373.3,1037.7L372.7,1034.5L366.4,1031.3L364.3,1032.4L362.1,1031.9L360.5,1030.8L360,1029.2L357.3,1028.2L352.1,1029.8L351.6,1031.4L349.4,1031.5L348.4,1033.6L347.4,1037.9L341.1,1040.7L339,1045.6L336.4,1049.9L331.7,1051L327.5,1060.2L325.4,1060.8L318.1,1064.7L319.2,1075.4L314.5,1076.6L312.4,1075.5L310.3,1077.7L308.7,1078.2L304.5,1076.1L287,1072.5L284.4,1071.5L270.2,1077.6L267.9,1062L274.6,1047.3L270.8,1042L251.8,1044.9L248.1,1044.4L246.6,1045.5L244.5,1048.8L236.1,1050.5L214.6,1062.1L214,1061.6L212.5,1063.2L215.1,1064.3L217.2,1063.7L219.4,1066.9L218.9,1067.5L218.4,1070.2L220,1070.1L218.4,1074.5L214.3,1078.9L217,1086.4L232,1106.7L229.4,1108.9L231,1111L231.6,1113.1L228.4,1112.1L223.2,1115.4L218.5,1117.6L214.8,1118.8L202.1,1116.3L198.4,1116.8L196.7,1106.1L196.2,1105L176.1,1105.9L175.1,1105.3L174,1101.6L171.9,1101.6L171.3,1099.5L171.8,1098.4L172.2,1091.4L170,1081.7L171,1079.5L174.7,1076.2L153.9,1028.5L154.3,1023.1L159.8,1005.2L160.3,1001.5L159.7,998.2L157.5,993.9L146.2,980.1L144.6,976.9L143.4,973.1L143.4,967.8L143.9,965.6L145.9,960.7L148.5,957.4L152.2,954.7L160.6,951.3L161.7,952.3L166.4,952.3L166.4,952.8L170.1,950.1L177,947.8L181.2,947.2L187,944.4L192.3,943.8L192.3,944.3L196,944.8L198.1,944.2L201.8,942.6L208.6,937.6L211.3,940.3L211.9,940.3L210.2,937L211.8,935.9L216,930L218,924.5L217.5,923.5L229.5,913L233.8,913L236.4,914L242.9,918.3L247.7,919.8L249.3,919.8L253,921.4L254.1,922.4L255.6,921.3L258.3,921.8L264.1,921.2L271,919L294.3,913.3L300.6,907.9L304.8,905.1L308.5,903.5L311.2,903.4L309.6,900.2L321.2,896.9L323.8,894.2L328.1,892L331.8,889.2L339.1,882.7L343.9,877.8L347,873.4L349.1,865.9L350.7,862.6L354.3,857.7L360.2,853.9L366,851.7L369.7,851.1L375,852.2L380.4,852.7L384.1,852.1L388.9,849.9L398.4,841.7L398.9,840.7L405.3,836.8L413.8,834.6L417,834.6L425.5,836.2L436.1,838.8L440.9,838.8L444.1,841.5L444.7,845.2L446.3,846.8L458,852.7L461.8,857.6L462.3,859.7L465.5,863.5L466.6,864L468.7,864L474,859.1L477.2,859.1L480.4,861.3L484.1,865L491.1,867.7L491.6,869.3L490,874.7L490.6,876.9L492.7,878.5L491.1,881.2L487.4,883.9L486.3,885.5L487.4,888.7L493.2,887.1L500.2,886L506,886L511.8,887L521.4,885.4L525.1,886.5L530.4,890.8L532,891.3L538.9,887.5L544.3,887.5L549,889.1L550.6,889.1L558.1,883.7L570.3,878.3L572.4,874.5L573.5,864.3L575.6,857.8L581.4,848.1L584.6,844.3L587.3,840L589.4,837.9L592.6,838.4L595.8,843.3L597.9,844.9L605.4,845.4L611.2,844.9L613.4,843.8L615.5,841.1L617.1,835.7L618.2,834.1L620.3,833L623,833L625.6,834.7L629.9,839.5L634.7,840.6L636.8,841.7L640.5,841.2L641.6,840.1L643.2,836.3L644.8,835.2L652.2,834.7L656.5,833.7L662.9,836.4L667.1,839.6L674,839.6L676.2,841.3L677.8,843.4L678.8,847.7L683.6,854.8L685.7,855.9L692.1,856.4L694.7,858.1L697.9,864L699.5,865.6L705.3,866.7L709,868.4L710.6,870L712.2,873.8L713.8,875.9L719.1,879.2L722.8,880.3L726.5,880.3L737.7,877.7L753.7,875.6L757.9,876.7L759.9,878.3L760.9,877.1L760.1,878.4L762.1,880.5L763.2,883.3L765.7,896.2L767.9,897.8L772.6,900L783.2,901.7L788,903.4L791.2,905.6L791.1,911.5L793.2,919.1L794.2,926.1L794.6,939.6L797.2,943.9L806.7,949.9L814.6,958.1L815.6,959.7L816.2,961.9L816.1,970L817.1,974.3L819.7,977.6L821.8,981.3L821.2,987.8L821.7,991.1L822.2,993.2L824.9,996.5L819.6,998.1L819,1000.2L813.8,993.1L809,989.3L808.5,989.3L804.3,992L797.9,994.6L783.6,999.4L773,1000.4L767.7,995.5L748.2,991.6L753.2,1028.8L756.3,1036.4L760.4,1061.2L771.9,1081.3L782.3,1100.8L762.7,1118.4L760,1120L687.2,1142.3L669.8,1167.6L669.2,1182.1L667.6,1194L658.7,1197.2L658.7,1196.1ZM414.3,1088.4L417,1088.2L416.8,1085.9L415.4,1086.7L413.9,1086.6L415.6,1087.7ZM417,1073.8L418.4,1072.5L418.3,1071L417.2,1071.1L417.3,1070.5L418.4,1069.8L418.8,1070.7L419.4,1070.4L419.2,1069.6L418.4,1069.8L418.4,1067.8L417.9,1067.9L418,1068.7L417.1,1068.8L417.1,1068.3L416.4,1068.3L417.1,1067.7L416.5,1067.7L416.3,1066.2L417.7,1066.3L417.9,1065.3L416.8,1063.7L414.3,1066.5L414.1,1068.3L413.2,1065.8L413.9,1065.3L413.2,1064.8L412.3,1065.2L411.8,1064L412.5,1063.7L412.2,1063L411.3,1063.9L411.6,1066.1L410.8,1067.1L411.5,1067.2L411.1,1067.7L411.5,1068L411,1068.6L411.5,1069.3L411.3,1069.7L409.1,1070.3L410,1070.7L410.3,1070.3L412.5,1071.4L413.3,1071.2L414.3,1073.2L414.5,1072.9L414.9,1073.4L416.1,1072.9ZM418.1,1063.6L419.7,1063L421.3,1063.1L422.9,1061.4L422.6,1059.2L421.8,1059.3L422.3,1060.4L421.2,1061.1L419.2,1061L415.8,1061.7L416.5,1063L418,1063.2ZM603.1,396.2L597,409.6L597.1,408.6L601.4,398.3ZM603.1,396.2L604.7,394L611.2,391.3L610.6,391.9L605.8,394ZM612.3,390.2L611.7,390.8L611.7,389.2L608.1,375.6L612.3,388.6ZM717.9,371.7L715.7,375.5L714.6,376L713,374.9L711.9,376.5L709.8,374.3L709.8,370L712.5,369L715.8,369.4L717.4,370.6ZM706.5,379.7L717.9,382.5L720.6,382.5L720.6,383.6L735.2,383.6L737.9,384.2L752.4,399.9L753.5,401.6L754,404.3L755,419.4L753.9,424.7L753.8,427.4L752.2,433.4L740.1,457L738.5,457.5L737.4,458.6L733.1,467.8L726,474.2L717.9,480.6L714.1,483.3L712.5,483.3L712,482.2L707.6,481.1L705.5,481.6L683.3,492.9L677.4,497.2L670.4,502.5L664.4,511.7L654.7,513.8L647.2,511.1L639.6,519.2L638,521.3L637.4,522.9L639,528.9L640.7,530.5L641.7,530L643.3,531L643.3,532.1L641.7,534.8L642.8,538.6L641.7,543.4L640.6,545.6L637.4,556.4L636.8,556.9L634.7,566.6L623.4,569.8L606.7,575.8L593.3,579.5L590.6,580.1L588.4,579.5L585.2,577.9L582.5,574.7L582,573L556.7,549.3L549.7,543.9L538.9,538L528.7,533.7L522.2,532.1L521.1,532.1L521.1,533.2L520.1,533.7L518.4,533.2L516.3,531.6L515.7,530L512,529.5L508.2,530L496.4,534.4L495.3,533.8L493.7,534.9L493.2,537.1L491.4,534.5L492.1,534.4L493.7,532.2L489.9,528.4L488.8,529L487.7,528.4L489.3,524.7L489.3,517.1L488.8,512.3L485.5,506.3L485.5,503.6L487.6,501.5L497.9,495.5L499.5,491.7L516.8,481.6L522.1,480.9L524.2,478.7L525.9,476L535,470.1L581.4,437.7L582.5,437.1L585.2,437.1L591.2,431.2L590.6,430.7L592.8,428.5L594.4,429L599.8,424.7L601.4,422.6L602,421L600.9,420.4L599.8,415.6L600.4,413.4L603.1,409.1L604.7,410.2L607.4,403.7L607.4,400.5L607.9,399.4L610.6,398.9L610.6,399.9L620.4,399.4L622.5,398.9L624.2,397.8L644.8,376.3L647.5,374.7L650.7,373.6L670.8,368.3L675.7,365L678.6,362.1L679.1,362.6L675.5,365.5L675.1,366.6L680.5,373.1ZM769.4,360.7L750.4,364.9L756.4,362.2L760.8,361.2L766.2,359ZM589.1,344.9L593.3,352.5L607.8,375.2L589.6,347.1ZM549.4,317.4L550.5,317.4L550.5,318.5L547.8,321.2L548.9,321.7L548.9,322.3L547.8,322.8L543.4,320.7L546.7,320.1L548.3,319.1ZM589.1,344.9L585.8,340.6L572.7,327.1L570,325L551.6,316.9L549.4,317.4L548.9,316.9L549.4,315.8L551.6,316.4L569.5,324.4L572.2,326L586.8,341.1ZM715.4,227.7L728.4,240.7L730,249.3L732.2,247.7L735.4,253.1L740.8,258.6L740.8,260.7L747.3,260.2L752.2,260.8L756.5,263L763,267.3L770.6,274.4L772.8,274.4L778.7,280.4L785.7,299.5L786.1,302.6L789.9,304.2L792.1,309.1L794.8,312.3L794.7,315L793.6,317.2L789.8,320.4L788.7,319.8L782.7,327.3L783.8,330L785.4,330L785.4,329L785.9,329L790.3,330.6L795.1,331.2L800.5,336.1L801.6,338.3L794.5,347.9L765.1,357.9L746.1,363.8L715.8,363.6L715.8,365.2L712,363.6L683.8,363.4L679.5,362.4L678.9,361.8L679.5,361.3L666.6,340.7L661.1,337.5L657.9,333.7L658.5,310L658.6,273.8L659.2,271.7L682.7,234.6L684.3,232.9L687,231.9L699,230.8L701.2,230.3L702.3,228.7L706.7,230.3L707.2,229.8L706.1,224.9ZM739.5,378.8L739.5,380.4L741.7,379.4L744.4,378.8L746.6,379.9L748.1,381.5L736.3,381L739.5,378.3L741.2,377.7L741.2,378.8ZM865.6,236.4L870.4,242.4L870.4,241.8L873.7,244.6L876.3,248.9L881.2,254.9L878.4,259.7L870.7,267.7L869,271L864.7,273.6L857.6,276.2L855.9,276.2L853.7,277.3L852.1,278.9L851.5,281L859.5,300.5L864.7,315.7L869.1,318.4L869.6,319.5L867.4,323.8L874.4,326.6L875,324.9L873.4,322.2L875.5,321.7L876.1,323.3L877.7,325.5L878.2,325.5L879.3,322.8L881.5,320.7L885.9,319.7L888,319.7L888,320.8L894.5,324.6L896.7,324.1L898.3,325.8L898.8,326.8L898.3,327.9L899.9,329.5L904.7,329.6L904.7,331.2L906.3,332.3L907.4,332.3L908,331.3L909.6,330.2L911.8,331.3L913.4,333.5L915.5,334.1L916.7,331.4L921,331.4L923.2,329.8L925.9,329.3L927,329.9L928,331.5L926.9,333.7L926.9,335.3L927.4,336.4L937.1,343.5L939.3,344.1L940.9,345.2L943,352.2L945.1,354.4L945.5,361.4L948.2,364.1L950.9,362.6L952,361L955.3,361.5L956.9,360.5L956.4,358.9L957.5,358.3L960.2,360L961.3,360L961.8,357.9L964.6,354.7L965.7,354.1L966.2,354.7L966.7,359.5L969.9,361.8L973.7,362.9L975.9,361.8L977.6,357L979.7,356.5L980.8,357.1L980.8,358.7L983.5,360.3L986.2,360.4L987.8,359.9L992.7,361L995.4,363.2L997.5,362.7L996.2,343.3L1010,332.2L1029,327.6L1032.8,327.1L1059.2,339.5L1067.3,342.3L1066.2,343.9L1065.5,350.4L1064.3,354.7L1067,355.3L1068.1,354.7L1070.3,356.4L1074.5,362.4L1070.9,378L1088,392.9L1088.5,393.4L1088.5,394.5L1083.6,396L1078.8,394.3L1074.4,393.7L1073.4,394.2L1071.6,400.6L1070,402.2L1063.5,400.5L1058.1,399.9L1057,399.3L1066.4,418.9L1063.3,439.9L1072.9,445.4L1083.6,453.2L1085.2,453.2L1091.7,455.5L1108.9,455.3L1117.6,456L1120.8,455.5L1120.2,461.4L1123.4,460.4L1133.6,463.3L1140,466.2L1152.9,470.2L1156.7,468.1L1160.6,464.5L1165.1,455.4L1166.2,452.2L1169.5,449.5L1172.2,452.3L1172.1,453.9L1176.2,464.3L1178.2,474L1182.4,477.3L1184.4,483.3L1187.5,489.9L1193.4,491.6L1194.5,490.6L1196.1,491.7L1196.1,493.8L1197.6,497.1L1200.6,508L1200.8,520.4L1195.3,528.3L1194.6,532.1L1191.8,536.9L1191.7,542.3L1190.1,543.3L1183.9,556.1L1184.3,559.9L1185.3,562.6L1184.2,564.8L1184.7,567.5L1186.3,568.6L1189.8,577.8L1198.2,586.7L1197.1,590.4L1188.9,595.1L1184.1,596.1L1181.4,596.5L1175.5,594.2L1170.6,595.2L1167.3,598.9L1166.7,604.3L1162.2,612.8L1160.5,614.9L1160.5,616.6L1156.6,623L1150.1,624.4L1142.1,625.3L1139.9,626.4L1139.8,629.6L1133.8,634.9L1131.1,638.1L1127.6,651.5L1128.1,653.1L1124.8,655.2L1121.5,658.9L1116.7,659.9L1109.2,660.3L1070.1,660.6L1063.2,657.2L1056.2,656L1050.4,653.2L1054.8,646.8L1054.4,638.2L1055,636L1054,632.3L1043.9,626.7L1042.2,631L1040.1,628.2L1038.5,627.7L1035.2,630.3L1034.1,632.4L1031.9,633.5L1030.3,632.9L1028.8,630.2L1029.9,627.5L1024.1,622L1011.2,625.1L995.1,622.6L989.2,625.2L987,623.6L983.3,621.9L979.6,615.9L979.7,612.2L974.9,610.5L971.2,603.9L964.9,597.4L962.8,592L960.2,589.2L960.2,586L954.8,585.4L950.5,585.8L947.9,584.7L947.3,583.6L941.9,586.3L936,586.2L932.8,589.9L931.7,589.9L931.6,595.3L926.8,595.2L925.2,595.8L916.6,596.2L916.1,594L914.8,593L906.4,595.5L903.2,594.4L901,594.9L895.1,594.8L893.5,593.7L889.2,594.2L887.1,592.6L886,592.6L887,595.8L881.7,593.6L876.8,594.1L874.2,590.8L868.3,592.9L867.2,595.1L869.3,598.9L867.6,601L867.1,600.5L867.1,598.3L866.6,597.2L861.3,594.5L859.1,591.2L859.7,588.5L864,584.8L863.5,583.2L862.5,582.1L860.3,583.7L857.6,582L852.8,580.4L853.9,574.4L852.9,573.3L851.9,567.9L848.7,564.7L848.1,563L848.2,558.2L846.1,555.5L845.6,552.8L844.5,550.6L844,551.1L840.7,551.6L838,550.5L836.5,540.8L833.8,541.3L831.7,540.8L831.7,538.6L833.3,538.1L835.6,527.3L835.1,524.6L835.1,520.9L836.2,519.8L839.4,519.3L842.1,517.1L840.5,515L836.8,513.9L835.7,512.8L836.3,509.5L837.4,507.9L852,503.8L853.6,500L853.1,496.2L855.3,491.4L851,489.7L847.8,486.5L849.5,482.7L849,479.5L850.6,475.7L851.2,471.4L847.5,467L845.9,465.9L844.8,464.3L845.4,458.9L844.9,451.9L843.9,449.2L840.1,445.4L833.2,441.6L830.5,438.3L828.4,432.9L827.3,431.8L821.9,427.4L817.6,425.8L816,427.9L814.4,428.4L811.7,427.9L810,428.9L794.8,445.5L792.1,441.2L789.4,441.2L784.5,445.5L780.2,447L773.8,432.4L771.1,428.1L764.7,420L763.1,418.3L762,418.3L758.2,419.9L757.1,418.3L757.2,412.9L754.6,400.5L751.9,395.6L749.7,393.4L748.7,389.7L747.1,386.4L744.9,385.3L743.8,383.7L740.6,383.1L739,381.5L748.7,382.6L749.3,381L745.5,377.2L746.6,372.9L746.1,372.9L745.5,371.3L748.8,365.4L770.5,360.1L772.7,360.2L772.7,361.2L777,364L782.4,362.9L791.1,358.7L791.7,356.5L796,357.6L802.5,356.6L802.5,355L803.6,356.1L811.3,349.1L814.5,350.2L815.1,346.5L810.3,340.5L806.5,338.3L802.1,337.7L795.1,331.2L790.3,330.6L785.9,329L785.4,329L785.4,330L783.8,330L782.7,327.3L783.2,326.3L788.7,319.8L789.8,320.4L793.6,317.2L794.7,315L794.8,312.3L792.1,309.1L789.9,304.2L786.1,302.6L785.7,299.5L778.7,280.4L772.8,274.4L770.6,274.4L763,267.3L756.5,263L752.2,260.8L747.3,260.2L740.8,260.7L740.8,258.6L735.4,253.1L732.2,247.7L737.6,242.9L741.4,240.9L741.4,241.8L743.1,243.5L744.7,243.5L746.3,244.6L747.4,246.2L747.4,247.8L749.3,248.2L750.3,246.9L749.9,248.3L752.8,247.9L756.1,248.4L762.1,250.6L763.2,250.6L764.2,249L769.7,246.9L770.8,244.2L775.2,242.1L776.3,239.4L779.6,237.2L779.1,232.9L780.2,231.3L782.3,230.3L786.2,229.7L787.8,228.7L791.1,231.4L791.6,230.9L791.1,228.7L792.2,227.6L797.1,226.1L798.7,230.9L801.4,235.3L802.5,238.5L803.5,238.5L806.2,241.2L806.8,241.2L810.6,239.1L816.6,238.1L818.7,242.4L823.6,239.8L828.2,235.7L828.1,236.3L829.1,235.5L827.5,232.8L826.5,229L829.7,228L836.8,228L837.9,227.5L839.6,225.4L842.3,224.3L851.1,219L854.9,222.8L855.4,225Z"};
+
+/* ---------- gegevens ---------- */
+const L0 = 3.80, LAT1 = 53.22, K = 600, C = 0.6115, KW = 716, KH = 960;
+const xy = (lon, lat) => [(lon - L0) * K * C, (LAT1 - lat) * K];
+const PROV = {
+  NH: { naam: "Noord-Holland", kleur: "var(--nh)", kleurnaam: "oranje" },
+  ZH: { naam: "Zuid-Holland", kleur: "var(--zh)", kleurnaam: "geel" },
+  UT: { naam: "Utrecht", kleur: "var(--ut)", kleurnaam: "paars" },
+};
+// vorm: stip (plaats met een stip), vlak (gebied), prov (provincie). r = richting van het naamkaartje.
+const ITEMS = [
+  // Noord-Holland
+  { id: "alkmaar", naam: "Alkmaar", prov: "NH", pos: [4.748, 52.632], r: "l", weetje: "Alkmaar is de kaasstad. Op de kaasmarkt dragen mannen grote gele kazen.", waar: "In het midden van Noord-Holland, een flink stuk boven Amsterdam.", spel: "Alk-maar, met een lange aa." },
+  { id: "amstelveen", naam: "Amstelveen", prov: "NH", pos: [4.859, 52.300], r: "r", weetje: "Amstelveen ligt aan de rivier de Amstel, net als Amsterdam.", waar: "Vlak onder Amsterdam.", spel: "Amstel-veen, met ee." },
+  { id: "amsterdam", naam: "Amsterdam", prov: "NH", pos: [4.895, 52.372], r: "r", weetje: "Amsterdam is de hoofdstad van Nederland. De stad zit vol met grachten.", waar: "Onder in Noord-Holland, aan het water.", spel: "Amster-dam: de dam in de Amstel." },
+  { id: "denhelder", naam: "Den Helder", prov: "NH", pos: [4.760, 52.956], r: "r", weetje: "In Den Helder liggen de schepen van de marine. Hier vertrekt ook de boot naar Texel.", waar: "Helemaal in het puntje bovenaan Noord-Holland.", spel: "Twee woorden, twee hoofdletters: Den Helder." },
+  { id: "enkhuizen", naam: "Enkhuizen", prov: "NH", pos: [5.292, 52.703], r: "l", weetje: "Enkhuizen is een oud havenstadje aan het IJsselmeer.", waar: "Rechts in Noord-Holland, op een punt in het IJsselmeer.", spel: "Enk-huizen, met ui en een z." },
+  { id: "haarlem", naam: "Haarlem", prov: "NH", pos: [4.637, 52.384], r: "t", weetje: "Haarlem is de hoofdstad van de provincie Noord-Holland.", waar: "Links van Amsterdam, dicht bij de zee.", spel: "Haar-lem, met een lange aa." },
+  { id: "haarlemmermeer", naam: "Haarlemmermeer", prov: "NH", pos: [4.640, 52.272], r: "l", soort: "gebied", lid: "de ", weetje: "De Haarlemmermeer was vroeger een groot meer. Nu is het een polder: droog land.", waar: "Onder Haarlem. Schiphol ligt in de Haarlemmermeer.", spel: "Haarlem + mer + meer. Dus dubbel m!" },
+  { id: "hilversum", naam: "Hilversum", prov: "NH", pos: [5.176, 52.224], r: "r", weetje: "In Hilversum worden veel tv- en radioprogramma's gemaakt.", waar: "Rechts onderin Noord-Holland, dicht bij de provincie Utrecht.", spel: "Hil-ver-sum, met een v en een s." },
+  { id: "purmerend", naam: "Purmerend", prov: "NH", pos: [4.960, 52.505], r: "r", weetje: "Purmerend ligt tussen drie polders: de Beemster, de Purmer en de Wormer.", waar: "Een stukje boven Amsterdam.", spel: "Pur-mer-end, met een d aan het eind." },
+  { id: "schiphol", naam: "Schiphol", prov: "NH", pos: [4.765, 52.309], r: "b", soort: "vliegveld", icoon: "✈️", weetje: "Schiphol is het grootste vliegveld van Nederland.", waar: "Links onder Amsterdam, in de Haarlemmermeer.", spel: "Schip-hol: een schip en een hol." },
+  { id: "texel", naam: "Texel", zeg: "Tessel", prov: "NH", pos: [4.815, 53.085], r: "r", soort: "eiland", weetje: "Texel is het grootste Waddeneiland. Je schrijft een x, maar je zegt: Tessel.", waar: "Het eiland helemaal bovenaan, boven Den Helder.", spel: "Met een x: Texel. Je zegt Tessel." },
+  { id: "zaandam", naam: "Zaandam", prov: "NH", pos: [4.826, 52.442], r: "r", weetje: "Bij Zaandam staan de bekende molens van de Zaanse Schans.", waar: "Net boven Amsterdam, een klein beetje naar links.", spel: "Zaan-dam: de dam in de Zaan." },
+  { id: "zandvoort", naam: "Zandvoort", prov: "NH", pos: [4.533, 52.371], r: "l", plus: true, weetje: "Zandvoort ligt aan zee. Er is een groot strand en een racecircuit.", waar: "Aan de kust, links van Haarlem.", spel: "Zand-voort: d in het midden, oo en een t." },
+  // Zuid-Holland
+  { id: "alphen", naam: "Alphen aan den Rijn", prov: "ZH", pos: [4.657, 52.129], r: "r", weetje: "Alphen aan den Rijn ligt aan de rivier de Oude Rijn.", waar: "In het Groene Hart, rechts van Leiden.", spel: "Alphen met ph. En het is aan DEN Rijn, niet de." },
+  { id: "delft", naam: "Delft", prov: "ZH", pos: [4.357, 52.011], r: "l", weetje: "Delft is bekend van Delfts blauw: wit servies met blauwe tekeningen.", waar: "Tussen Den Haag en Rotterdam in.", spel: "Kort woord: Delft, met ft aan het eind." },
+  { id: "denhaag", naam: "Den Haag", prov: "ZH", pos: [4.300, 52.078], r: "l", weetje: "In Den Haag werkt de regering. Het is ook de hoofdstad van Zuid-Holland.", waar: "Aan de kust, links in Zuid-Holland.", spel: "Twee woorden, twee hoofdletters: Den Haag." },
+  { id: "dordrecht", naam: "Dordrecht", prov: "ZH", pos: [4.690, 51.813], r: "r", weetje: "Dordrecht is de oudste stad van Holland. De stad ligt op een eiland tussen rivieren.", waar: "Rechts onder Rotterdam.", spel: "Dor-drecht, met cht aan het eind." },
+  { id: "gouda", naam: "Gouda", prov: "ZH", pos: [4.711, 52.012], r: "r", weetje: "Gouda is bekend van de Goudse kaas en van stroopwafels.", waar: "Rechts in Zuid-Holland, tussen Rotterdam en Utrecht in.", spel: "Gou-da, met ou." },
+  { id: "groenehart", naam: "Groene Hart", prov: "ZH", pos: [4.775, 52.188], r: "c", vorm: "vlak", soort: "gebied", lid: "het ", plus: true, weetje: "Het Groene Hart is het groene gebied midden in de Randstad. Er zijn veel weilanden met koeien.", waar: "In het midden, tussen de grote steden in.", spel: "Twee woorden, twee hoofdletters. Hart met een t, net als je hart." },
+  { id: "leiden", naam: "Leiden", prov: "ZH", pos: [4.497, 52.160], r: "l", weetje: "Leiden heeft de oudste universiteit van Nederland.", waar: "Rechtsboven Den Haag.", spel: "Lei-den, met de korte ei." },
+  { id: "randstad", naam: "Randstad", prov: "ZH", pos: [5.030, 52.200], r: "c", vorm: "vlak", soort: "gebied", lid: "de ", weetje: "De Randstad is een grote rand van steden: Amsterdam, Rotterdam, Den Haag, Utrecht en nog meer.", waar: "De rand van grote steden, om het Groene Hart heen.", spel: "Rand + stad. Dus een d in het midden en een d aan het eind." },
+  { id: "rotterdam", naam: "Rotterdam", prov: "ZH", pos: [4.479, 51.922], r: "r", weetje: "Rotterdam heeft de grootste haven van Europa.", waar: "Onder in Zuid-Holland, aan de rivier.", spel: "Rot-ter-dam, met dubbel t." },
+  { id: "vlaardingen", naam: "Vlaardingen", prov: "ZH", pos: [4.342, 51.912], r: "l", plus: true, weetje: "Vlaardingen is een oude vissersstad. Vroeger werd hier veel haring gevangen.", waar: "Vlak links van Rotterdam.", spel: "Vlaar-ding-en, met een lange aa." },
+  { id: "zoetermeer", naam: "Zoetermeer", prov: "ZH", pos: [4.494, 52.057], r: "t", weetje: "Zoetermeer was eerst een klein dorp. Nu is het een grote stad.", waar: "Rechts van Den Haag.", spel: "Zoe-ter-meer: oe en ee." },
+  // Utrecht
+  { id: "amersfoort", naam: "Amersfoort", prov: "UT", pos: [5.388, 52.156], r: "r", weetje: "In Amersfoort is een grote dierentuin: DierenPark Amersfoort.", waar: "Rechts in de provincie Utrecht.", spel: "Amers-foort: oo en een t aan het eind." },
+  { id: "nieuwegein", naam: "Nieuwegein", prov: "UT", pos: [5.081, 52.029], r: "b", plus: true, weetje: "Nieuwegein is een jonge stad. De stad bestaat pas sinds 1971.", waar: "Vlak onder de stad Utrecht.", spel: "Nieuwe + gein: ieuw en de korte ei." },
+  { id: "utrecht", naam: "Utrecht (stad)", kort: "Utrecht", zeg: "Utrecht, de stad", lidnaam: "de stad Utrecht", prov: "UT", pos: [5.122, 52.091], r: "r", weetje: "In Utrecht staat de Domtoren. Dat is de hoogste kerktoren van Nederland.", waar: "In het midden van de provincie Utrecht.", spel: "U-trecht, met cht aan het eind." },
+  { id: "woerden", naam: "Woerden", prov: "UT", pos: [4.883, 52.085], r: "b", plus: true, weetje: "Woerden is een kaasstad in het Groene Hart.", waar: "Links in de provincie Utrecht, tussen Utrecht en Gouda in.", spel: "Woer-den, met oe." },
+  // Provincies
+  { id: "NH", naam: "Noord-Holland", prov: "NH", pos: [4.93, 52.78], r: "c", vorm: "prov", soort: "provincie", lidnaam: "de provincie Noord-Holland", weetje: "Noord-Holland is de bovenste provincie van de Randstad. De hoofdstad is Haarlem.", waar: "De bovenste van de drie. Op de kaart is hij oranje.", spel: "Met een streepje en twee hoofdletters: Noord-Holland." },
+  { id: "ZH", naam: "Zuid-Holland", prov: "ZH", pos: [4.50, 51.86], r: "c", vorm: "prov", soort: "provincie", lidnaam: "de provincie Zuid-Holland", weetje: "Zuid-Holland ligt onder Noord-Holland. De hoofdstad is Den Haag.", waar: "Linksonder. Op de kaart is hij geel.", spel: "Met een streepje en twee hoofdletters: Zuid-Holland." },
+  { id: "UT", naam: "Utrecht (provincie)", kort: "Utrecht", zeg: "Utrecht, de provincie", prov: "UT", pos: [5.43, 52.02], r: "c", vorm: "prov", soort: "provincie", lidnaam: "de provincie Utrecht", weetje: "Utrecht is de kleinste provincie van Nederland. De hoofdstad heet ook Utrecht.", waar: "Rechts van Zuid-Holland. Op de kaart is hij paars.", spel: "U-trecht, met cht aan het eind." },
+];
+ITEMS.forEach(it => { it.vorm = it.vorm || "stip"; it.soort = it.soort || "stad"; [it.x, it.y] = xy(...it.pos); });
+const item = id => ITEMS.find(i => i.id === id);
+const metLid = it => it.lidnaam || (it.lid || "") + (it.kort || it.naam);
+const zeg = it => it.zeg || it.naam;
+const SOORTVRAAG = { stad: "Welke plaats is dit?", eiland: "Welk eiland is dit?", vliegveld: "Welk vliegveld is dit?", gebied: "Welk gebied is dit?", provincie: "Welke provincie is dit?" };
+const RANDSTAD_ROUTE = [[4.690, 51.813], [4.479, 51.922], [4.357, 52.011], [4.300, 52.078], [4.497, 52.160], [4.637, 52.384], [4.895, 52.372], [5.122, 52.091]];
+
+const SPELLEN = [
+  { id: "ontdek", emoji: "🔭", naam: "Ontdekken", tekst: "Tik op de kaart en hoor hoe alles heet.", tint: "var(--zee)" },
+  { id: "wijs", emoji: "👆", naam: "Wijs aan", tekst: "Waar ligt het? Tik op de goede plek.", tint: "var(--nh)" },
+  { id: "naam", emoji: "🏷️", naam: "Hoe heet het?", tekst: "Kies de goede naam bij de stip.", tint: "var(--zh)" },
+  { id: "schrijf", emoji: "✏️", naam: "Schrijf goed", tekst: "Typ de naam zonder fouten.", tint: "var(--ut)" },
+  { id: "prov", emoji: "🧩", naam: "Welke provincie?", tekst: "In welke provincie ligt de plaats?", tint: "var(--groen)" },
+  { id: "toets", emoji: "🏆", naam: "De toets", tekst: "Alles door elkaar. Welk cijfer haal jij?" },
+];
+const GOED = ["Goed zo!", "Super!", "Knap hoor!", "Helemaal goed!", "Top!", "Jij bent een kanjer!", "Yes, goed!"];
+
+/* ---------- opslag ---------- */
+const SLEUTEL = "topotopper-randstad-v1";
+const S = { filter: "alles", voorlezen: true, geluid: true, plus: true, provincies: true, kennis: {}, besteCijfer: null };
+try { Object.assign(S, JSON.parse(localStorage.getItem(SLEUTEL) || "{}")); } catch (e) {}
+const bewaar = () => { try { localStorage.setItem(SLEUTEL, JSON.stringify(S)); } catch (e) {} };
+const ken = id => (S.kennis[id] = S.kennis[id] || { w: 0, n: 0, s: 0 });
+const sterrenVan = id => { const k = ken(id); return (k.w >= 2) + (k.n >= 2) + (k.s >= 2); };
+function tel(id, vak, goed) {
+  if (!vak) return;
+  const k = ken(id);
+  k[vak] = Math.max(0, Math.min(3, k[vak] + (goed ? 1 : -1)));
+  bewaar();
+}
+const meedoen = () => ITEMS.filter(it => (S.plus || !it.plus) && (S.provincies || it.vorm !== "prov"));
+const actief = () => meedoen().filter(it => S.filter === "alles" || it.prov === S.filter);
+
+/* ---------- hulpjes ---------- */
+const $ = s => document.querySelector(s);
+const schud = a => { a = [...a]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const kies = a => a[Math.floor(Math.random() * a.length)];
+const esc = t => t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const sterTekst = n => `<span class="sterren" aria-label="${n} van de 3 sterren">${"<b>★</b>".repeat(n)}${"★".repeat(3 - n)}</span>`;
+
+/* ---------- voorlezen ---------- */
+const kanPraten = "speechSynthesis" in window;
+let stem = null;
+function zoekStem() {
+  const st = speechSynthesis.getVoices();
+  stem = st.find(v => v.lang === "nl-NL") || st.find(v => v.lang && v.lang.toLowerCase().startsWith("nl")) || null;
+}
+if (kanPraten) { zoekStem(); speechSynthesis.onvoiceschanged = zoekStem; }
+function lees(tekst) {
+  if (!kanPraten) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(tekst.replace(/\s+/g, " "));
+  u.lang = "nl-NL"; if (stem) u.voice = stem;
+  u.rate = 0.9;
+  speechSynthesis.speak(u);
+}
+const leesAuto = tekst => { if (S.voorlezen) lees(tekst); };
+const stil = () => { if (kanPraten) speechSynthesis.cancel(); };
+
+/* ---------- geluidjes ---------- */
+let audio = null;
+function toon(freqs, duur = .13, type = "sine") {
+  if (!S.geluid) return;
+  try {
+    audio = audio || new (window.AudioContext || window.webkitAudioContext)();
+    freqs.forEach((f, i) => {
+      const o = audio.createOscillator(), g = audio.createGain(), t = audio.currentTime + i * duur;
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.18, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + duur);
+      o.connect(g).connect(audio.destination); o.start(t); o.stop(t + duur + .02);
+    });
+  } catch (e) {}
+}
+const geluidGoed = () => toon([523, 659, 784]);
+const geluidFout = () => toon([220, 175], .18, "triangle");
+const geluidFeest = () => toon([523, 659, 784, 1047, 784, 1047], .12);
+
+function confetti(n = 60) {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const tekens = ["⭐", "🎉", "🧀", "🌷", "✈️", "⛵", "🚲", "💛", "🎈"];
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement("div");
+    d.className = "confetti"; d.textContent = kies(tekens);
+    d.style.left = Math.random() * 100 + "vw";
+    d.style.animationDuration = 2 + Math.random() * 2.5 + "s";
+    d.style.animationDelay = Math.random() * .8 + "s";
+    document.body.appendChild(d);
+    setTimeout(() => d.remove(), 5500);
+  }
+}
+
+/* ---------- kaart ---------- */
+const svg = $("#kaart");
+function tekenKaart() {
+  const route = "M" + RANDSTAD_ROUTE.map(p => xy(...p).map(v => v.toFixed(1)).join(",")).join("L");
+  const gh = xy(4.775, 52.125);
+  svg.setAttribute("viewBox", `0 0 ${KW} ${KH}`);
+  svg.innerHTML = `
+    <rect width="${KW}" height="${KH}" fill="var(--zee)"/>
+    <path class="land" d="${KAART.overig}"/>
+    <text class="water" x="120" y="420">Noordzee</text>
+    <text class="water" x="${xy(5.42, 52.75)[0]}" y="${xy(5.42, 52.75)[1]}" text-anchor="middle">IJsselmeer</text>
+    <text class="water" x="${xy(5.15, 53.08)[0]}" y="${xy(5.15, 53.08)[1]}" text-anchor="middle">Waddenzee</text>
+    <g class="provs">
+      <path class="prov NH" data-prov="NH" d="${KAART.NH}"/>
+      <path class="prov NH" data-prov="NH" data-id="texel" d="${KAART.texel}"/>
+      <path class="prov ZH" data-prov="ZH" d="${KAART.ZH}"/>
+      <path class="prov UT" data-prov="UT" d="${KAART.UT}"/>
+    </g>
+    <g class="gebieden">
+      <path class="randstad" data-gebied="randstad" d="${route}"/>
+      <ellipse class="groenehart" data-gebied="groenehart" cx="${gh[0].toFixed(1)}" cy="${gh[1].toFixed(1)}" rx="58" ry="52"/>
+    </g>
+    <g class="windroos" transform="translate(64,70)">
+      <circle r="34" fill="#fff" opacity=".85"/>
+      <path d="M0,-28 L7,0 L0,28 L-7,0Z" fill="var(--inkt)"/><path d="M-28,0 L0,-7 L28,0 L0,7Z" fill="var(--zacht)"/>
+      <text y="-38" text-anchor="middle" font-size="16" font-weight="800" fill="#fff">N</text>
+    </g>
+    <g class="stippen"></g><g class="extra"></g><g class="labels"></g>`;
+}
+function tekenStippen(lijst) {
+  svg.querySelector(".stippen").innerHTML = lijst.filter(it => it.vorm === "stip").map(it =>
+    `<g class="stip" data-stip="${it.id}">${it.icoon
+      ? `<circle cx="${it.x.toFixed(1)}" cy="${it.y.toFixed(1)}" r="12"/><text x="${it.x.toFixed(1)}" y="${(it.y + 1).toFixed(1)}" font-size="15">${it.icoon}</text>`
+      : `<circle cx="${it.x.toFixed(1)}" cy="${it.y.toFixed(1)}" r="8"/>`}</g>`).join("");
+  svg.querySelectorAll(".gebieden [data-gebied]").forEach(el => { el.style.display = lijst.some(it => it.id === el.dataset.gebied) ? "" : "none"; });
+}
+function kaartSchoon() {
+  svg.querySelector(".labels").innerHTML = "";
+  svg.querySelector(".extra").innerHTML = "";
+  svg.querySelectorAll(".doel,.goed,.fout,.dim").forEach(el => el.classList.remove("doel", "goed", "fout", "dim"));
+  svg.classList.remove("grijs");
+  svg.removeAttribute("data-doel");
+}
+function vormVan(it) {
+  if (it.vorm === "stip") return svg.querySelector(`[data-stip="${it.id}"]`);
+  if (it.vorm === "vlak") return svg.querySelector(`[data-gebied="${it.id}"]`);
+  return null;
+}
+function markeer(it, klasse) {
+  if (it.vorm === "prov") svg.querySelectorAll(`[data-prov="${it.id}"]`).forEach(el => el.classList.add(klasse));
+  else { const el = vormVan(it); if (el) el.classList.add(klasse); }
+}
+function puls(it) {
+  if (it.vorm !== "stip") return;
+  svg.querySelector(".extra").innerHTML = `<circle class="puls" cx="${it.x.toFixed(1)}" cy="${it.y.toFixed(1)}" r="16"/>`;
+}
+function label(it, klasse = "", tekst) {
+  const t = tekst || it.kort || it.naam;
+  let x = it.x, y = it.y + 6, anker = "middle";
+  const d = it.icoon ? 17 : 13;
+  if (it.r === "r") { x += d; anker = "start"; }
+  else if (it.r === "l") { x -= d; anker = "end"; }
+  else if (it.r === "t") y -= d + 8;
+  else if (it.r === "b") y += d + 10;
+  // binnen beeld houden
+  const breed = t.length * 10.5;
+  if (anker === "start" && x + breed > KW - 6) { anker = "end"; x = it.x - d; }
+  if (anker === "end" && x - breed < 6) { anker = "start"; x = it.x + d; }
+  svg.querySelector(".labels").insertAdjacentHTML("beforeend", `<text class="${klasse}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="${anker}">${esc(t)}</text>`);
+}
+function kaartPunt(e) {
+  const p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+  return p.matrixTransform(svg.getScreenCTM().inverse());
+}
+function dichtsteStip(p, lijst, max = 30) {
+  let beste = null, afstand = max;
+  lijst.forEach(it => { if (it.vorm !== "stip") return; const d = Math.hypot(it.x - p.x, it.y - p.y); if (d < afstand) { afstand = d; beste = it; } });
+  return beste;
+}
+/* Geeft terug wat er op de kaart is aangetikt: { it } of { land: true } of null (zee). */
+function watIsGetikt(e, lijst, doelVorm) {
+  const p = kaartPunt(e), t = e.target;
+  if (doelVorm === "prov") {
+    const el = t.closest("[data-prov]");
+    return el ? { it: item(el.dataset.prov) } : null;
+  }
+  if (doelVorm === "vlak") {
+    const el = t.closest("[data-gebied]");
+    if (el) return { it: item(el.dataset.gebied) };
+    return t.closest("[data-prov]") ? { land: true } : null;
+  }
+  const stip = dichtsteStip(p, lijst);
+  if (stip) return { it: stip };
+  const el = t.closest("[data-id]");
+  if (el && lijst.some(it => it.id === el.dataset.id)) return { it: item(el.dataset.id) };
+  if (doelVorm === "alles") {
+    const g = t.closest("[data-gebied]");
+    if (g && lijst.some(it => it.id === g.dataset.gebied)) return { it: item(g.dataset.gebied) };
+    const pr = t.closest("[data-prov]");
+    if (pr) return { it: item(pr.dataset.prov) };
+  }
+  return t.closest("[data-prov]") ? { land: true } : null;
+}
+
+/* ---------- schermen ---------- */
+function scherm(naam) {
+  ["Start", "Spel", "Einde"].forEach(s => { $("#scherm" + s).hidden = s !== naam; });
+  window.scrollTo(0, 0);
+}
+function totaalSterren() { return meedoen().reduce((s, it) => s + sterrenVan(it.id), 0); }
+function tekenStart() {
+  stil(); R = null;
+  const alle = meedoen(), totaal = totaalSterren(), max = alle.length * 3;
+  $("#sterTeller").textContent = `⭐ ${totaal}`;
+  const deel = max ? totaal / max : 0;
+  const rangen = [[0, "🥚 Kaartkijker"], [.15, "🚲 Stedenfietser"], [.4, "🔎 Stedenspeurder"], [.7, "🛡️ Randstad-ridder"], [.95, "👑 Topotopper"]];
+  const rang = rangen.filter(r => deel >= r[0]).pop()[1];
+  $("#rang").innerHTML = `${rang} &nbsp;·&nbsp; ${totaal} van de ${max} sterren` + (S.besteCijfer ? ` &nbsp;·&nbsp; beste toets: ${String(S.besteCijfer).replace(".", ",")}` : "");
+  $("#rangBalk").style.width = Math.round(deel * 100) + "%";
+
+  $("#filterChips").innerHTML = [["alles", "Alles", null], ...Object.entries(PROV).map(([k, p]) => [k, p.naam, p.kleur])].map(([k, n, kleur]) =>
+    `<button class="chip" data-filter="${k}" aria-pressed="${S.filter === k}">${kleur ? `<i class="bol" style="background:${kleur}"></i>` : "🌍"} ${n}</button>`).join("");
+  $("#spellen").innerHTML = SPELLEN.map(sp =>
+    `<button class="spelkaart ${sp.id === "toets" ? "toets" : ""}" data-spel="${sp.id}" style="${sp.tint ? `--tint:${sp.tint}` : ""}">
+      <span class="emoji">${sp.emoji}</span><b>${sp.naam}</b><span>${sp.tekst}</span></button>`).join("");
+  $("#album").innerHTML = Object.entries(PROV).map(([k, p]) =>
+    `<section style="--tint:${p.kleur}"><h3>${p.naam}</h3><ul>${alle.filter(it => it.prov === k && it.vorm !== "prov").map(it =>
+      `<li><button data-zeg="${it.id}">${it.plus ? '<span class="plus">+</span> ' : ""}${esc(it.naam)}</button>${sterTekst(sterrenVan(it.id))}</li>`).join("")}</ul></section>`).join("");
+  scherm("Start");
+}
+
+/* ---------- ontdekken ---------- */
+function startOntdek() {
+  R = { spel: "ontdek", lijst: actief() };
+  scherm("Spel"); kaartSchoon(); tekenStippen(R.lijst);
+  $("#paneel").innerHTML = `
+    <div class="vraagregel"><p class="vraag">🔭 Ontdek de kaart</p><button class="luister" data-lees="Tik op een stip op de kaart. Dan hoor je hoe de plaats heet." aria-label="Lees voor">🔊</button></div>
+    <p class="uitleg">Tik op een stip, een gebied of een provincie. Dan zie en hoor je hoe het heet.</p>
+    <div class="rij"><button class="knop twee" id="alleNamen" aria-pressed="false">🏷️ Laat alle namen zien</button></div>
+    <div id="ontdekInfo"></div>`;
+  leesAuto("Tik op een stip op de kaart. Dan hoor je hoe de plaats heet.");
+}
+function toonOntdek(it) {
+  const alle = $("#alleNamen").getAttribute("aria-pressed") === "true";
+  svg.querySelectorAll(".doel").forEach(el => el.classList.remove("doel"));
+  if (!alle) svg.querySelector(".labels").innerHTML = "";
+  markeer(it, "doel"); puls(it);
+  if (!alle) label(it);
+  const p = PROV[it.prov];
+  $("#ontdekInfo").innerHTML = `
+    <div class="melding tip ontdek">
+      <div class="vraagregel"><h3>${it.icoon || ""} ${esc(it.naam)}</h3><button class="luister" data-lees="${esc(zeg(it))}" aria-label="Lees de naam voor">🔊</button></div>
+      <span class="soort" style="background:${p.kleur}">${it.soort}${it.vorm === "prov" || it.vorm === "vlak" ? "" : " in " + p.naam}</span>
+      <dl>
+        <dt>📍 Waar ligt het?</dt><dd>${esc(it.waar)}</dd>
+        <dt>💡 Weetje</dt><dd class="weetje"><p>${esc(it.weetje)}</p><button class="luister klein" data-lees="${esc(zeg(it) + ". " + it.waar + " " + it.weetje)}" aria-label="Lees alles voor">🔊</button></dd>
+        <dt>✏️ Zo schrijf je het</dt><dd>${esc(it.spel)}</dd>
+      </dl>
+    </div>`;
+  leesAuto(zeg(it));
+}
+
+/* ---------- rondes ---------- */
+let R = null;
+const VAK = { wijs: "w", naam: "n", schrijf: "s" };
+function startRonde(spel) {
+  let lijst = actief();
+  if (spel === "prov") lijst = lijst.filter(it => it.vorm === "stip");
+  if (lijst.length < 2) return;
+  let rij;
+  if (spel === "toets") {
+    rij = schud(lijst).map((it, i) => ({ it, type: i % 2 ? "schrijf" : "wijs" }));
+  } else {
+    const vak = VAK[spel];
+    // wat je nog niet goed kent, komt vaker
+    rij = lijst.map(it => ({ it, w: Math.pow(Math.random(), 1 / (4 - (vak ? ken(it.id)[vak] : 0))) }))
+      .sort((a, b) => b.w - a.w).slice(0, 10).map(o => ({ it: o.it, type: spel }));
+    rij = schud(rij);
+  }
+  R = { spel, lijst, rij, i: 0, goed: 0, totaal: rij.length, fouten: [], herhaald: new Set() };
+  scherm("Spel"); tekenStippen(lijst);
+  vraag();
+}
+function vraag() {
+  const v = R.rij[R.i], it = v.it;
+  R.kans = 1; R.klaar = false; R.hints = 0; R.gespiekt = false;
+  kaartSchoon();
+  const kop = `<div class="voortgang"><span>${R.spel === "toets" ? "🏆 Toets · " : ""}Vraag ${Math.min(R.i + 1, R.totaal)} van ${R.totaal}</span><div class="balk"><i style="width:${Math.round(Math.min(R.i, R.totaal) / R.totaal * 100)}%"></i></div><span>⭐ ${R.goed}</span></div>`;
+  let tekst, html, voorlees;
+  if (v.type === "wijs") {
+    svg.dataset.doel = it.vorm;
+    voorlees = `Waar ligt ${it.lidnaam || (it.lid || "") + zeg(it)}?`;
+    tekst = `Waar ligt <b>${esc(metLid(it))}</b>?`;
+    html = `<p class="uitleg">👆 Tik op ${it.vorm === "stip" ? "de goede stip" : it.vorm === "prov" ? "de goede provincie" : "het goede gebied"} op de kaart.</p>`;
+  } else if (v.type === "naam") {
+    toonDoel(it);
+    voorlees = SOORTVRAAG[it.soort];
+    tekst = voorlees;
+    html = `<div class="opties">${keuzes(it).map(o => `<button class="optie" data-keuze="${o.id}">${esc(o.naam)}<span class="ruimte" style="flex:1"></span><span class="luister klein" role="button" data-lees="${esc(zeg(o))}" aria-label="Lees voor">🔊</span></button>`).join("")}</div>`;
+  } else if (v.type === "schrijf") {
+    toonDoel(it);
+    voorlees = SOORTVRAAG[it.soort] + " Schrijf de naam op.";
+    tekst = SOORTVRAAG[it.soort] + " Schrijf de naam.";
+    html = `<form class="schrijf" id="schrijfForm" autocomplete="off">
+        <input id="schrijfIn" type="text" inputmode="text" autocapitalize="words" autocorrect="off" spellcheck="false" aria-label="Typ de naam" placeholder="Typ hier…">
+        <p class="hintletters" id="hintLetters"></p>
+        <div class="rij"><button class="knop" type="submit">Controleer</button>
+        ${R.spel === "toets" ? "" : `<button class="knop twee" type="button" id="hintKnop">💡 Hint</button><button class="knop twee" type="button" id="spiekKnop">👀 Spiek</button>`}</div>
+      </form>`;
+  } else {
+    svg.classList.add("grijs");
+    markeer(it, "doel"); puls(it); label(it);
+    voorlees = `In welke provincie ligt ${zeg(it)}?`;
+    tekst = `In welke provincie ligt <b>${esc(it.kort || it.naam)}</b>?`;
+    html = `<div class="opties">${Object.entries(PROV).map(([k, p]) => `<button class="optie" data-keuze="${k}"><i class="bol" style="background:${p.kleur}"></i>${p.naam}</button>`).join("")}</div>`;
+  }
+  R.voorlees = voorlees;
+  $("#paneel").innerHTML = `${kop}<div class="vraagregel"><p class="vraag">${tekst}</p><button class="luister" data-lees="${esc(voorlees)}" aria-label="Lees de vraag voor">🔊</button></div>${html}<div id="melding"></div>`;
+  if (v.type === "schrijf") {
+    const inp = $("#schrijfIn");
+    if (matchMedia("(pointer: fine)").matches) inp.focus();
+  }
+  leesAuto(voorlees);
+}
+function toonDoel(it) {
+  svg.querySelectorAll(".stip").forEach(el => el.classList.add("dim"));
+  const el = vormVan(it); if (el) el.classList.remove("dim");
+  markeer(it, "doel"); puls(it);
+}
+function keuzes(it) {
+  const rest = R.lijst.filter(o => o.id !== it.id);
+  const zelfde = rest.filter(o => (o.vorm === "stip") === (it.vorm === "stip"));
+  const bron = zelfde.length >= 3 ? zelfde : rest;
+  const dichtbij = [...bron].sort((a, b) => Math.hypot(a.x - it.x, a.y - it.y) - Math.hypot(b.x - it.x, b.y - it.y));
+  const gekozen = dichtbij.slice(0, 2);
+  const over = schud(bron.filter(o => !gekozen.includes(o)));
+  if (over.length) gekozen.push(over[0]);
+  return schud([it, ...gekozen]);
+}
+const norm = t => t.toLowerCase().replace(/[’'`]/g, "'").replace(/\s+/g, " ").trim();
+function verschil(a, b) { // Levenshtein
+  const m = a.length, n = b.length, d = Array.from({ length: m + 1 }, (_, i) => [i]);
+  for (let j = 1; j <= n; j++) d[0][j] = j;
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++)
+    d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+  return d[m][n];
+}
+function goedeNaam(it) { return it.kort || it.naam; }
+
+/* Eén poging. goed = true/false. tip = tekst bij de eerste fout. */
+function poging(goed, tip, extra) {
+  if (R.klaar) return;
+  const v = R.rij[R.i], it = v.it;
+  if (goed) return afronden(true, extra);
+  geluidFout();
+  if (R.spel === "toets" || R.kans === 2) return afronden(false, extra);
+  R.kans = 2;
+  $("#melding").innerHTML = `<div class="melding tip"><h3>🤔 Bijna! Probeer het nog een keer.</h3><div class="weetje"><p><b>Tip:</b> ${esc(tip)}</p><button class="luister klein" data-lees="${esc("Tip. " + tip)}" aria-label="Lees de tip voor">🔊</button></div></div>`;
+  leesAuto("Bijna! Probeer het nog een keer. Tip: " + tip);
+}
+function afronden(goed, extra = "") {
+  const v = R.rij[R.i], it = v.it;
+  R.klaar = true;
+  const inEenKeer = goed && R.kans === 1 && !R.gespiekt && !R.hints;
+  const vak = VAK[v.type];
+  if (inEenKeer) { R.goed++; tel(it.id, vak, true); }
+  else if (!goed) {
+    tel(it.id, vak, false);
+    if (!R.fouten.includes(it)) R.fouten.push(it);
+    if (R.spel !== "toets" && !R.herhaald.has(it.id)) { R.herhaald.add(it.id); R.rij.push({ it, type: v.type }); }
+  }
+  // kaart: laat het goede antwoord zien
+  svg.classList.remove("grijs"); svg.removeAttribute("data-doel");
+  svg.querySelectorAll(".dim").forEach(el => el.classList.remove("dim"));
+  svg.querySelector(".extra").innerHTML = "";
+  svg.querySelectorAll(".doel").forEach(el => el.classList.remove("doel"));
+  markeer(it, goed ? "goed" : "doel"); if (!goed) puls(it);
+  if (![...svg.querySelectorAll(".labels text")].some(t => t.textContent === (it.kort || it.naam))) label(it, goed ? "goed" : "");
+  document.querySelectorAll("#paneel .optie, #paneel form button, #paneel form input").forEach(el => { el.disabled = true; });
+  const laatste = R.i >= R.rij.length - 1;
+  const knop = `<div class="rij"><button class="knop groot" id="verder">${laatste ? "Klaar! 🎉" : "Verder →"}</button></div>`;
+  const weet = `<div class="weetje"><p>💡 ${esc(it.weetje)}</p><button class="luister klein" data-lees="${esc(it.weetje)}" aria-label="Lees het weetje voor">🔊</button></div>`;
+  if (goed) {
+    const zin = kies(GOED);
+    geluidGoed();
+    $("#melding").innerHTML = `<div class="melding goed"><h3>✅ ${inEenKeer ? zin + " ⭐" : "Goed! Nu weet je het."}</h3>${extra}${weet}${knop}</div>`;
+    leesAuto(inEenKeer ? zin : "Goed! Nu weet je het.");
+  } else {
+    const uit = v.type === "prov" ? `${goedeNaam(it)} ligt in ${PROV[it.prov].naam}.`
+      : v.type === "wijs" ? `Kijk op de kaart: daar ligt ${metLid(it)}.` : `Het goede antwoord is ${goedeNaam(it)}.`;
+    const tip = v.type === "schrijf" ? it.spel : it.waar;
+    $("#melding").innerHTML = `<div class="melding fout"><h3>❌ Jammer!</h3><p><b>${esc(uit)}</b></p>${extra}<div class="weetje"><p>📌 ${esc(tip)}</p><button class="luister klein" data-lees="${esc(uit.replace(it.kort || it.naam, zeg(it)) + " " + tip)}" aria-label="Lees voor">🔊</button></div>${knop}</div>`;
+    leesAuto(v.type === "prov" ? `${zeg(it)} ligt in ${PROV[it.prov].naam}.` : v.type === "wijs" ? `Kijk op de kaart. Daar ligt ${it.lidnaam || (it.lid || "") + zeg(it)}.` : `Het goede antwoord is ${zeg(it)}.`);
+  }
+  const k = $("#verder"); if (k && matchMedia("(pointer: fine)").matches) k.focus();
+  $("#melding").scrollIntoView({ block: "nearest", behavior: "smooth" });
+}
+function verder() {
+  if (!R || !R.klaar) return;
+  R.i++;
+  if (R.i >= R.rij.length) return einde();
+  vraag();
+}
+
+function kaartKlik(e) {
+  if (!R) return;
+  if (R.spel === "ontdek") {
+    const g = watIsGetikt(e, R.lijst, "alles");
+    if (g && g.it && R.lijst.includes(g.it)) toonOntdek(g.it);
+    return;
+  }
+  const v = R.rij[R.i];
+  if (!v || v.type !== "wijs" || R.klaar) return;
+  const it = v.it, g = watIsGetikt(e, R.lijst, it.vorm);
+  if (!g) return;
+  if (!g.it && it.vorm === "stip") { $("#melding").innerHTML = `<div class="melding tip"><p>👆 Tik precies op een stip.</p></div>`; return; }
+  if (g.it === it) return poging(true);
+  // fout: laat zien wat het wél was
+  if (g.it) {
+    markeer(g.it, "fout");
+    label(g.it, "fout");
+    const gek = g.it;
+    setTimeout(() => { if (gek.vorm === "prov") svg.querySelectorAll(`[data-prov="${gek.id}"]`).forEach(el => el.classList.remove("fout")); }, 900);
+  }
+  const dat = g.it ? `Dat is ${metLid(g.it)}. ` : "";
+  poging(false, dat + it.waar, g.it ? `<p>Jij tikte op ${esc(metLid(g.it))}.</p>` : "");
+}
+function controleerSchrijf() {
+  const v = R.rij[R.i], it = v.it, inp = $("#schrijfIn"), getypt = inp.value.replace(/\s+/g, " ").trim();
+  if (!getypt) { inp.focus(); return; }
+  const goed = [it.naam, it.kort].filter(Boolean);
+  if (it.lid) goed.push(it.lid + it.naam);
+  const juist = goed.some(g => norm(g) === norm(getypt));
+  const mooi = goedeNaam(it);
+  if (juist) {
+    const hoofd = goed.includes(getypt) || getypt === (it.lid || "") + it.naam;
+    return poging(true, "", hoofd ? "" : `<p>🔠 Let wel op de hoofdletters: <b>${esc(mooi)}</b></p>`);
+  }
+  const dichtbij = verschil(norm(mooi), norm(getypt)) <= 2;
+  const extra = `<p>Jij schreef: <span class="spelling"><s>${esc(getypt)}</s></span><br>Goed is: <span class="spelling">${esc(mooi)}</span></p>`;
+  if (R.spel !== "toets" && R.kans === 1) { inp.select(); }
+  poging(false, (dichtbij ? "Je bent er bijna! Kijk goed naar elke letter. " : "") + it.spel, extra);
+}
+function hint() {
+  const it = R.rij[R.i].it, naam = goedeNaam(it);
+  R.hints = Math.min(naam.length, R.hints + 1 + (naam[R.hints] === " " ? 1 : 0));
+  $("#hintLetters").textContent = [...naam].map((c, i) => i < R.hints || c === " " || c === "-" ? (c === " " ? "  " : c) : "_").join("");
+}
+function spiek() {
+  const it = R.rij[R.i].it;
+  R.gespiekt = true;
+  svg.querySelector(".labels").innerHTML = ""; label(it);
+  lees(zeg(it));
+  setTimeout(() => { if (R && !R.klaar && R.rij[R.i] && R.rij[R.i].it === it) svg.querySelector(".labels").innerHTML = ""; }, 3000);
+}
+
+/* ---------- einde ---------- */
+function einde() {
+  const goed = R.goed, totaal = R.totaal, deel = goed / totaal, spel = R.spel, fouten = R.fouten;
+  kaartSchoon();
+  let kop, groot, midden, zin;
+  if (spel === "toets") {
+    const cijfer = Math.round((1 + 9 * deel) * 10) / 10;
+    if (!S.besteCijfer || cijfer > S.besteCijfer) { S.besteCijfer = cijfer; bewaar(); }
+    const c = String(cijfer).replace(".", ",");
+    groot = cijfer >= 10 ? "👑" : cijfer >= 8 ? "🏆" : cijfer >= 5.5 ? "💪" : "🌱";
+    kop = cijfer >= 10 ? "Een 10! Jij bent een echte topotopper!" : cijfer >= 9 ? "Bijna een 10! Wat knap!" : cijfer >= 8 ? "Wat een mooi cijfer!" : cijfer >= 5.5 ? "Voldoende! Nog even oefenen voor de 10." : "Goed geprobeerd! Oefenen maakt je beter.";
+    midden = `<div class="cijfer">${c}</div><p>${goed} van de ${totaal} goed.</p>`;
+    zin = `${kop} Je cijfer is een ${c}.`;
+  } else {
+    const st = deel >= .9 ? 3 : deel >= .6 ? 2 : deel >= .3 ? 1 : 0;
+    groot = ["🌱", "👍", "🎉", "🏆"][st];
+    kop = ["Goed geprobeerd!", "Lekker bezig!", "Heel knap gedaan!", "Wauw, wat ben jij goed!"][st];
+    midden = `<div>${sterTekst(st)}</div><p>${goed} van de ${totaal} in één keer goed.</p>`;
+    zin = `${kop} Je had er ${goed} van de ${totaal} in één keer goed.`;
+  }
+  $("#schermEinde").innerHTML = `<div class="einde">
+      <div class="groot">${groot}</div><h2>${kop}</h2>${midden}
+      ${fouten.length ? `<h3>Deze kun je nog even oefenen:</h3><div class="chips">${fouten.map(it => `<button class="chip" data-zeg="${it.id}">🔊 ${esc(it.naam)}</button>`).join("")}</div>`
+        : `<p>Je had geen enkele fout. 🌟</p>`}
+      <div class="rij" style="margin-top:22px"><button class="knop groot" data-spel="${spel}">Nog een keer</button><button class="knop twee groot" id="naarHuis">Ander spel</button></div>
+    </div>`;
+  scherm("Einde");
+  $("#sterTeller").textContent = `⭐ ${totaalSterren()}`;
+  if (deel >= .6) { confetti(deel >= .9 ? 90 : 40); geluidFeest(); }
+  leesAuto(zin);
+  R = null;
+}
+
+/* ---------- knoppen ---------- */
+document.addEventListener("click", e => {
+  const t = e.target;
+  const l = t.closest("[data-lees]");
+  if (l) { lees(l.dataset.lees); e.stopPropagation(); return; }
+  const z = t.closest("[data-zeg]");
+  if (z) { lees(zeg(item(z.dataset.zeg))); return; }
+  const f = t.closest("[data-filter]");
+  if (f) { S.filter = f.dataset.filter; bewaar(); tekenStart(); return; }
+  const sp = t.closest("[data-spel]");
+  if (sp) { sp.dataset.spel === "ontdek" ? startOntdek() : startRonde(sp.dataset.spel); return; }
+  const k = t.closest("[data-keuze]");
+  if (k && R && !R.klaar && !k.disabled) {
+    const v = R.rij[R.i], it = v.it;
+    const goed = v.type === "prov" ? k.dataset.keuze === it.prov : k.dataset.keuze === it.id;
+    k.classList.add(goed ? "goed" : "fout"); if (!goed) k.disabled = true;
+    if (!goed && (R.spel === "toets" || R.kans === 2)) {
+      const juist = document.querySelector(`[data-keuze="${v.type === "prov" ? it.prov : it.id}"]`); if (juist) juist.classList.add("goed");
+    }
+    poging(goed, v.type === "prov" ? `Kijk waar de stip ligt. ${it.waar}` : it.waar);
+    return;
+  }
+  if (t.closest("#verder")) return verder();
+  if (t.closest("#hintKnop")) return hint();
+  if (t.closest("#spiekKnop")) return spiek();
+  if (t.closest("#alleNamen")) {
+    const b = t.closest("#alleNamen"), aan = b.getAttribute("aria-pressed") !== "true";
+    b.setAttribute("aria-pressed", aan); b.textContent = aan ? "🙈 Verstop de namen" : "🏷️ Laat alle namen zien";
+    svg.querySelector(".labels").innerHTML = "";
+    if (aan) R.lijst.forEach(it => label(it));
+    return;
+  }
+  if (t.closest("#stopKnop") || t.closest("#naarHuis") || t.closest("#naarStart")) return tekenStart();
+});
+document.addEventListener("submit", e => { if (e.target.id === "schrijfForm") { e.preventDefault(); if (R && !R.klaar) controleerSchrijf(); } });
+svg.addEventListener("click", kaartKlik);
+
+const dlg = $("#instellingen");
+$("#instelKnop").addEventListener("click", () => {
+  $("#insVoorlezen").checked = S.voorlezen; $("#insGeluid").checked = S.geluid; $("#insPlus").checked = S.plus; $("#insProv").checked = S.provincies;
+  dlg.showModal();
+});
+function sluitInstellingen() {
+  S.voorlezen = $("#insVoorlezen").checked; S.geluid = $("#insGeluid").checked; S.plus = $("#insPlus").checked; S.provincies = $("#insProv").checked;
+  bewaar(); if (!S.voorlezen) stil();
+  if (!$("#schermSpel").hidden || !$("#schermStart").hidden) tekenStart();
+}
+$("#insKlaar").addEventListener("click", () => dlg.close());
+dlg.addEventListener("close", sluitInstellingen);
+let wisTeller = 0;
+$("#insWis").addEventListener("click", e => {
+  if (++wisTeller < 2) { e.target.textContent = "Zeker weten? Tik nog een keer"; return; }
+  wisTeller = 0; e.target.textContent = "Alles wissen";
+  S.kennis = {}; S.besteCijfer = null; bewaar(); dlg.close();
+});
+
+tekenKaart();
+tekenStart();
+</script>
+</body>
+</html>
