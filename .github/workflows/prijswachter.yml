@@ -8,6 +8,7 @@ on:
 permissions:
   contents: write
   issues: write
+  pages: write
 
 concurrency:
   group: prijswachter
@@ -44,6 +45,12 @@ jobs:
             sleep 5
           done
           exit 1
+
+      - name: Website (GitHub Pages) verversen
+        if: steps.datum.outputs.klaar != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" >/dev/null || echo "GitHub Pages staat (nog) niet aan"
 
       - name: Melding bij prijsdaling (GitHub stuurt je een e-mail)
         if: steps.datum.outputs.klaar != '1'
