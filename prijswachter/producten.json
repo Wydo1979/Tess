@@ -1,0 +1,61 @@
+{
+  "_uitleg": "Pas hier producten, webshops en wensprijzen aan. 'wensprijs' = bij deze prijs (of lager) krijg je een melding. 'min_prijs'/'max_prijs' voorkomen dat per ongeluk de prijs van een accessoire wordt opgepikt.",
+  "producten": [
+    {
+      "id": "ipad-2025",
+      "naam": "Apple iPad (2025) 11 inch, 128 GB, wifi",
+      "emoji": "📱",
+      "wensprijs": 329,
+      "min_prijs": 250,
+      "max_prijs": 800,
+      "zoekterm": "ipad 2025 11 inch 128gb wifi",
+      "aanbiedingen": [
+        {"winkel": "Coolblue", "variant": "Zilver", "url": "https://www.coolblue.nl/product/960489/apple-ipad-2025-11-inch-128gb-wifi-zilver.html"},
+        {"winkel": "Coolblue", "variant": "Blauw", "url": "https://www.coolblue.nl/product/961491/apple-ipad-2025-11-inches-128gb-wifi-blue.html"},
+        {"winkel": "Coolblue", "variant": "Roze", "url": "https://www.coolblue.nl/product/961493/apple-ipad-2025-11-inches-128gb-wifi-pink.html"},
+        {"winkel": "MediaMarkt", "variant": "Zilver", "url": "https://www.mediamarkt.nl/nl/product/_apple-ipad-a16-11-inch-128-gb-silver-wi-fi-1880425.html"},
+        {"winkel": "MediaMarkt", "variant": "Roze", "url": "https://www.mediamarkt.nl/nl/product/_apple-ipad-a16-11-inch-128-gb-pink-wi-fi-1880419.html"},
+        {"winkel": "MediaMarkt", "variant": "Geel", "url": "https://www.mediamarkt.nl/nl/product/_apple-ipad-a16-11-inch-128-gb-yellow-wi-fi-1880421.html"},
+        {"winkel": "Apple", "variant": "Alle kleuren", "url": "https://www.apple.com/nl/shop/buy-ipad/ipad"}
+      ]
+    },
+    {
+      "id": "lego-71043",
+      "naam": "LEGO Harry Potter 71043 Kasteel Zweinstein",
+      "emoji": "🏰",
+      "wensprijs": 399,
+      "min_prijs": 250,
+      "max_prijs": 700,
+      "zoekterm": "lego 71043 kasteel zweinstein",
+      "aanbiedingen": [
+        {"winkel": "LEGO", "variant": "Officiële LEGO-winkel", "url": "https://www.lego.com/nl-nl/product/71043"},
+        {"winkel": "MediaMarkt", "variant": "Let op: vaak verkocht door partner", "url": "https://www.mediamarkt.nl/nl/product/_lego-lego-harry-potter-kasteel-zweinstein-71043-bouwset-multicolor-107855348.html"},
+        {"winkel": "Smyths Toys", "variant": "", "url": "https://www.smythstoys.com/nl/nl-nl/speelgoed/lego/lego-harry-potter/lego-harry-potter-71043-kasteel-zweinstein-set/p/169928"}
+      ]
+    }
+  ],
+  "zelf_kijken": [
+    {"winkel": "bol (kies 'verkoop door bol')", "url": "https://www.bol.com/nl/nl/s/?searchtext={zoekterm}"},
+    {"winkel": "Amazon.nl (kies 'verzonden en verkocht door Amazon')", "url": "https://www.amazon.nl/s?k={zoekterm}"},
+    {"winkel": "Tweakers Pricewatch (prijsgeschiedenis + winkelreviews)", "url": "https://tweakers.net/zoeken/?keyword={zoekterm}"},
+    {"winkel": "Intertoys / Bart Smit / Wehkamp", "url": "https://www.google.com/search?q={zoekterm}+site%3Aintertoys.nl+OR+site%3Abartsmit.nl+OR+site%3Awehkamp.nl"}
+  ],
+  "abonnementen": {
+    "vergelijkers": [
+      {"naam": "Bellen.com", "url": "https://www.bellen.com"},
+      {"naam": "Independer", "url": "https://www.independer.nl"},
+      {"naam": "Belsimpel (toestel + abonnement)", "url": "https://www.belsimpel.nl"},
+      {"naam": "Tweakers – abonnementen", "url": "https://tweakers.net/zoeken/?keyword=sim+only"}
+    ],
+    "providers": [
+      {"naam": "KPN", "url": "https://www.kpn.com"},
+      {"naam": "Vodafone", "url": "https://www.vodafone.nl"},
+      {"naam": "Odido", "url": "https://www.odido.nl"},
+      {"naam": "Simyo", "url": "https://www.simyo.nl"},
+      {"naam": "Ben", "url": "https://www.ben.nl"},
+      {"naam": "hollandsnieuwe", "url": "https://www.hollandsnieuwe.nl"},
+      {"naam": "Youfone", "url": "https://www.youfone.nl"},
+      {"naam": "Lebara", "url": "https://www.lebara.nl"}
+    ]
+  }
+}

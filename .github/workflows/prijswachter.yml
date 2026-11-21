@@ -1,0 +1,61 @@
+name: Prijswachter Black Friday
+
+on:
+  schedule:
+    - cron: "23 */2 * * *"   # elke 2 uur (UTC)
+  workflow_dispatch:          # handmatig starten via het tabblad Actions
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: prijswachter
+  cancel-in-progress: false
+
+jobs:
+  prijzen:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Na 2 december automatisch stoppen
+        id: datum
+        run: |
+          if [ "$(date -u +%Y%m%d)" -gt "20261202" ] && [ "${{ github.event_name }}" = "schedule" ]; then
+            echo "klaar=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.datum.outputs.klaar != '1'
+
+      - name: Prijzen ophalen
+        if: steps.datum.outputs.klaar != '1'
+        run: python3 prijswachter/check_prijzen.py --melding "$RUNNER_TEMP/melding.md"
+
+      - name: Resultaten bewaren
+        if: steps.datum.outputs.klaar != '1'
+        run: |
+          git config user.name "prijswachter"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prijswachter/geschiedenis.json prijswachter.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Prijswachter: prijzen bijgewerkt"
+          for i in 1 2 3; do
+            git pull --rebase -X theirs && git push && exit 0
+            sleep 5
+          done
+          exit 1
+
+      - name: Melding bij prijsdaling (GitHub stuurt je een e-mail)
+        if: steps.datum.outputs.klaar != '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [ -f "$RUNNER_TEMP/melding.md" ]; then
+            gh issue create --repo "${{ github.repository }}" \
+              --title "💸 Prijsdaling gevonden ($(TZ=Europe/Amsterdam date '+%d-%m %H:%M'))" \
+              --body-file "$RUNNER_TEMP/melding.md" \
+              --assignee "${{ github.repository_owner }}" || \
+            gh issue create --repo "${{ github.repository }}" \
+              --title "💸 Prijsdaling gevonden ($(TZ=Europe/Amsterdam date '+%d-%m %H:%M'))" \
+              --body-file "$RUNNER_TEMP/melding.md"
+          fi
