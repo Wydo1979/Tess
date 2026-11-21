@@ -55,12 +55,12 @@ XP en rangen (van 🌱 Nieuwsgierige beginner tot 🏆 AI-goeroe) houden je gemo
 # 🛍️ Prijswachter Black Friday
 
 Houdt automatisch de prijzen bij van de **iPad (2025)** en **LEGO 71043 Kasteel Zweinstein** bij betrouwbare webshops
-(Coolblue, MediaMarkt, Apple, LEGO, Smyths Toys), plus een rekenhulp om **telefoonabonnementen** eerlijk te vergelijken.
+(Coolblue, MediaMarkt, bol, Amazon.nl, Apple, LEGO, Smyths Toys), plus een rekenhulp om **telefoonabonnementen** eerlijk te vergelijken.
 
 - **Overzicht:** open `prijswachter.html` (of via GitHub Pages).
 - **Automatisch:** de GitHub Action `Prijswachter Black Friday` checkt elke 2 uur de prijzen (t/m 2 december) en bewaart de geschiedenis.
 - **Melding:** zakt een prijs onder je wensprijs (of 5% onder de startprijs), dan maakt de Action een GitHub-issue aan → je krijgt een e-mail.
-- **Aanpassen:** wensprijzen, webshops en links staan in `prijswachter/producten.json`.
+- **Aanpassen:** wensprijzen, webshops en links staan in `prijswachter/producten.json`. Bij bol en Amazon zoekt het script zelf de juiste productpagina op (hoesjes, 5G-versies en losse verlichtingssets worden overgeslagen).
 - **Zelf draaien:** `python3 prijswachter/check_prijzen.py` (alleen Python nodig).
 
 Lukt een check niet (sommige webshops blokkeren automatische bezoekers), dan zie je dat op de pagina met een link om zelf te kijken.
