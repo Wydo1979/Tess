@@ -128,6 +128,91 @@ def _zoek_offers(obj, gevonden):
             _zoek_offers(v, gevonden)
 
 
+# ------------------------------------------- zoeken bij bol en Amazon ---
+# Voor deze winkels zoekt het script zelf de productpagina op. Het eerste
+# zoekresultaat waarvan de naam alle 'moet'-woorden bevat en geen enkel
+# 'niet'-woord (hoesjes, 5G-versie, refurbished, ...) wordt gebruikt.
+
+ZOEKERS = {
+    "bol": {
+        "zoek": "https://www.bol.com/nl/nl/s/?searchtext={q}",
+        "link": r'href="(?:https://www\.bol\.com)?(/nl/nl/p/([^/"?]+)/(\d+))',
+        "url": lambda m: f"https://www.bol.com{m.group(1)}/",
+    },
+    "amazon": {
+        "zoek": "https://www.amazon.nl/s?k={q}",
+        "link": r'href="(?:https://www\.amazon\.nl)?/([^/"?]+)/dp/([A-Z0-9]{10})',
+        "url": lambda m: f"https://www.amazon.nl/dp/{m.group(2)}",
+    },
+}
+
+
+def zoeker(winkel):
+    return ZOEKERS.get(winkel.split()[0].lower().replace(".nl", "").replace(".com", ""))
+
+
+def zoek_url(aanbod):
+    z = zoeker(aanbod["winkel"])
+    return z["zoek"].format(q=urllib.parse.quote_plus(aanbod["zoek"])) if z else None
+
+
+def past_bij(naam, moet, niet):
+    woorden = re.findall(r"[a-z0-9]+", urllib.parse.unquote(naam).lower())
+    for eis in moet:  # "a16|2025" = een van beide
+        if not any(w.startswith(alt) for alt in eis.lower().split("|") for w in woorden):
+            return False
+    return not any(w in [x.lower() for x in niet] for w in woorden)
+
+
+def zoek_product(aanbod):
+    z = zoeker(aanbod["winkel"])
+    pagina = haal_op(zoek_url(aanbod))
+    controleer_blokkade(pagina)
+    gezien = set()
+    for m in re.finditer(z["link"], pagina):
+        url = z["url"](m)
+        naam = m.group(2) if "bol" in url else m.group(1)
+        if url in gezien:
+            continue
+        gezien.add(url)
+        if past_bij(naam, aanbod.get("moet", []), aanbod.get("niet", [])):
+            return url
+    raise RuntimeError("product niet gevonden in de zoekresultaten")
+
+
+def controleer_blokkade(pagina):
+    if ("validateCaptcha" in pagina or "Typ de tekens die je hieronder ziet" in pagina
+            or "Enter the characters you see below" in pagina):
+        raise RuntimeError("webshop toont een robot-check (captcha)")
+
+
+def extra_kandidaten(pagina):
+    """Amazon gebruikt geen JSON-LD: lees de 'te betalen' prijs."""
+    uit = []
+    for m in re.findall(r'priceToPay[^>]*>\s*<span class="a-offscreen">([^<]+)<', pagina):
+        uit.append(m)
+    if not uit:
+        m = re.search(r'id="corePrice(?:Display_desktop)?_feature_div".{0,3000}?class="a-offscreen">([^<]+)<',
+                      pagina, flags=re.S)
+        if m:
+            uit.append(m.group(1))
+    if not uit:
+        uit += re.findall(r'"priceAmount"\s*:\s*([0-9.]+)', pagina)[:1]
+    return [{"prijs": naar_getal(x), "voorraad": "", "conditie": "", "verkoper": ""} for x in uit]
+
+
+def verkoper_uit_pagina(pagina):
+    m = re.search(r'id="sellerProfileTriggerId"[^>]*>\s*([^<]+?)\s*<', pagina)
+    if m:
+        return html.unescape(m.group(1))
+    if re.search(r'(?:verkocht door|sold by)\s*(?:<[^>]+>\s*)*Amazon', pagina, flags=re.I):
+        return "Amazon"
+    m = re.search(r'Verkoop door\s*(?:<[^>]+>\s*)*([^<]{2,60}?)\s*<', pagina)
+    if m:
+        return html.unescape(m.group(1)).strip()
+    return ""
+
+
 def lees_prijs(pagina, min_prijs, max_prijs):
     """Zoek de prijs in de pagina. Eerst gestructureerde data (JSON-LD,
     gebruikt door bijna alle grote webshops), daarna meta-tags."""
@@ -150,6 +235,13 @@ def lees_prijs(pagina, min_prijs, max_prijs):
         for m in re.findall(patroon, pagina, flags=re.I):
             kandidaten.append({"prijs": naar_getal(m), "voorraad": "", "conditie": "", "verkoper": ""})
 
+    if not any(k["prijs"] for k in kandidaten):
+        kandidaten += extra_kandidaten(pagina)
+    verkoper = verkoper_uit_pagina(pagina)
+    for k in kandidaten:
+        if not k["verkoper"] and verkoper:
+            k["verkoper"] = verkoper
+
     geldig = [k for k in kandidaten
               if k["prijs"] is not None and min_prijs <= k["prijs"] <= max_prijs]
     if not geldig:
@@ -162,6 +254,10 @@ def lees_prijs(pagina, min_prijs, max_prijs):
 
 
 # ------------------------------------------------------------ hulpjes ---
+
+def link(aanbod, gesch, k):
+    return aanbod.get("url") or gesch.get("gevonden_urls", {}).get(k) or zoek_url(aanbod) or "#"
+
 
 def sleutel(product, aanbod):
     return f'{product["id"]}|{aanbod["winkel"]}|{aanbod.get("variant", "")}'
@@ -221,13 +317,20 @@ def controleer(config, gesch):
         for aanbod in product["aanbiedingen"]:
             k = sleutel(product, aanbod)
             print(f"→ {k} ... ", end="", flush=True)
+            cache = gesch.setdefault("gevonden_urls", {})
             try:
-                pagina = haal_op(aanbod["url"])
+                url = aanbod.get("url") or cache.get(k)
+                if not url:
+                    url = cache[k] = zoek_product(aanbod)
+                    time.sleep(2)
+                pagina = haal_op(url)
+                controleer_blokkade(pagina)
                 gevonden = lees_prijs(pagina, product.get("min_prijs", 1), product.get("max_prijs", 1e9))
                 meting = {"t": nu, **{a: b for a, b in gevonden.items() if b not in ("", None)}}
-                print(euro(meting["prijs"]))
+                print(euro(meting["prijs"]), url)
             except Exception as e:
                 meting = {"t": nu, "fout": str(e)}
+                cache.pop(k, None)  # volgende keer opnieuw zoeken
                 print("✗", e)
             gesch["metingen"].setdefault(k, []).append(meting)
             time.sleep(2)
@@ -256,7 +359,7 @@ def maak_melding(config, gesch):
         if goed_genoeg and (vorige is None or prijs < vorige - 0.009):
             gesch["gemeld"][product["id"]] = prijs
             regel = (f"- {product['emoji']} **{product['naam']}**: **{euro(prijs)}** bij "
-                     f"[{(aanbod['winkel'] + ' ' + aanbod.get('variant', '')).strip()}]({aanbod['url']})"
+                     f"[{(aanbod['winkel'] + ' ' + aanbod.get('variant', '')).strip()}]({link(aanbod, gesch, sleutel(product, aanbod))})"
                      f" (wensprijs {euro(product['wensprijs'])}")
             if start:
                 regel += f", startprijs {euro(start)}"
@@ -339,7 +442,7 @@ def maak_pagina(config, gesch):
                 status.append("nog niet gecontroleerd")
             rijen.append(f"""
           <tr>
-            <td><a href="{e(aanbod['url'])}" target="_blank" rel="noopener">{e(aanbod['winkel'])}</a>
+            <td><a href="{e(link(aanbod, gesch, sleutel(product, aanbod)))}" target="_blank" rel="noopener">{e(aanbod['winkel'])}</a>
                 <div class="zacht klein">{e(aanbod.get('variant', ''))}</div></td>
             <td>{prijs_html}<div class="klein">{'<br>'.join(status)}</div></td>
             <td>{verschil_html}</td>
