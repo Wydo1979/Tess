@@ -65,6 +65,7 @@
       <stop offset="0" stop-color="#8be05f"/><stop offset="1" stop-color="#3f9d38"/>
     </linearGradient>
     <pattern id="ramen" width="8" height="9" patternUnits="userSpaceOnUse"><rect x="2" y="2" width="4" height="5" rx=".5" fill="#7f9ca6"/></pattern>
+    <linearGradient id="bovenlicht" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
     <g id="ster4"><path d="M0,-4 Q.8,-.8 4,0 Q.8,.8 0,4 Q-.8,.8 -4,0 Q-.8,-.8 0,-4Z"/></g>
     <g id="wolk" fill="#fff"><circle cx="0" cy="0" r="9"/><circle cx="10" cy="-5" r="11"/><circle cx="22" cy="0" r="9"/><rect x="0" y="0" width="22" height="9"/></g>
     <g id="scene">
@@ -113,7 +114,7 @@
     <label>Naam van de ontvanger <input type="text" id="in-naam" value="Indy" maxlength="18"></label>
     <label>Kleur linker controller <input type="color" id="in-jl" value="#19b5e6"></label>
     <label>Kleur rechter controller <input type="color" id="in-jr" value="#ff5148"></label>
-    <label style="grid-column:1/-1">Eigen plaatje in het ronde vak op het scherm (optioneel) <input type="file" id="in-plaatje" accept="image/*"></label>
+    <label style="grid-column:1/-1">Achtergrondfoto voor het scherm (bijv. een plaatje uit het spel, liggend) <input type="file" id="in-plaatje" accept="image/*"></label>
     <button class="knop" onclick="window.print()">🖨️ Alles afdrukken (A4, schaal 100% / werkelijke grootte)</button>
   </div>
 
@@ -139,7 +140,7 @@
   <h2>Overzicht van de pagina's</h2>
   <table>
     <tr><th>Blz.</th><th>Sjabloon</th><th>Formaat</th></tr>
-    <tr><td>2</td><td>Scherm: overwoekerde stad met grasveld, bloemen en een rond plakvak voor je eigen plaatje (liggend afdrukken)</td><td>27 × 15,5 cm</td></tr>
+    <tr><td>2</td><td>Scherm met je eigen achtergrondfoto, “SURPRISE!” en de naam (liggend afdrukken)</td><td>27 × 15,5 cm</td></tr>
     <tr><td>3</td><td>Voorkant linker + rechter controller</td><td>2× 6,5 × 19 cm</td></tr>
     <tr><td>4</td><td>Zijstroken in controllerkleur</td><td>5 cm breed</td></tr>
     <tr><td>5</td><td>3D-onderdelen: joysticks, knoppen, schouderknoppen, bovenkant, standaard</td><td>diverse</td></tr>
@@ -155,32 +156,27 @@
     <text x="0" y="6" class="kop">2 · Scherm</text>
     <text x="40" y="6" class="sub">Knip langs de stippellijn en plak midden op de zwarte voorkant (2,5 cm zwarte rand rondom).</text>
     <g transform="translate(3.5,14)">
-      <svg width="270" height="155" viewBox="0 0 270 155"><use href="#scene"/></svg>
-      <!-- plakvak / eigen plaatje -->
-      <defs><clipPath id="rondje"><circle cx="64" cy="80" r="46"/></clipPath></defs>
-      <circle cx="64" cy="80" r="50" fill="#fff"/>
-      <circle cx="64" cy="80" r="50" fill="none" stroke="#ff7fb2" stroke-width="2"/>
-      <g id="plakvak">
-        <circle cx="64" cy="80" r="46" fill="#ffe3ef"/>
-        <circle cx="64" cy="80" r="46" fill="none" stroke="#ff7fb2" stroke-width=".6" stroke-dasharray="3 2"/>
-        <text x="64" y="74" font-size="6" fill="#ff4f9a" text-anchor="middle">Plak hier</text>
-        <text x="64" y="82" font-size="6" fill="#ff4f9a" text-anchor="middle">je favoriete</text>
-        <text x="64" y="90" font-size="6" fill="#ff4f9a" text-anchor="middle">plaatje ★</text>
-      </g>
-      <image id="eigenplaatje" x="18" y="34" width="92" height="92" preserveAspectRatio="xMidYMid slice" clip-path="url(#rondje)" href="" style="display:none"/>
+      <svg width="270" height="155" viewBox="0 0 270 155"><use href="#scene" id="standaardscene"/></svg>
+      <image id="achtergrond" x="0" y="0" width="270" height="155" preserveAspectRatio="xMidYMid slice" href="" style="display:none"/>
+      <!-- zachte lichtrand bovenin voor leesbaarheid -->
+      <rect width="270" height="40" fill="url(#bovenlicht)"/>
       <!-- HUD -->
-      <g transform="translate(7,6)"><rect width="38" height="11" rx="5.5" fill="#fff" opacity=".9"/><text x="5" y="8.2" font-size="6.5" fill="#ff4f9a">♥♥♥♥</text></g>
-      <g transform="translate(218,6)"><rect width="45" height="11" rx="5.5" fill="#fff" opacity=".9"/><use href="#ster4" transform="translate(8,5.5) scale(.9)" fill="#ffcf3a"/><text x="15" y="7.8" font-size="5.5" fill="#ff4f9a">× 24</text></g>
+      <g transform="translate(7,6)"><rect width="38" height="11" rx="5.5" fill="#fff" opacity=".92"/><text x="5" y="8.2" font-size="6.5" fill="#ff4f9a">♥♥♥♥</text></g>
+      <g transform="translate(218,6)"><rect width="45" height="11" rx="5.5" fill="#fff" opacity=".92"/><use href="#ster4" transform="translate(8,5.5) scale(.9)" fill="#ffcf3a"/><text x="15" y="7.8" font-size="5.5" fill="#ff4f9a">× 24</text></g>
+      <!-- glitters -->
+      <g fill="#fff"><use href="#ster4" transform="translate(150,26) scale(1.1)"/><use href="#ster4" transform="translate(262,44) scale(.8)"/><use href="#ster4" transform="translate(148,82) scale(.7)"/></g>
+      <g fill="#ffe25a"><use href="#ster4" transform="translate(258,82) scale(1)"/><use href="#ster4" transform="translate(160,92) scale(.6)"/></g>
       <!-- titel -->
       <g text-anchor="middle" stroke-linejoin="round" paint-order="stroke">
-        <text x="190" y="58" font-size="30" textLength="140" lengthAdjust="spacingAndGlyphs" fill="#fff" stroke="#fff" stroke-width="9">SURPRISE!</text>
-        <text x="190" y="58" font-size="30" textLength="140" lengthAdjust="spacingAndGlyphs" fill="#ffd93b" stroke="#2457d6" stroke-width="4">SURPRISE!</text>
-        <text x="190" y="58" font-size="30" textLength="140" lengthAdjust="spacingAndGlyphs" fill="none" stroke="#fff6b0" stroke-width=".8" transform="translate(-.6,-.8)" opacity=".7">SURPRISE!</text>
+        <text x="206" y="52" font-size="28" textLength="112" lengthAdjust="spacingAndGlyphs" fill="#fff" stroke="#fff" stroke-width="10">SURPRISE!</text>
+        <text x="206" y="52" font-size="28" textLength="112" lengthAdjust="spacingAndGlyphs" fill="#ffd93b" stroke="#2457d6" stroke-width="4.2">SURPRISE!</text>
+        <text x="205.4" y="51.2" font-size="28" textLength="112" lengthAdjust="spacingAndGlyphs" fill="none" stroke="#fff6b0" stroke-width=".8" opacity=".75">SURPRISE!</text>
       </g>
-      <path d="M128,64 H252 L246,72 L252,80 H128 L134,72 Z" fill="#2e9e3f" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
-      <text x="190" y="75.6" font-size="9.5" fill="#fff" text-anchor="middle">voor <tspan class="naam">Indy</tspan></text>
-      <rect x="140" y="138" width="100" height="11" rx="5.5" fill="#fff" opacity=".92"/>
-      <text x="190" y="145.6" font-size="5.6" fill="#ff4f9a" text-anchor="middle">Druk op Ⓐ om te openen</text>
+      <path d="M152,59 H260 L254,67.5 L260,76 H152 L158,67.5 Z" fill="#2e9e3f" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+      <text x="206" y="71" font-size="9.5" fill="#fff" text-anchor="middle">voor <tspan class="naam">Indy</tspan></text>
+      <!-- onderbalk -->
+      <rect x="150" y="139" width="104" height="11" rx="5.5" fill="#fff" opacity=".94" stroke="#ff7fb2" stroke-width=".8"/>
+      <text x="202" y="146.6" font-size="5.6" fill="#ff4f9a" text-anchor="middle">Druk op Ⓐ om te openen</text>
       <rect width="270" height="155" fill="url(#glans)"/>
       <rect width="270" height="155" fill="none" class="c"/>
     </g>
@@ -341,9 +337,9 @@
     const f = e.target.files[0]; if (!f) return;
     const r = new FileReader();
     r.onload = () => {
-      const img = document.getElementById('eigenplaatje');
+      const img = document.getElementById('achtergrond');
       img.setAttribute('href', r.result); img.style.display = '';
-      document.getElementById('plakvak').style.display = 'none';
+      document.getElementById('standaardscene').style.display = 'none';
     };
     r.readAsDataURL(f);
   });
