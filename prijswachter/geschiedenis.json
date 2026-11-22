@@ -96,6 +96,12 @@
     "prijs": 449.0,
     "voorraad": "InStock",
     "conditie": "NewCondition"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "prijs": 449.0,
+    "voorraad": "InStock",
+    "conditie": "NewCondition"
    }
   ],
   "ipad-2025|Coolblue|Blauw": [
@@ -191,6 +197,12 @@
    },
    {
     "t": "2026-11-22T15:08+00:00",
+    "prijs": 449.0,
+    "voorraad": "InStock",
+    "conditie": "NewCondition"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
     "prijs": 449.0,
     "voorraad": "InStock",
     "conditie": "NewCondition"
@@ -292,6 +304,12 @@
     "prijs": 473.0,
     "voorraad": "InStock",
     "conditie": "NewCondition"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "prijs": 473.0,
+    "voorraad": "InStock",
+    "conditie": "NewCondition"
    }
   ],
   "ipad-2025|MediaMarkt|Zilver": [
@@ -357,6 +375,10 @@
    },
    {
     "t": "2026-11-22T15:08+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
@@ -424,6 +446,10 @@
    {
     "t": "2026-11-22T15:08+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
   "ipad-2025|MediaMarkt|Geel": [
@@ -489,6 +515,10 @@
    },
    {
     "t": "2026-11-22T15:08+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
@@ -556,6 +586,10 @@
    {
     "t": "2026-11-22T15:08+00:00",
     "prijs": 509.0
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "prijs": 509.0
    }
   ],
   "lego-71043|LEGO|Officiële LEGO-winkel": [
@@ -621,6 +655,10 @@
    },
    {
     "t": "2026-11-22T15:08+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
@@ -688,6 +726,10 @@
    {
     "t": "2026-11-22T15:08+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
   "lego-71043|Smyths Toys|": [
@@ -754,6 +796,10 @@
    {
     "t": "2026-11-22T15:08+00:00",
     "fout": "geen prijs gevonden op de pagina"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "fout": "geen prijs gevonden op de pagina"
    }
   ],
   "ipad-2025|bol|Zilver – verkoop door bol": [
@@ -815,6 +861,10 @@
    },
    {
     "t": "2026-11-22T15:08+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
@@ -878,6 +928,10 @@
    {
     "t": "2026-11-22T15:08+00:00",
     "fout": "webshop weigert automatische check (HTTP 503)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "fout": "product niet gevonden in de zoekresultaten"
    }
   ],
   "lego-71043|bol|Verkoop door bol": [
@@ -940,6 +994,10 @@
    {
     "t": "2026-11-22T15:08+00:00",
     "fout": "webshop weigert automatische check (HTTP 403)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
+    "fout": "webshop weigert automatische check (HTTP 403)"
    }
   ],
   "lego-71043|Amazon|amazon.nl": [
@@ -1001,6 +1059,10 @@
    },
    {
     "t": "2026-11-22T15:08+00:00",
+    "fout": "webshop weigert automatische check (HTTP 503)"
+   },
+   {
+    "t": "2026-11-22T17:07+00:00",
     "fout": "webshop weigert automatische check (HTTP 503)"
    }
   ]
