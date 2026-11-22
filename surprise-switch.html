@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sjablonen – Sinterklaas-surprise spelcomputer (Switch-stijl)</title>
+<style>
+  :root { --jl: #19b5e6; --jr: #ff5148; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #d9dbe0; font-family: "Segoe UI", Verdana, Arial, sans-serif; color: #222; }
+  .page { width: 210mm; height: 297mm; padding: 10mm; margin: 10mm auto; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.2); overflow: hidden; position: relative; }
+  .page.land { width: 297mm; height: 210mm; page: liggend; }
+  .page svg.vel { display: block; width: 190mm; height: 277mm; }
+  .page.land svg.vel { width: 277mm; height: 190mm; }
+  svg text { font-family: "Arial Black", "Segoe UI Black", Arial, sans-serif; }
+  .c { stroke: #555; stroke-width: .3; stroke-dasharray: 2 1; }
+  .lijn { fill: none; stroke: #555; stroke-width: .3; stroke-dasharray: 2 1; }
+  .vouw { fill: none; stroke: #888; stroke-width: .3; stroke-dasharray: 4 1 1 1; }
+  .kop { font-size: 6px; fill: #222; }
+  .sub { font-family: Verdana, Arial, sans-serif !important; font-size: 3.2px; fill: #555; font-weight: normal; }
+  .lbl { font-family: Verdana, Arial, sans-serif !important; font-size: 2.6px; fill: #666; }
+  .jl { fill: var(--jl); }
+  .jr { fill: var(--jr); }
+  h1 { font-size: 22pt; margin: 0 0 2mm; }
+  h2 { font-size: 13pt; margin: 5mm 0 2mm; }
+  p, li { font-size: 10pt; line-height: 1.45; }
+  ol, ul { margin: 0; padding-left: 6mm; }
+  table { border-collapse: collapse; width: 100%; font-size: 9.5pt; }
+  td, th { border: 1px solid #ccc; padding: 1.2mm 2mm; text-align: left; }
+  .instel { background: #f3f6ff; border: 1px solid #c9d3f5; border-radius: 3mm; padding: 3mm 4mm; margin: 3mm 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; font-size: 10pt; }
+  .instel label { display: flex; flex-direction: column; gap: 1mm; }
+  .instel input[type=text] { font-size: 11pt; padding: 1.5mm; border: 1px solid #aab; border-radius: 1.5mm; }
+  .instel input[type=color] { width: 100%; height: 9mm; border: 1px solid #aab; border-radius: 1.5mm; }
+  .knop { grid-column: 1 / -1; font-size: 12pt; padding: 2.5mm; border: 0; border-radius: 2mm; background: #2b5be3; color: #fff; cursor: pointer; font-weight: bold; }
+  .tip { background: #fff7d6; border-left: 4px solid #f2b705; padding: 2mm 3mm; font-size: 9.5pt; margin-top: 3mm; }
+  @page { size: A4 portrait; margin: 0; }
+  @page liggend { size: A4 landscape; margin: 0; }
+  @media print {
+    body { background: none; }
+    .page { margin: 0; box-shadow: none; break-after: page; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Gedeelde definities -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lucht" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1440"/><stop offset=".6" stop-color="#2d2470"/><stop offset="1" stop-color="#5a2f80"/>
+    </linearGradient>
+    <linearGradient id="glans" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="dockgrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a3d43"/><stop offset="1" stop-color="#25272b"/>
+    </linearGradient>
+    <pattern id="arcering" width="2.5" height="2.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.5" height="2.5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="2.5" stroke="#bbb" stroke-width=".6"/>
+    </pattern>
+
+    <!-- Eigen spelscène: daken bij nacht met vallende pakjes (270 x 155) -->
+    <g id="scene">
+      <rect width="270" height="155" fill="url(#lucht)"/>
+      <g fill="#fff">
+        <circle cx="12" cy="22" r=".8"/><circle cx="34" cy="40" r=".6"/><circle cx="52" cy="15" r="1"/><circle cx="75" cy="33" r=".7"/>
+        <circle cx="96" cy="12" r=".8"/><circle cx="118" cy="44" r=".6"/><circle cx="140" cy="20" r="1"/><circle cx="160" cy="38" r=".7"/>
+        <circle cx="182" cy="14" r=".9"/><circle cx="200" cy="50" r=".6"/><circle cx="252" cy="58" r=".8"/><circle cx="262" cy="18" r=".7"/>
+        <circle cx="22" cy="60" r=".6"/><circle cx="66" cy="62" r=".5"/><circle cx="150" cy="62" r=".6"/><circle cx="240" cy="8" r=".6"/>
+      </g>
+      <circle cx="228" cy="32" r="13" fill="#fff6c8"/>
+      <circle cx="223" cy="28" r="2.6" fill="#efe2a2"/><circle cx="232" cy="37" r="1.8" fill="#efe2a2"/><circle cx="233" cy="26" r="1.2" fill="#efe2a2"/>
+      <path d="M0,155 V100 L20,88 L40,100 V90 L70,72 L100,90 V96 L118,84 L140,96 V88 L170,68 L200,88 V94 L222,80 L245,94 V86 L270,74 V155Z" fill="#2a1f5c"/>
+      <g fill="#150d2e">
+        <polygon points="0,115 27,95 55,115"/><rect x="0" y="115" width="55" height="40"/>
+        <rect x="100" y="84" width="8" height="18"/><polygon points="58,108 90,82 122,108"/><rect x="60" y="108" width="60" height="47"/>
+        <polygon points="123,118 150,98 177,118"/><rect x="125" y="118" width="50" height="37"/>
+        <rect x="190" y="80" width="8" height="18"/><polygon points="178,105 210,80 242,105"/><rect x="180" y="105" width="60" height="50"/>
+        <polygon points="243,120 270,100 270,120"/><rect x="245" y="120" width="25" height="35"/>
+      </g>
+      <g fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".9">
+        <polyline points="0,115 27,95 55,115"/><polyline points="58,108 90,82 122,108"/><polyline points="123,118 150,98 177,118"/>
+        <polyline points="178,105 210,80 242,105"/><polyline points="243,120 270,100"/><line x1="99.5" y1="84" x2="108.5" y2="84"/><line x1="189.5" y1="80" x2="198.5" y2="80"/>
+      </g>
+      <g fill="#ffd35a">
+        <rect x="10" y="125" width="8" height="9"/><rect x="36" y="125" width="8" height="9"/><rect x="70" y="118" width="9" height="10"/>
+        <rect x="100" y="118" width="9" height="10"/><rect x="84" y="138" width="10" height="17"/><rect x="140" y="128" width="8" height="9"/>
+        <rect x="190" y="115" width="9" height="10"/><rect x="220" y="115" width="9" height="10"/><rect x="254" y="130" width="7" height="8"/>
+      </g>
+      <g stroke="#fff" stroke-width=".8" stroke-linecap="round" opacity=".6">
+        <line x1="101" y1="58" x2="101" y2="68"/><line x1="105" y1="54" x2="105" y2="67"/><line x1="109" y1="59" x2="109" y2="68"/>
+        <line x1="191" y1="24" x2="191" y2="34"/><line x1="195" y1="20" x2="195" y2="33"/><line x1="199" y1="25" x2="199" y2="34"/>
+      </g>
+      <rect x="99" y="71" width="12" height="10" rx="1" fill="#e8333a"/><rect x="104" y="71" width="2" height="10" fill="#ffd35a"/><rect x="99" y="75" width="12" height="2" fill="#ffd35a"/>
+      <rect x="189" y="38" width="12" height="10" rx="1" fill="#2fbf71"/><rect x="194" y="38" width="2" height="10" fill="#fff"/><rect x="189" y="42" width="12" height="2" fill="#fff"/>
+      <rect x="40" y="50" width="9" height="8" rx="1" fill="#3d8bff" transform="translate(-24,18) rotate(-15 44 54)"/><rect x="43.5" y="50" width="2" height="8" fill="#ffd35a" transform="translate(-24,18) rotate(-15 44 54)"/>
+    </g>
+
+    <!-- Snijlijnmarkering -->
+    <g id="schaar"><text font-size="5" fill="#777" font-family="Arial">✂</text></g>
+  </defs>
+</svg>
+
+<!-- ================= PAGINA 1: HANDLEIDING ================= -->
+<section class="page">
+  <h1>🎮 Surprise: spelcomputer in Switch-stijl</h1>
+  <p style="margin:0;color:#555">Sjablonen om af te drukken voor een Sinterklaas-surprise van ± <b>45 × 19 × 5 cm</b> (bijna 2× zo groot als het echte apparaat).</p>
+
+  <div class="instel no-print">
+    <label>Naam van de ontvanger <input type="text" id="in-naam" value="Tess" maxlength="18"></label>
+    <label>Naam van het spel (op het spelhoesje) <input type="text" id="in-spel" value="Pakjesavond Party" maxlength="26"></label>
+    <label>Kleur linker controller <input type="color" id="in-jl" value="#19b5e6"></label>
+    <label>Kleur rechter controller <input type="color" id="in-jr" value="#ff5148"></label>
+    <button class="knop" onclick="window.print()">🖨️ Alles afdrukken (A4, schaal 100% / werkelijke grootte)</button>
+  </div>
+
+  <h2>Wat heb je nodig?</h2>
+  <ul>
+    <li>Een platte doos van ± 45 × 19 × 5 cm (of maak er een van stevig karton), plus een doos van 33 × 11 × 7 cm voor de dock</li>
+    <li>Zwarte verf of zwart (kaft)papier voor de console en de dock</li>
+    <li>Schaar, hobbymes, liniaal, lijmstift en alleslijm / dubbelzijdig tape</li>
+    <li>2 flessendoppen of stukjes wc-rol voor de joysticks · stukjes foamboard/karton voor reliëfknoppen</li>
+    <li>Wit papier (liefst 160 g/m² voor stevigheid), kleurenprinter</li>
+  </ul>
+
+  <h2>Zo maak je hem</h2>
+  <ol>
+    <li><b>Doos:</b> knip of plak een doos van 45 × 19 × 5 cm. Rond de vier hoeken aan de zijkanten een beetje af (straal ± 4 cm) als je dat kunt.</li>
+    <li><b>Verven:</b> schilder of beplak de middelste 32 cm zwart (voor- en achterkant, boven en onder).</li>
+    <li><b>Scherm (blz. 2):</b> knip het scherm uit en plak het precies in het midden van de zwarte voorkant (rondom 2,5 cm zwarte rand).</li>
+    <li><b>Controllers (blz. 3 + 4):</b> plak de twee controller-voorkanten links en rechts tegen het scherm aan. Beplak de zijkanten met de gekleurde stroken.</li>
+    <li><b>3D-knoppen (blz. 5):</b> plak de joystick-kapjes op flessendoppen en de knopjes op een stukje karton, zo krijg je reliëf. Schouderknoppen komen bovenop, aan de buitenkanten.</li>
+    <li><b>Bovenkant:</b> aan/uit-knop, volumeknoppen, ventilatierooster en spelkaartsleuf (blz. 5) plakken op de zwarte bovenkant.</li>
+    <li><b>Dock (blz. 6):</b> plak de twee helften aan elkaar en op de voorkant van de dock-doos. Zet de console er rechtop achter, dan lijkt hij ‘gedockt’. Tip: in de dock past nog een extra cadeautje!</li>
+    <li><b>Spelhoesje + gedicht (blz. 7 + 8):</b> vouw het hoesje om een stukje karton (of een oud dvd-/spelhoesje) en stop er een spelkaartje met een cadeaubon of snoep in. Schrijf het gedicht op de kaart.</li>
+  </ol>
+
+  <h2>Overzicht van de pagina's</h2>
+  <table>
+    <tr><th>Blz.</th><th>Sjabloon</th><th>Formaat</th></tr>
+    <tr><td>2</td><td>Scherm met eigen spel “SURPRISE!” (liggend afdrukken)</td><td>27 × 15,5 cm</td></tr>
+    <tr><td>3</td><td>Voorkant linker + rechter controller</td><td>2× 6,5 × 19 cm</td></tr>
+    <tr><td>4</td><td>Zijstroken in controllerkleur</td><td>5 cm breed</td></tr>
+    <tr><td>5</td><td>3D-onderdelen: joysticks, knoppen, schouderknoppen, bovenkant, standaard</td><td>diverse</td></tr>
+    <tr><td>6</td><td>Dock-voorkant (2 helften)</td><td>33 × 11 cm</td></tr>
+    <tr><td>7</td><td>Spelhoesje (achter – rug – voor), liggend afdrukken</td><td>22,2 × 17 cm</td></tr>
+    <tr><td>8</td><td>Gedichtkaart, cadeaulabel en 3 spelkaartjes</td><td>diverse</td></tr>
+  </table>
+
+  <div class="tip">✂ <b>Stippellijn</b> = knippen &nbsp;·&nbsp; <b>streep-punt</b> = vouwen &nbsp;·&nbsp; <b>gearceerd</b> = lijmrand. Op elke pagina staat een controlelijn van 5 cm: meet even na of je printer niet heeft verkleind.</div>
+
+</section>
+
+<!-- ================= PAGINA 2: SCHERM ================= -->
+<section class="page land">
+  <svg class="vel" viewBox="0 0 277 190">
+    <text x="0" y="6" class="kop">2 · Scherm</text>
+    <text x="40" y="6" class="sub">Knip langs de stippellijn en plak midden op de zwarte voorkant (2,5 cm zwarte rand rondom).</text>
+    <g transform="translate(3.5,14)">
+      <svg width="270" height="155" viewBox="0 0 270 155"><use href="#scene"/></svg>
+      <!-- HUD -->
+      <text x="8" y="13" font-size="8" fill="#ff5a6e">♥♥♥</text>
+      <text x="200" y="12" font-size="6" fill="#fff" text-anchor="end" font-family="Courier New, monospace">PAKJES × 24</text>
+      <g transform="translate(236,6)"><rect width="16" height="7" rx="1.2" fill="none" stroke="#fff" stroke-width=".8"/><rect x="16.6" y="2.2" width="1.4" height="2.6" fill="#fff"/><rect x="1.4" y="1.4" width="11" height="4.2" fill="#5ee37a"/></g>
+      <text x="135" y="13" font-size="5" fill="#cfd3ff" text-anchor="middle" font-family="Courier New, monospace">5 DEC · 19:00</text>
+      <text x="135" y="72" font-size="36" fill="#fff" stroke="#1b1046" stroke-width="2.4" paint-order="stroke" text-anchor="middle">SURPRISE!</text>
+      <text x="135" y="92" font-size="13" fill="#ffd35a" stroke="#1b1046" stroke-width="1.6" paint-order="stroke" text-anchor="middle">voor <tspan class="naam">Tess</tspan></text>
+      <rect x="85" y="133" width="100" height="12" rx="6" fill="#000" opacity=".55"/>
+      <text x="135" y="141.3" font-size="6" fill="#fff" text-anchor="middle">Druk op <tspan fill="#ffd35a">Ⓐ</tspan> om te openen</text>
+      <rect width="270" height="155" fill="url(#glans)"/>
+      <rect width="270" height="155" fill="none" class="c"/>
+    </g>
+    <g transform="translate(3.5,182)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 3: CONTROLLERS ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <text x="0" y="6" class="kop">3 · Controllers (voorkant)</text>
+    <text x="0" y="11" class="sub">Knip uit en plak links en rechts naast het scherm. De rechte kant komt tegen het zwarte middendeel.</text>
+
+    <!-- Linker controller 65 x 190 -->
+    <g transform="translate(20,20)">
+      <path d="M65,0 H40 A40,40 0 0 0 0,40 V150 A40,40 0 0 0 40,190 H65 Z" class="jl c"/>
+      <path d="M65,0 H40 A40,40 0 0 0 0,40 V150 A40,40 0 0 0 40,190 H65 Z" fill="url(#glans)"/>
+      <rect x="61" y="0" width="4" height="190" fill="#000" opacity=".12"/>
+      <rect x="43" y="19" width="11" height="3.2" rx="1" fill="#2a2a2a"/>
+      <circle cx="33" cy="55" r="15" fill="#2a2a2a"/><circle cx="33" cy="55" r="11" fill="#3b3b3b"/><circle cx="33" cy="55" r="8" fill="none" stroke="#505050" stroke-width=".8"/>
+      <g fill="#2a2a2a"><circle cx="33" cy="95" r="6.5"/><circle cx="33" cy="125" r="6.5"/><circle cx="18" cy="110" r="6.5"/><circle cx="48" cy="110" r="6.5"/></g>
+      <g fill="#ddd">
+        <polygon points="33,92 30.5,96.5 35.5,96.5"/><polygon points="33,128 30.5,123.5 35.5,123.5"/>
+        <polygon points="15,110 19.5,107.5 19.5,112.5"/><polygon points="51,110 46.5,107.5 46.5,112.5"/>
+      </g>
+      <rect x="27" y="145" width="12" height="12" rx="2" fill="#2a2a2a"/><circle cx="33" cy="151" r="3.5" fill="#444"/>
+      <text x="32" y="200" class="lbl" text-anchor="middle">LINKS</text>
+    </g>
+
+    <!-- Rechter controller 65 x 190 -->
+    <g transform="translate(105,20)">
+      <path d="M0,0 H25 A40,40 0 0 1 65,40 V150 A40,40 0 0 1 25,190 H0 Z" class="jr c"/>
+      <path d="M0,0 H25 A40,40 0 0 1 65,40 V150 A40,40 0 0 1 25,190 H0 Z" fill="url(#glans)"/>
+      <rect x="0" y="0" width="4" height="190" fill="#000" opacity=".12"/>
+      <rect x="11" y="19" width="11" height="3.2" rx="1" fill="#2a2a2a"/><rect x="14.9" y="15.1" width="3.2" height="11" rx="1" fill="#2a2a2a"/>
+      <g fill="#2a2a2a"><circle cx="32" cy="43" r="6.5"/><circle cx="32" cy="73" r="6.5"/><circle cx="17" cy="58" r="6.5"/><circle cx="47" cy="58" r="6.5"/></g>
+      <g fill="#ddd" font-size="6" text-anchor="middle" font-family="Arial">
+        <text x="32" y="45.2">X</text><text x="32" y="75.2">B</text><text x="17" y="60.2">Y</text><text x="47" y="60.2">A</text>
+      </g>
+      <circle cx="32" cy="110" r="15" fill="#2a2a2a"/><circle cx="32" cy="110" r="11" fill="#3b3b3b"/><circle cx="32" cy="110" r="8" fill="none" stroke="#505050" stroke-width=".8"/>
+      <circle cx="32" cy="150" r="7.5" fill="#3a3a3a"/><circle cx="32" cy="150" r="6" fill="#2a2a2a"/>
+      <path d="M28.5,151 L32,147.5 L35.5,151 V154 H28.5 Z" fill="none" stroke="#ddd" stroke-width=".9" stroke-linejoin="round"/>
+      <text x="32" y="200" class="lbl" text-anchor="middle">RECHTS</text>
+    </g>
+
+    <text x="0" y="232" class="sub">Tip: voor extra echt effect knip je de knoppen en joysticks van blz. 5 ook uit</text>
+    <text x="0" y="237" class="sub">en plak je die met een stukje karton eronder precies op de getekende knoppen.</text>
+    <g transform="translate(0,262)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 4: ZIJSTROKEN ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <text x="0" y="6" class="kop">4 · Zijstroken controllers</text>
+    <text x="0" y="11" class="sub">Voor de zijkanten van de doos (5 cm dik). Buig de boven- en onderstroken mee met de ronde hoek.</text>
+    <g transform="translate(10,20)">
+      <!-- kolom 1: links -->
+      <rect x="0" y="0" width="50" height="110" class="jl c"/><text x="25" y="56" class="lbl" text-anchor="middle" fill="#fff">LINKS · buitenzijde</text>
+      <rect x="0" y="116" width="50" height="90" class="jl c"/><text x="25" y="162" class="lbl" text-anchor="middle">LINKS · boven</text>
+      <!-- kolom 2: rechts -->
+      <rect x="60" y="0" width="50" height="110" class="jr c"/><text x="85" y="56" class="lbl" text-anchor="middle">RECHTS · buitenzijde</text>
+      <rect x="60" y="116" width="50" height="90" class="jr c"/><text x="85" y="162" class="lbl" text-anchor="middle">RECHTS · boven</text>
+      <!-- kolom 3: onder -->
+      <rect x="120" y="0" width="50" height="90" class="jl c"/><text x="145" y="46" class="lbl" text-anchor="middle">LINKS · onder</text>
+      <rect x="120" y="96" width="50" height="90" class="jr c"/><text x="145" y="142" class="lbl" text-anchor="middle">RECHTS · onder</text>
+      <!-- rail (binnenkant controller, optioneel) -->
+      <rect x="120" y="192" width="22" height="14" fill="#2a2a2a" class="c"/><text x="131" y="200" font-size="2.6" fill="#ddd" text-anchor="middle" font-family="Arial">SL  SR</text>
+      <rect x="148" y="192" width="22" height="14" fill="#2a2a2a" class="c"/><text x="159" y="200" font-size="2.6" fill="#ddd" text-anchor="middle" font-family="Arial">SL  SR</text>
+      <text x="120" y="211" class="lbl">optioneel: zwarte rail-plaatjes</text>
+    </g>
+    <g transform="translate(0,262)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 5: 3D-ONDERDELEN ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <text x="0" y="6" class="kop">5 · 3D-onderdelen</text>
+    <text x="0" y="11" class="sub">Plak op karton of foam voor reliëf. Joystick-kapjes op een flessendop, de ringen eronder.</text>
+    <g transform="translate(0,18)">
+      <!-- joysticks -->
+      <text x="0" y="0" class="lbl">JOYSTICKS (2×)</text>
+      <g transform="translate(22,24)"><circle r="20" fill="#2a2a2a" class="c"/><circle r="15.5" fill="none" stroke="#444" stroke-width=".6"/><text y="1" class="lbl" text-anchor="middle" fill="#999">ring</text></g>
+      <g transform="translate(66,24)"><circle r="20" fill="#2a2a2a" class="c"/><circle r="15.5" fill="none" stroke="#444" stroke-width=".6"/><text y="1" class="lbl" text-anchor="middle" fill="#999">ring</text></g>
+      <g transform="translate(112,24)"><circle r="16" fill="#3b3b3b" class="c"/><circle r="12" fill="none" stroke="#555" stroke-width="1"/><circle r="8" fill="none" stroke="#555" stroke-width=".6"/><circle r="3" fill="#333"/></g>
+      <g transform="translate(152,24)"><circle r="16" fill="#3b3b3b" class="c"/><circle r="12" fill="none" stroke="#555" stroke-width="1"/><circle r="8" fill="none" stroke="#555" stroke-width=".6"/><circle r="3" fill="#333"/></g>
+
+      <!-- knoppen -->
+      <text x="0" y="54" class="lbl">KNOPPEN</text>
+      <g fill="#2a2a2a">
+        <circle cx="10" cy="66" r="6.5" class="c"/><circle cx="26" cy="66" r="6.5" class="c"/><circle cx="42" cy="66" r="6.5" class="c"/><circle cx="58" cy="66" r="6.5" class="c"/>
+        <circle cx="80" cy="66" r="6.5" class="c"/><circle cx="96" cy="66" r="6.5" class="c"/><circle cx="112" cy="66" r="6.5" class="c"/><circle cx="128" cy="66" r="6.5" class="c"/>
+      </g>
+      <g fill="#ddd">
+        <polygon points="10,63 7.5,67.5 12.5,67.5"/><polygon points="26,69 23.5,64.5 28.5,64.5"/><polygon points="39,66 43.5,63.5 43.5,68.5"/><polygon points="61,66 56.5,63.5 56.5,68.5"/>
+      </g>
+      <g fill="#ddd" font-size="6" text-anchor="middle" font-family="Arial"><text x="80" y="68.2">A</text><text x="96" y="68.2">B</text><text x="112" y="68.2">X</text><text x="128" y="68.2">Y</text></g>
+      <rect x="140" y="64.4" width="11" height="3.2" rx="1" fill="#2a2a2a" class="c"/>
+      <g fill="#2a2a2a"><rect x="157" y="64.4" width="11" height="3.2" rx="1"/><rect x="160.9" y="60.5" width="3.2" height="11" rx="1"/></g>
+      <path d="M157,60.5 h11 v11 h-11 z" class="lijn"/>
+      <circle cx="180" cy="66" r="7" fill="#2a2a2a" class="c"/><path d="M176.5,67 L180,63.5 L183.5,67 V70 H176.5 Z" fill="none" stroke="#ddd" stroke-width=".9" stroke-linejoin="round"/>
+      <rect x="0" y="78" width="12" height="12" rx="2" fill="#2a2a2a" class="c"/><circle cx="6" cy="84" r="3.5" fill="#444"/>
+      <text x="16" y="85" class="lbl">pijltjes · A B X Y · min · plus · home · foto</text>
+
+      <!-- bovenkant -->
+      <text x="0" y="102" class="lbl">BOVENKANT (op de zwarte doos)</text>
+      <g transform="translate(0,106)">
+        <rect x="0" y="0" width="16" height="6" rx="2" fill="#555" class="c"/><text x="8" y="11" class="lbl" text-anchor="middle">aan/uit</text>
+        <rect x="22" y="0" width="18" height="6" rx="2" fill="#555" class="c"/><text x="31" y="4.3" font-size="4" fill="#ddd" text-anchor="middle" font-family="Arial">–</text>
+        <rect x="42" y="0" width="18" height="6" rx="2" fill="#555" class="c"/><text x="51" y="4.5" font-size="4" fill="#ddd" text-anchor="middle" font-family="Arial">+</text>
+        <text x="41" y="11" class="lbl" text-anchor="middle">volume</text>
+        <circle cx="70" cy="3" r="4" fill="#111" stroke="#555" stroke-width=".6" class="c"/><text x="70" y="11" class="lbl" text-anchor="middle">koptelefoon</text>
+        <g transform="translate(82,0)">
+          <rect x="0" y="0" width="100" height="9" rx="2" fill="#1d1d1d" class="c"/>
+          <g fill="#000"><rect x="5" y="2.5" width="90" height="1.2" rx=".6"/><rect x="5" y="5.3" width="90" height="1.2" rx=".6"/></g>
+          <text x="50" y="14" class="lbl" text-anchor="middle">ventilatierooster</text>
+        </g>
+      </g>
+      <g transform="translate(0,128)">
+        <rect x="0" y="0" width="50" height="12" rx="2" fill="#1d1d1d" class="c"/><rect x="5" y="4" width="40" height="4" rx="1" fill="#000"/>
+        <text x="25" y="17" class="lbl" text-anchor="middle">spelkaartsleuf</text>
+        <rect x="60" y="0" width="122" height="22" rx="2" fill="#1d1d1d" class="c"/><rect x="63" y="3" width="116" height="16" rx="1.5" fill="none" stroke="#333" stroke-width=".6"/>
+        <text x="121" y="27" class="lbl" text-anchor="middle">uitklapstandaard (achterkant, laat de onderrand vastzitten)</text>
+      </g>
+
+      <!-- schouderknoppen -->
+      <text x="0" y="172" class="lbl">SCHOUDERKNOPPEN (bovenop, buitenkanten)</text>
+      <g transform="translate(0,178)">
+        <path d="M70,0 H26 A26,18 0 0 0 0,18 H70 Z" class="jl c"/><text x="45" y="12" font-size="6" fill="#fff" font-family="Arial" text-anchor="middle">L</text>
+        <path d="M0,0 H44 A26,18 0 0 1 70,18 H0 Z" transform="translate(100,0)" class="jr c"/><text x="125" y="12" font-size="6" fill="#fff" font-family="Arial" text-anchor="middle">R</text>
+      </g>
+      <g transform="translate(0,204)">
+        <path d="M70,0 H30 Q6,0 0,22 H70 Z" fill="#2a2a2a" class="c"/><text x="45" y="14" font-size="6" fill="#ddd" font-family="Arial" text-anchor="middle">ZL</text>
+        <path d="M0,0 H40 Q64,0 70,22 H0 Z" transform="translate(100,0)" fill="#2a2a2a" class="c"/><text x="125" y="14" font-size="6" fill="#ddd" font-family="Arial" text-anchor="middle">ZR</text>
+      </g>
+    </g>
+    <g transform="translate(0,262)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 6: DOCK ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <defs>
+      <g id="dockvoor">
+        <rect width="330" height="110" rx="6" fill="url(#dockgrad)"/>
+        <rect x="4" y="4" width="322" height="102" rx="4" fill="none" stroke="#45484f" stroke-width=".8"/>
+        <rect x="0" y="0" width="330" height="6" fill="#1b1c1f"/>
+        <text x="20" y="96" font-size="9" fill="#3f4248">PAKJESDOCK</text>
+        <rect x="306" y="98" width="10" height="2" rx="1" fill="#41e07a"/>
+        <text x="82" y="60" font-size="8" fill="#43464d" text-anchor="middle" class="naam">Tess</text>
+      </g>
+    </defs>
+    <text x="0" y="6" class="kop">6 · Dock-voorkant (2 helften)</text>
+    <text x="0" y="11" class="sub">Plak helft B over de lijmrand van helft A. Samen 33 × 11 cm. Plak op een doos van 33 × 11 × 7 cm.</text>
+
+    <g transform="translate(5,22)">
+      <text x="0" y="-2" class="lbl">HELFT A</text>
+      <rect x="165" y="0" width="10" height="110" fill="url(#arcering)" class="c"/><text x="170" y="57" class="lbl" text-anchor="middle" transform="rotate(90 170 55)">lijmrand</text>
+      <svg width="165" height="110" viewBox="0 0 165 110"><use href="#dockvoor"/></svg>
+      <path d="M0,0 H175 V110 H0 Z" class="lijn"/>
+      <line x1="165" y1="0" x2="165" y2="110" class="vouw"/>
+    </g>
+    <g transform="translate(5,145)">
+      <text x="0" y="-2" class="lbl">HELFT B</text>
+      <svg width="165" height="110" viewBox="165 0 165 110"><use href="#dockvoor"/></svg>
+      <rect width="165" height="110" class="lijn"/>
+    </g>
+    <g transform="translate(0,268)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 7: SPELHOESJE ================= -->
+<section class="page land">
+  <svg class="vel" viewBox="0 0 277 190">
+    <text x="0" y="6" class="kop">7 · Spelhoesje</text>
+    <text x="40" y="6" class="sub">Knip uit, vouw langs de rug en plak om stevig karton of in een oud spelhoesje.</text>
+    <g transform="translate(27,13)">
+      <!-- ACHTERKANT 0..105 -->
+      <rect x="0" y="0" width="105" height="170" fill="#f7f7f9"/>
+      <rect x="0" y="0" width="105" height="14" class="jr"/>
+      <text x="6" y="9.5" font-size="5" fill="#fff">PAKJES-EDITIE</text>
+      <text x="6" y="24" font-size="6.5" fill="#222" class="spel" textLength="93" lengthAdjust="spacingAndGlyphs">Pakjesavond Party</text>
+      <svg x="6" y="29" width="45" height="28" viewBox="60 50 120 75" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
+      <svg x="54" y="29" width="45" height="28" viewBox="150 20 120 75" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
+      <g font-family="Verdana, Arial, sans-serif" font-size="3.3" fill="#333">
+        <text x="6" y="66">Het is pakjesavond en jíj bent de</text>
+        <text x="6" y="71">snelste pakjesbezorger van de stad!</text>
+        <text x="6" y="76">Spring over de daken, mik de pakjes</text>
+        <text x="6" y="81">door de schoorsteen en verzamel</text>
+        <text x="6" y="86">pepernoten voor extra punten.</text>
+        <text x="6" y="96">★ 25 levels boven de daken</text>
+        <text x="6" y="101">★ Schoentje-zet-modus</text>
+        <text x="6" y="106">★ Chocoladeletter-bonus</text>
+        <text x="6" y="111">★ Speciaal gemaakt voor <tspan class="naam" font-weight="bold">Tess</tspan></text>
+      </g>
+      <rect x="6" y="140" width="13" height="16" rx="1.5" fill="#fff" stroke="#222" stroke-width=".6"/><text x="12.5" y="151" font-size="7" fill="#222" text-anchor="middle">3+</text>
+      <text x="23" y="146" class="lbl" fill="#444">1–4 spelers</text><text x="23" y="151" class="lbl" fill="#444">Sint &amp; Piet Games</text>
+      <g transform="translate(72,140)" fill="#222"><rect width="27" height="13" fill="#fff"/><rect x="1" y="1" width=".6" height="9"/><rect x="2.4" y="1" width="1.2" height="9"/><rect x="4.4" y="1" width=".6" height="9"/><rect x="6" y="1" width="1.6" height="9"/><rect x="8.4" y="1" width=".6" height="9"/><rect x="10" y="1" width="1.2" height="9"/><rect x="12" y="1" width=".6" height="9"/><rect x="13.6" y="1" width="1.6" height="9"/><rect x="16" y="1" width=".6" height="9"/><rect x="17.4" y="1" width="1.2" height="9"/><rect x="19.6" y="1" width=".6" height="9"/><rect x="21" y="1" width="1.6" height="9"/><rect x="23.4" y="1" width=".6" height="9"/><rect x="25" y="1" width="1" height="9"/><text x="13.5" y="12.6" font-size="2.2" text-anchor="middle" font-family="Arial">05-12-2026</text></g>
+
+      <!-- RUG 105..117 -->
+      <rect x="105" y="0" width="12" height="170" fill="#fff"/>
+      <rect x="105" y="0" width="12" height="14" class="jr"/>
+      <text x="111" y="85" font-size="5" fill="#222" text-anchor="middle" dominant-baseline="middle" transform="rotate(90 111 85)" class="spel">Pakjesavond Party</text>
+
+      <!-- VOORKANT 117..222 -->
+      <rect x="117" y="0" width="105" height="170" fill="#111"/>
+      <rect x="117" y="0" width="105" height="14" class="jr"/>
+      <text x="123" y="9.5" font-size="5" fill="#fff">PAKJES-EDITIE</text>
+      <svg x="117" y="14" width="105" height="130" viewBox="75 0 120 155" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
+      <text x="169.5" y="40" font-size="11" fill="#ffd35a" stroke="#1b1046" stroke-width="1.4" paint-order="stroke" text-anchor="middle" class="spel" textLength="95" lengthAdjust="spacingAndGlyphs">Pakjesavond Party</text>
+      <text x="169.5" y="50" font-size="5" fill="#fff" stroke="#1b1046" stroke-width=".8" paint-order="stroke" text-anchor="middle">voor <tspan class="naam">Tess</tspan></text>
+      <rect x="117" y="144" width="105" height="26" fill="#fff"/>
+      <rect x="123" y="149" width="13" height="16" rx="1.5" fill="#fff" stroke="#222" stroke-width=".6"/><text x="129.5" y="160" font-size="7" fill="#222" text-anchor="middle">3+</text>
+      <text x="140" y="155" class="lbl" fill="#444">1–4 spelers</text><text x="140" y="160" class="lbl" fill="#444">Sint &amp; Piet Games</text>
+
+      <rect x="0" y="0" width="222" height="170" class="lijn"/>
+      <line x1="105" y1="0" x2="105" y2="170" class="vouw"/><line x1="117" y1="0" x2="117" y2="170" class="vouw"/>
+    </g>
+    <text x="160" y="188" class="lbl">achterkant · rug · voorkant</text>
+    <g transform="translate(27,187)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 8: GEDICHT, LABEL, SPELKAARTJES ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <defs>
+      <g id="kaartje">
+        <path d="M0,0 H34 L40,6 V52 H0 Z" fill="#e9e9ec" stroke="#999" stroke-width=".4"/>
+        <rect x="3" y="8" width="34" height="34" rx="1.5" fill="#fff"/>
+        <g fill="#c9cbd1"><rect x="4" y="45" width="4" height="5"/><rect x="10" y="45" width="4" height="5"/><rect x="16" y="45" width="4" height="5"/><rect x="22" y="45" width="4" height="5"/><rect x="28" y="45" width="4" height="5"/></g>
+      </g>
+    </defs>
+    <text x="0" y="6" class="kop">8 · Gedichtkaart, label &amp; spelkaartjes</text>
+
+    <!-- Gedichtkaart 190 x 135 -->
+    <g transform="translate(0,12)">
+      <rect width="190" height="135" rx="4" fill="#fff" class="c"/>
+      <rect x="4" y="4" width="182" height="127" rx="3" fill="none" stroke="var(--jr)" stroke-width="1.6" style="stroke:var(--jr)"/>
+      <rect x="7" y="7" width="176" height="121" rx="2" fill="none" style="stroke:var(--jl)" stroke-width=".8"/>
+      <text x="95" y="20" font-size="8" fill="#222" text-anchor="middle">Sinterklaasgedicht voor <tspan class="naam">Tess</tspan></text>
+      <g stroke="#cfd2da" stroke-width=".4">
+        <line x1="15" y1="32" x2="175" y2="32"/><line x1="15" y1="41" x2="175" y2="41"/><line x1="15" y1="50" x2="175" y2="50"/><line x1="15" y1="59" x2="175" y2="59"/>
+        <line x1="15" y1="68" x2="175" y2="68"/><line x1="15" y1="77" x2="175" y2="77"/><line x1="15" y1="86" x2="175" y2="86"/><line x1="15" y1="95" x2="175" y2="95"/>
+        <line x1="15" y1="104" x2="175" y2="104"/><line x1="15" y1="113" x2="175" y2="113"/>
+      </g>
+      <text x="175" y="123" class="sub" text-anchor="end">Sint &amp; Piet</text>
+      <!-- mini-console in hoek -->
+      <g transform="translate(14,116)">
+        <path d="M5,0 H2 A2,2 0 0 0 0,2 V8 A2,2 0 0 0 2,10 H5Z" class="jl"/><rect x="5" y="0" width="20" height="10" fill="#222"/><rect x="7" y="1.5" width="16" height="7" fill="url(#lucht)"/>
+        <path d="M25,0 H28 A2,2 0 0 1 30,2 V8 A2,2 0 0 1 28,10 H25Z" class="jr"/>
+      </g>
+    </g>
+
+    <!-- Cadeaulabel -->
+    <g transform="translate(0,155)">
+      <path d="M12,0 H90 V45 H12 L0,22.5 Z" fill="#fff" class="c"/>
+      <circle cx="10" cy="22.5" r="2.2" fill="none" stroke="#777" stroke-width=".4"/>
+      <rect x="18" y="0" width="5" height="45" class="jl"/>
+      <text x="28" y="14" font-size="5" fill="#222">Voor: <tspan class="naam">Tess</tspan></text>
+      <text x="28" y="25" font-size="5" fill="#222">Van: Sinterklaas</text>
+      <text x="28" y="36" class="sub">Niet schudden – breekbaar spel!</text>
+    </g>
+    <g transform="translate(98,155)">
+      <path d="M12,0 H90 V45 H12 L0,22.5 Z" fill="#fff" class="c"/>
+      <circle cx="10" cy="22.5" r="2.2" fill="none" stroke="#777" stroke-width=".4"/>
+      <rect x="18" y="0" width="5" height="45" class="jr"/>
+      <text x="28" y="14" font-size="5" fill="#222">Level up,</text>
+      <text x="28" y="25" font-size="5" fill="#222"><tspan class="naam">Tess</tspan>!</text>
+      <text x="28" y="36" class="sub">Druk op A om te openen</text>
+    </g>
+
+    <!-- Spelkaartjes -->
+    <text x="0" y="210" class="lbl">SPELKAARTJES – stop er een cadeaubon, geldbriefje of snoepje achter</text>
+    <g transform="translate(4,214)">
+      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
+      <svg x="3" y="8" width="34" height="34" viewBox="60 40 110 110" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
+      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle" stroke="#1b1046" stroke-width=".5" paint-order="stroke">Pakjesavond Party</text>
+    </g>
+    <g transform="translate(52,214)">
+      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
+      <rect x="3" y="8" width="34" height="34" rx="1.5" style="fill:var(--jl)"/>
+      <path d="M10,32 V15 h9 v8 q9,0 12,5 v4 z" fill="#fff"/><rect x="10" y="15" width="9" height="3" fill="#ffd35a"/>
+      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle">Schoentje Sprint</text>
+    </g>
+    <g transform="translate(100,214)">
+      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
+      <rect x="3" y="8" width="34" height="34" rx="1.5" style="fill:var(--jr)"/>
+      <g fill="#8a4b1f"><circle cx="14" cy="20" r="3"/><circle cx="22" cy="17" r="3"/><circle cx="27" cy="25" r="3"/><circle cx="18" cy="27" r="3"/></g>
+      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle">Pepernoten Puzzel</text>
+    </g>
+    <g transform="translate(148,214)">
+      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
+      <rect x="3" y="8" width="34" height="34" rx="1.5" fill="#2b2b2b"/>
+      <text x="20" y="31" font-size="16" fill="#ffd35a" text-anchor="middle" class="letter">T</text>
+      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle">Letter Legends</text>
+    </g>
+    <g transform="translate(0,273)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<script>
+  const velden = { naam: 'in-naam', spel: 'in-spel', jl: 'in-jl', jr: 'in-jr' };
+  const opgeslagen = JSON.parse(localStorage.getItem('surprise-switch') || '{}');
+  for (const [k, id] of Object.entries(velden)) if (opgeslagen[k]) document.getElementById(id).value = opgeslagen[k];
+
+  function bijwerken() {
+    const w = {}; for (const [k, id] of Object.entries(velden)) w[k] = document.getElementById(id).value;
+    const naam = w.naam.trim() || 'jou';
+    document.querySelectorAll('.naam').forEach(el => el.textContent = naam);
+    document.querySelectorAll('.spel').forEach(el => el.textContent = w.spel.trim() || 'Pakjesavond Party');
+    document.querySelectorAll('.letter').forEach(el => el.textContent = naam.charAt(0).toUpperCase());
+    document.documentElement.style.setProperty('--jl', w.jl);
+    document.documentElement.style.setProperty('--jr', w.jr);
+    localStorage.setItem('surprise-switch', JSON.stringify(w));
+  }
+  Object.values(velden).forEach(id => document.getElementById(id).addEventListener('input', bijwerken));
+  bijwerken();
+</script>
+</body>
+</html>
