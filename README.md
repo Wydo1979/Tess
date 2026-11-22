@@ -72,3 +72,6 @@ Lukt een check niet (sommige webshops blokkeren automatische bezoekers), dan zie
 Open `surprise-switch.html` om de naam en de controllerkleuren aan te passen en alles af te drukken (A4, werkelijke grootte),
 of print direct `surprise-switch-sjablonen.pdf`. 5 pagina's: handleiding, scherm, 2 controllers, zijstroken en 3D-knoppen.
 Eindmaat ± 45 × 19 × 5 cm.
+
+**Extra:** `sinterklaas-spelletjes.html` / `sinterklaas-spelletjes.pdf` bevat 20 vouwbare spelkaartjes (cartridges) met eigen Sinterklaas-illustraties,
+een overzicht met beschrijvingen en 3 knipvellen. Naam en chocoladeletter zijn aan te passen.
