@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sjablonen – Sinterklaas-surprise spelcomputer (Switch-stijl)</title>
+<title>Sjablonen – Sinterklaas-surprise Switch met 2 controllers</title>
 <style>
   :root { --jl: #19b5e6; --jr: #ff5148; }
   * { box-sizing: border-box; }
@@ -27,7 +27,7 @@
   ol, ul { margin: 0; padding-left: 6mm; }
   table { border-collapse: collapse; width: 100%; font-size: 9.5pt; }
   td, th { border: 1px solid #ccc; padding: 1.2mm 2mm; text-align: left; }
-  .instel { background: #f3f6ff; border: 1px solid #c9d3f5; border-radius: 3mm; padding: 3mm 4mm; margin: 3mm 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2mm 6mm; font-size: 10pt; }
+  .instel { background: #f3f6ff; border: 1px solid #c9d3f5; border-radius: 3mm; padding: 3mm 4mm; margin: 3mm 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2mm 6mm; font-size: 10pt; }
   .instel label { display: flex; flex-direction: column; gap: 1mm; }
   .instel input[type=text] { font-size: 11pt; padding: 1.5mm; border: 1px solid #aab; border-radius: 1.5mm; }
   .instel input[type=color] { width: 100%; height: 9mm; border: 1px solid #aab; border-radius: 1.5mm; }
@@ -52,9 +52,6 @@
     </linearGradient>
     <linearGradient id="glans" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="dockgrad" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3a3d43"/><stop offset="1" stop-color="#25272b"/>
     </linearGradient>
     <pattern id="arcering" width="2.5" height="2.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
       <rect width="2.5" height="2.5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="2.5" stroke="#bbb" stroke-width=".6"/>
@@ -109,7 +106,6 @@
 
   <div class="instel no-print">
     <label>Naam van de ontvanger <input type="text" id="in-naam" value="Tess" maxlength="18"></label>
-    <label>Naam van het spel (op het spelhoesje) <input type="text" id="in-spel" value="Pakjesavond Party" maxlength="26"></label>
     <label>Kleur linker controller <input type="color" id="in-jl" value="#19b5e6"></label>
     <label>Kleur rechter controller <input type="color" id="in-jr" value="#ff5148"></label>
     <button class="knop" onclick="window.print()">🖨️ Alles afdrukken (A4, schaal 100% / werkelijke grootte)</button>
@@ -117,8 +113,8 @@
 
   <h2>Wat heb je nodig?</h2>
   <ul>
-    <li>Een platte doos van ± 45 × 19 × 5 cm (of maak er een van stevig karton), plus een doos van 33 × 11 × 7 cm voor de dock</li>
-    <li>Zwarte verf of zwart (kaft)papier voor de console en de dock</li>
+    <li>Een platte doos van ± 45 × 19 × 5 cm (of maak er een van stevig karton)</li>
+    <li>Zwarte verf of zwart (kaft)papier voor het middendeel van de console</li>
     <li>Schaar, hobbymes, liniaal, lijmstift en alleslijm / dubbelzijdig tape</li>
     <li>2 flessendoppen of stukjes wc-rol voor de joysticks · stukjes foamboard/karton voor reliëfknoppen</li>
     <li>Wit papier (liefst 160 g/m² voor stevigheid), kleurenprinter</li>
@@ -132,8 +128,6 @@
     <li><b>Controllers (blz. 3 + 4):</b> plak de twee controller-voorkanten links en rechts tegen het scherm aan. Beplak de zijkanten met de gekleurde stroken.</li>
     <li><b>3D-knoppen (blz. 5):</b> plak de joystick-kapjes op flessendoppen en de knopjes op een stukje karton, zo krijg je reliëf. Schouderknoppen komen bovenop, aan de buitenkanten.</li>
     <li><b>Bovenkant:</b> aan/uit-knop, volumeknoppen, ventilatierooster en spelkaartsleuf (blz. 5) plakken op de zwarte bovenkant.</li>
-    <li><b>Dock (blz. 6):</b> plak de twee helften aan elkaar en op de voorkant van de dock-doos. Zet de console er rechtop achter, dan lijkt hij ‘gedockt’. Tip: in de dock past nog een extra cadeautje!</li>
-    <li><b>Spelhoesje + gedicht (blz. 7 + 8):</b> vouw het hoesje om een stukje karton (of een oud dvd-/spelhoesje) en stop er een spelkaartje met een cadeaubon of snoep in. Schrijf het gedicht op de kaart.</li>
   </ol>
 
   <h2>Overzicht van de pagina's</h2>
@@ -143,9 +137,6 @@
     <tr><td>3</td><td>Voorkant linker + rechter controller</td><td>2× 6,5 × 19 cm</td></tr>
     <tr><td>4</td><td>Zijstroken in controllerkleur</td><td>5 cm breed</td></tr>
     <tr><td>5</td><td>3D-onderdelen: joysticks, knoppen, schouderknoppen, bovenkant, standaard</td><td>diverse</td></tr>
-    <tr><td>6</td><td>Dock-voorkant (2 helften)</td><td>33 × 11 cm</td></tr>
-    <tr><td>7</td><td>Spelhoesje (achter – rug – voor), liggend afdrukken</td><td>22,2 × 17 cm</td></tr>
-    <tr><td>8</td><td>Gedichtkaart, cadeaulabel en 3 spelkaartjes</td><td>diverse</td></tr>
   </table>
 
   <div class="tip">✂ <b>Stippellijn</b> = knippen &nbsp;·&nbsp; <b>streep-punt</b> = vouwen &nbsp;·&nbsp; <b>gearceerd</b> = lijmrand. Op elke pagina staat een controlelijn van 5 cm: meet even na of je printer niet heeft verkleind.</div>
@@ -309,170 +300,8 @@
   </svg>
 </section>
 
-<!-- ================= PAGINA 6: DOCK ================= -->
-<section class="page">
-  <svg class="vel" viewBox="0 0 190 277">
-    <defs>
-      <g id="dockvoor">
-        <rect width="330" height="110" rx="6" fill="url(#dockgrad)"/>
-        <rect x="4" y="4" width="322" height="102" rx="4" fill="none" stroke="#45484f" stroke-width=".8"/>
-        <rect x="0" y="0" width="330" height="6" fill="#1b1c1f"/>
-        <text x="20" y="96" font-size="9" fill="#3f4248">PAKJESDOCK</text>
-        <rect x="306" y="98" width="10" height="2" rx="1" fill="#41e07a"/>
-        <text x="82" y="60" font-size="8" fill="#43464d" text-anchor="middle" class="naam">Tess</text>
-      </g>
-    </defs>
-    <text x="0" y="6" class="kop">6 · Dock-voorkant (2 helften)</text>
-    <text x="0" y="11" class="sub">Plak helft B over de lijmrand van helft A. Samen 33 × 11 cm. Plak op een doos van 33 × 11 × 7 cm.</text>
-
-    <g transform="translate(5,22)">
-      <text x="0" y="-2" class="lbl">HELFT A</text>
-      <rect x="165" y="0" width="10" height="110" fill="url(#arcering)" class="c"/><text x="170" y="57" class="lbl" text-anchor="middle" transform="rotate(90 170 55)">lijmrand</text>
-      <svg width="165" height="110" viewBox="0 0 165 110"><use href="#dockvoor"/></svg>
-      <path d="M0,0 H175 V110 H0 Z" class="lijn"/>
-      <line x1="165" y1="0" x2="165" y2="110" class="vouw"/>
-    </g>
-    <g transform="translate(5,145)">
-      <text x="0" y="-2" class="lbl">HELFT B</text>
-      <svg width="165" height="110" viewBox="165 0 165 110"><use href="#dockvoor"/></svg>
-      <rect width="165" height="110" class="lijn"/>
-    </g>
-    <g transform="translate(0,268)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
-  </svg>
-</section>
-
-<!-- ================= PAGINA 7: SPELHOESJE ================= -->
-<section class="page land">
-  <svg class="vel" viewBox="0 0 277 190">
-    <text x="0" y="6" class="kop">7 · Spelhoesje</text>
-    <text x="40" y="6" class="sub">Knip uit, vouw langs de rug en plak om stevig karton of in een oud spelhoesje.</text>
-    <g transform="translate(27,13)">
-      <!-- ACHTERKANT 0..105 -->
-      <rect x="0" y="0" width="105" height="170" fill="#f7f7f9"/>
-      <rect x="0" y="0" width="105" height="14" class="jr"/>
-      <text x="6" y="9.5" font-size="5" fill="#fff">PAKJES-EDITIE</text>
-      <text x="6" y="24" font-size="6.5" fill="#222" class="spel" textLength="93" lengthAdjust="spacingAndGlyphs">Pakjesavond Party</text>
-      <svg x="6" y="29" width="45" height="28" viewBox="60 50 120 75" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
-      <svg x="54" y="29" width="45" height="28" viewBox="150 20 120 75" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
-      <g font-family="Verdana, Arial, sans-serif" font-size="3.3" fill="#333">
-        <text x="6" y="66">Het is pakjesavond en jíj bent de</text>
-        <text x="6" y="71">snelste pakjesbezorger van de stad!</text>
-        <text x="6" y="76">Spring over de daken, mik de pakjes</text>
-        <text x="6" y="81">door de schoorsteen en verzamel</text>
-        <text x="6" y="86">pepernoten voor extra punten.</text>
-        <text x="6" y="96">★ 25 levels boven de daken</text>
-        <text x="6" y="101">★ Schoentje-zet-modus</text>
-        <text x="6" y="106">★ Chocoladeletter-bonus</text>
-        <text x="6" y="111">★ Speciaal gemaakt voor <tspan class="naam" font-weight="bold">Tess</tspan></text>
-      </g>
-      <rect x="6" y="140" width="13" height="16" rx="1.5" fill="#fff" stroke="#222" stroke-width=".6"/><text x="12.5" y="151" font-size="7" fill="#222" text-anchor="middle">3+</text>
-      <text x="23" y="146" class="lbl" fill="#444">1–4 spelers</text><text x="23" y="151" class="lbl" fill="#444">Sint &amp; Piet Games</text>
-      <g transform="translate(72,140)" fill="#222"><rect width="27" height="13" fill="#fff"/><rect x="1" y="1" width=".6" height="9"/><rect x="2.4" y="1" width="1.2" height="9"/><rect x="4.4" y="1" width=".6" height="9"/><rect x="6" y="1" width="1.6" height="9"/><rect x="8.4" y="1" width=".6" height="9"/><rect x="10" y="1" width="1.2" height="9"/><rect x="12" y="1" width=".6" height="9"/><rect x="13.6" y="1" width="1.6" height="9"/><rect x="16" y="1" width=".6" height="9"/><rect x="17.4" y="1" width="1.2" height="9"/><rect x="19.6" y="1" width=".6" height="9"/><rect x="21" y="1" width="1.6" height="9"/><rect x="23.4" y="1" width=".6" height="9"/><rect x="25" y="1" width="1" height="9"/><text x="13.5" y="12.6" font-size="2.2" text-anchor="middle" font-family="Arial">05-12-2026</text></g>
-
-      <!-- RUG 105..117 -->
-      <rect x="105" y="0" width="12" height="170" fill="#fff"/>
-      <rect x="105" y="0" width="12" height="14" class="jr"/>
-      <text x="111" y="85" font-size="5" fill="#222" text-anchor="middle" dominant-baseline="middle" transform="rotate(90 111 85)" class="spel">Pakjesavond Party</text>
-
-      <!-- VOORKANT 117..222 -->
-      <rect x="117" y="0" width="105" height="170" fill="#111"/>
-      <rect x="117" y="0" width="105" height="14" class="jr"/>
-      <text x="123" y="9.5" font-size="5" fill="#fff">PAKJES-EDITIE</text>
-      <svg x="117" y="14" width="105" height="130" viewBox="75 0 120 155" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
-      <text x="169.5" y="40" font-size="11" fill="#ffd35a" stroke="#1b1046" stroke-width="1.4" paint-order="stroke" text-anchor="middle" class="spel" textLength="95" lengthAdjust="spacingAndGlyphs">Pakjesavond Party</text>
-      <text x="169.5" y="50" font-size="5" fill="#fff" stroke="#1b1046" stroke-width=".8" paint-order="stroke" text-anchor="middle">voor <tspan class="naam">Tess</tspan></text>
-      <rect x="117" y="144" width="105" height="26" fill="#fff"/>
-      <rect x="123" y="149" width="13" height="16" rx="1.5" fill="#fff" stroke="#222" stroke-width=".6"/><text x="129.5" y="160" font-size="7" fill="#222" text-anchor="middle">3+</text>
-      <text x="140" y="155" class="lbl" fill="#444">1–4 spelers</text><text x="140" y="160" class="lbl" fill="#444">Sint &amp; Piet Games</text>
-
-      <rect x="0" y="0" width="222" height="170" class="lijn"/>
-      <line x1="105" y1="0" x2="105" y2="170" class="vouw"/><line x1="117" y1="0" x2="117" y2="170" class="vouw"/>
-    </g>
-    <text x="160" y="188" class="lbl">achterkant · rug · voorkant</text>
-    <g transform="translate(27,187)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
-  </svg>
-</section>
-
-<!-- ================= PAGINA 8: GEDICHT, LABEL, SPELKAARTJES ================= -->
-<section class="page">
-  <svg class="vel" viewBox="0 0 190 277">
-    <defs>
-      <g id="kaartje">
-        <path d="M0,0 H34 L40,6 V52 H0 Z" fill="#e9e9ec" stroke="#999" stroke-width=".4"/>
-        <rect x="3" y="8" width="34" height="34" rx="1.5" fill="#fff"/>
-        <g fill="#c9cbd1"><rect x="4" y="45" width="4" height="5"/><rect x="10" y="45" width="4" height="5"/><rect x="16" y="45" width="4" height="5"/><rect x="22" y="45" width="4" height="5"/><rect x="28" y="45" width="4" height="5"/></g>
-      </g>
-    </defs>
-    <text x="0" y="6" class="kop">8 · Gedichtkaart, label &amp; spelkaartjes</text>
-
-    <!-- Gedichtkaart 190 x 135 -->
-    <g transform="translate(0,12)">
-      <rect width="190" height="135" rx="4" fill="#fff" class="c"/>
-      <rect x="4" y="4" width="182" height="127" rx="3" fill="none" stroke="var(--jr)" stroke-width="1.6" style="stroke:var(--jr)"/>
-      <rect x="7" y="7" width="176" height="121" rx="2" fill="none" style="stroke:var(--jl)" stroke-width=".8"/>
-      <text x="95" y="20" font-size="8" fill="#222" text-anchor="middle">Sinterklaasgedicht voor <tspan class="naam">Tess</tspan></text>
-      <g stroke="#cfd2da" stroke-width=".4">
-        <line x1="15" y1="32" x2="175" y2="32"/><line x1="15" y1="41" x2="175" y2="41"/><line x1="15" y1="50" x2="175" y2="50"/><line x1="15" y1="59" x2="175" y2="59"/>
-        <line x1="15" y1="68" x2="175" y2="68"/><line x1="15" y1="77" x2="175" y2="77"/><line x1="15" y1="86" x2="175" y2="86"/><line x1="15" y1="95" x2="175" y2="95"/>
-        <line x1="15" y1="104" x2="175" y2="104"/><line x1="15" y1="113" x2="175" y2="113"/>
-      </g>
-      <text x="175" y="123" class="sub" text-anchor="end">Sint &amp; Piet</text>
-      <!-- mini-console in hoek -->
-      <g transform="translate(14,116)">
-        <path d="M5,0 H2 A2,2 0 0 0 0,2 V8 A2,2 0 0 0 2,10 H5Z" class="jl"/><rect x="5" y="0" width="20" height="10" fill="#222"/><rect x="7" y="1.5" width="16" height="7" fill="url(#lucht)"/>
-        <path d="M25,0 H28 A2,2 0 0 1 30,2 V8 A2,2 0 0 1 28,10 H25Z" class="jr"/>
-      </g>
-    </g>
-
-    <!-- Cadeaulabel -->
-    <g transform="translate(0,155)">
-      <path d="M12,0 H90 V45 H12 L0,22.5 Z" fill="#fff" class="c"/>
-      <circle cx="10" cy="22.5" r="2.2" fill="none" stroke="#777" stroke-width=".4"/>
-      <rect x="18" y="0" width="5" height="45" class="jl"/>
-      <text x="28" y="14" font-size="5" fill="#222">Voor: <tspan class="naam">Tess</tspan></text>
-      <text x="28" y="25" font-size="5" fill="#222">Van: Sinterklaas</text>
-      <text x="28" y="36" class="sub">Niet schudden – breekbaar spel!</text>
-    </g>
-    <g transform="translate(98,155)">
-      <path d="M12,0 H90 V45 H12 L0,22.5 Z" fill="#fff" class="c"/>
-      <circle cx="10" cy="22.5" r="2.2" fill="none" stroke="#777" stroke-width=".4"/>
-      <rect x="18" y="0" width="5" height="45" class="jr"/>
-      <text x="28" y="14" font-size="5" fill="#222">Level up,</text>
-      <text x="28" y="25" font-size="5" fill="#222"><tspan class="naam">Tess</tspan>!</text>
-      <text x="28" y="36" class="sub">Druk op A om te openen</text>
-    </g>
-
-    <!-- Spelkaartjes -->
-    <text x="0" y="210" class="lbl">SPELKAARTJES – stop er een cadeaubon, geldbriefje of snoepje achter</text>
-    <g transform="translate(4,214)">
-      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
-      <svg x="3" y="8" width="34" height="34" viewBox="60 40 110 110" preserveAspectRatio="xMidYMid slice"><use href="#scene"/></svg>
-      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle" stroke="#1b1046" stroke-width=".5" paint-order="stroke">Pakjesavond Party</text>
-    </g>
-    <g transform="translate(52,214)">
-      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
-      <rect x="3" y="8" width="34" height="34" rx="1.5" style="fill:var(--jl)"/>
-      <path d="M10,32 V15 h9 v8 q9,0 12,5 v4 z" fill="#fff"/><rect x="10" y="15" width="9" height="3" fill="#ffd35a"/>
-      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle">Schoentje Sprint</text>
-    </g>
-    <g transform="translate(100,214)">
-      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
-      <rect x="3" y="8" width="34" height="34" rx="1.5" style="fill:var(--jr)"/>
-      <g fill="#8a4b1f"><circle cx="14" cy="20" r="3"/><circle cx="22" cy="17" r="3"/><circle cx="27" cy="25" r="3"/><circle cx="18" cy="27" r="3"/></g>
-      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle">Pepernoten Puzzel</text>
-    </g>
-    <g transform="translate(148,214)">
-      <use href="#kaartje"/><path d="M0,0 H34 L40,6 V52 H0 Z" class="lijn"/>
-      <rect x="3" y="8" width="34" height="34" rx="1.5" fill="#2b2b2b"/>
-      <text x="20" y="31" font-size="16" fill="#ffd35a" text-anchor="middle" class="letter">T</text>
-      <text x="20" y="38" font-size="3" fill="#fff" text-anchor="middle">Letter Legends</text>
-    </g>
-    <g transform="translate(0,273)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
-  </svg>
-</section>
-
 <script>
-  const velden = { naam: 'in-naam', spel: 'in-spel', jl: 'in-jl', jr: 'in-jr' };
+  const velden = { naam: 'in-naam', jl: 'in-jl', jr: 'in-jr' };
   const opgeslagen = JSON.parse(localStorage.getItem('surprise-switch') || '{}');
   for (const [k, id] of Object.entries(velden)) if (opgeslagen[k]) document.getElementById(id).value = opgeslagen[k];
 
@@ -480,8 +309,6 @@
     const w = {}; for (const [k, id] of Object.entries(velden)) w[k] = document.getElementById(id).value;
     const naam = w.naam.trim() || 'jou';
     document.querySelectorAll('.naam').forEach(el => el.textContent = naam);
-    document.querySelectorAll('.spel').forEach(el => el.textContent = w.spel.trim() || 'Pakjesavond Party');
-    document.querySelectorAll('.letter').forEach(el => el.textContent = naam.charAt(0).toUpperCase());
     document.documentElement.style.setProperty('--jl', w.jl);
     document.documentElement.style.setProperty('--jr', w.jr);
     localStorage.setItem('surprise-switch', JSON.stringify(w));

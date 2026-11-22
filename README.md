@@ -69,6 +69,6 @@ Lukt een check niet (sommige webshops blokkeren automatische bezoekers), dan zie
 
 # 🎮 Surprise-sjablonen: spelcomputer in Switch-stijl
 
-Open `surprise-switch.html` om naam, spelnaam en controllerkleuren aan te passen en alles af te drukken (A4, werkelijke grootte),
-of print direct `surprise-switch-sjablonen.pdf`. 8 pagina's: handleiding, scherm, controllers, zijstroken, 3D-knoppen, dock,
-spelhoesje en gedichtkaart met labels en spelkaartjes. Eindmaat ± 45 × 19 × 5 cm.
+Open `surprise-switch.html` om de naam en de controllerkleuren aan te passen en alles af te drukken (A4, werkelijke grootte),
+of print direct `surprise-switch-sjablonen.pdf`. 5 pagina's: handleiding, scherm, 2 controllers, zijstroken en 3D-knoppen.
+Eindmaat ± 45 × 19 × 5 cm.
