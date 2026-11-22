@@ -57,41 +57,54 @@
       <rect width="2.5" height="2.5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="2.5" stroke="#bbb" stroke-width=".6"/>
     </pattern>
 
-    <!-- Eigen spelscène: daken bij nacht met vallende pakjes (270 x 155) -->
+    <!-- Eigen schattige pastel-platformwereld met eigen figuurtje "Pepernootje" (270 x 155) -->
+    <linearGradient id="pastel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd3ff"/><stop offset=".65" stop-color="#ffd9f0"/><stop offset="1" stop-color="#fff1c9"/>
+    </linearGradient>
+    <g id="ster4"><path d="M0,-4 Q.8,-.8 4,0 Q.8,.8 0,4 Q-.8,.8 -4,0 Q-.8,-.8 0,-4Z"/></g>
+    <g id="wolk" fill="#fff"><circle cx="0" cy="0" r="9"/><circle cx="10" cy="-5" r="11"/><circle cx="22" cy="0" r="9"/><rect x="0" y="0" width="22" height="9"/></g>
     <g id="scene">
-      <rect width="270" height="155" fill="url(#lucht)"/>
-      <g fill="#fff">
-        <circle cx="12" cy="22" r=".8"/><circle cx="34" cy="40" r=".6"/><circle cx="52" cy="15" r="1"/><circle cx="75" cy="33" r=".7"/>
-        <circle cx="96" cy="12" r=".8"/><circle cx="118" cy="44" r=".6"/><circle cx="140" cy="20" r="1"/><circle cx="160" cy="38" r=".7"/>
-        <circle cx="182" cy="14" r=".9"/><circle cx="200" cy="50" r=".6"/><circle cx="252" cy="58" r=".8"/><circle cx="262" cy="18" r=".7"/>
-        <circle cx="22" cy="60" r=".6"/><circle cx="66" cy="62" r=".5"/><circle cx="150" cy="62" r=".6"/><circle cx="240" cy="8" r=".6"/>
+      <rect width="270" height="155" fill="url(#pastel)"/>
+      <circle cx="232" cy="30" r="14" fill="#fff6a8"/><circle cx="232" cy="30" r="19" fill="#fff6a8" opacity=".35"/>
+      <use href="#wolk" transform="translate(20,30)"/><use href="#wolk" transform="translate(150,22) scale(.8)"/><use href="#wolk" transform="translate(190,58) scale(.6)"/>
+      <g fill="#fff"><use href="#ster4" transform="translate(70,20)"/><use href="#ster4" transform="translate(120,45) scale(.6)"/><use href="#ster4" transform="translate(255,62) scale(.7)"/><use href="#ster4" transform="translate(12,62) scale(.5)"/></g>
+      <g fill="#ffe25a"><use href="#ster4" transform="translate(100,18) scale(.8)"/><use href="#ster4" transform="translate(205,40) scale(.6)"/></g>
+      <!-- heuvels -->
+      <ellipse cx="40" cy="135" rx="80" ry="45" fill="#b8ecb0"/>
+      <ellipse cx="200" cy="130" rx="95" ry="42" fill="#a6e3a0"/>
+      <ellipse cx="130" cy="145" rx="70" ry="30" fill="#c6f2bd"/>
+      <g fill="none" stroke="#8fd68c" stroke-width="1.2" stroke-linecap="round">
+        <path d="M30,112 q6,-6 12,0 q-6,6 -9,1"/><path d="M200,105 q6,-6 12,0 q-6,6 -9,1"/><path d="M150,128 q5,-5 10,0 q-5,5 -7,1"/>
       </g>
-      <circle cx="228" cy="32" r="13" fill="#fff6c8"/>
-      <circle cx="223" cy="28" r="2.6" fill="#efe2a2"/><circle cx="232" cy="37" r="1.8" fill="#efe2a2"/><circle cx="233" cy="26" r="1.2" fill="#efe2a2"/>
-      <path d="M0,155 V100 L20,88 L40,100 V90 L70,72 L100,90 V96 L118,84 L140,96 V88 L170,68 L200,88 V94 L222,80 L245,94 V86 L270,74 V155Z" fill="#2a1f5c"/>
-      <g fill="#150d2e">
-        <polygon points="0,115 27,95 55,115"/><rect x="0" y="115" width="55" height="40"/>
-        <rect x="100" y="84" width="8" height="18"/><polygon points="58,108 90,82 122,108"/><rect x="60" y="108" width="60" height="47"/>
-        <polygon points="123,118 150,98 177,118"/><rect x="125" y="118" width="50" height="37"/>
-        <rect x="190" y="80" width="8" height="18"/><polygon points="178,105 210,80 242,105"/><rect x="180" y="105" width="60" height="50"/>
-        <polygon points="243,120 270,100 270,120"/><rect x="245" y="120" width="25" height="35"/>
+      <!-- boom -->
+      <rect x="236" y="96" width="6" height="22" rx="2" fill="#c98a5a"/>
+      <circle cx="239" cy="92" r="12" fill="#6fd38a"/><circle cx="231" cy="96" r="8" fill="#6fd38a"/><circle cx="247" cy="96" r="8" fill="#6fd38a"/>
+      <circle cx="236" cy="88" r="3" fill="#fff" opacity=".35"/>
+      <!-- zwevend wolkenplatform met pakje -->
+      <g transform="translate(196,86)"><circle cx="0" cy="0" r="6" fill="#fff"/><circle cx="8" cy="-3" r="7" fill="#fff"/><circle cx="17" cy="0" r="6" fill="#fff"/><rect x="0" y="0" width="17" height="5" fill="#fff"/></g>
+      <g transform="translate(202,72)"><rect width="10" height="9" rx="1.5" fill="#ff7eb6"/><rect x="4" width="2" height="9" fill="#fff"/><rect y="3.5" width="10" height="2" fill="#fff"/><path d="M5,0 q-4,-4 -4,0 M5,0 q4,-4 4,0" fill="none" stroke="#fff" stroke-width="1"/></g>
+      <!-- grond met gras -->
+      <rect x="0" y="130" width="270" height="25" fill="#ffd38a"/>
+      <g fill="#ffc46b"><rect x="0" y="137" width="18" height="18"/><rect x="36" y="137" width="18" height="18"/><rect x="72" y="137" width="18" height="18"/><rect x="108" y="137" width="18" height="18"/><rect x="144" y="137" width="18" height="18"/><rect x="180" y="137" width="18" height="18"/><rect x="216" y="137" width="18" height="18"/><rect x="252" y="137" width="18" height="18"/></g>
+      <path d="M0,133 Q9,127 18,133 T36,133 T54,133 T72,133 T90,133 T108,133 T126,133 T144,133 T162,133 T180,133 T198,133 T216,133 T234,133 T252,133 T270,133 V128 H0Z" fill="#6fd38a"/>
+      <!-- bloemetjes -->
+      <g><circle cx="100" cy="126" r="2" fill="#fff"/><circle cx="100" cy="126" r=".9" fill="#ffd34a"/><circle cx="160" cy="125" r="2" fill="#ffb3d6"/><circle cx="160" cy="125" r=".9" fill="#fff"/><circle cx="222" cy="126" r="2" fill="#fff"/><circle cx="222" cy="126" r=".9" fill="#ff7eb6"/></g>
+      <!-- Pepernootje: eigen figuurtje (rond koekje met spikkels en rode muts) -->
+      <g transform="translate(52,112)">
+        <ellipse cx="0" cy="17" rx="15" ry="2.5" fill="#000" opacity=".12"/>
+        <ellipse cx="-8" cy="14" rx="7" ry="4" fill="#8a4b2b"/><ellipse cx="8" cy="14" rx="7" ry="4" fill="#8a4b2b"/>
+        <ellipse cx="-15" cy="2" rx="4.5" ry="3.5" fill="#e2a868" transform="rotate(-30 -15 2)"/>
+        <ellipse cx="15" cy="-3" rx="4.5" ry="3.5" fill="#e2a868" transform="rotate(-50 15 -3)"/>
+        <circle r="15" fill="#eab676"/>
+        <circle cx="-4" cy="-6" r="8" fill="#fff" opacity=".18"/>
+        <g fill="#b9763f"><circle cx="-9" cy="-8" r="1"/><circle cx="7" cy="-10" r="1"/><circle cx="10" cy="6" r="1"/><circle cx="-10" cy="7" r="1"/><circle cx="0" cy="-12" r=".9"/></g>
+        <ellipse cx="-4" cy="-2" rx="2" ry="3.6" fill="#2a1a12"/><ellipse cx="4" cy="-2" rx="2" ry="3.6" fill="#2a1a12"/>
+        <circle cx="-4.4" cy="-3.6" r=".9" fill="#fff"/><circle cx="3.6" cy="-3.6" r=".9" fill="#fff"/>
+        <ellipse cx="-9" cy="3" rx="2.6" ry="1.5" fill="#ff8fa8" opacity=".8"/><ellipse cx="9" cy="3" rx="2.6" ry="1.5" fill="#ff8fa8" opacity=".8"/>
+        <path d="M-2.5,4 Q0,7 2.5,4" fill="#c2444f" stroke="#2a1a12" stroke-width=".6"/>
+        <path d="M-9,-11 Q0,-24 10,-12 Q2,-15 -9,-11Z" fill="#e8333a"/><circle cx="11" cy="-12" r="2.2" fill="#fff"/>
       </g>
-      <g fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round" opacity=".9">
-        <polyline points="0,115 27,95 55,115"/><polyline points="58,108 90,82 122,108"/><polyline points="123,118 150,98 177,118"/>
-        <polyline points="178,105 210,80 242,105"/><polyline points="243,120 270,100"/><line x1="99.5" y1="84" x2="108.5" y2="84"/><line x1="189.5" y1="80" x2="198.5" y2="80"/>
-      </g>
-      <g fill="#ffd35a">
-        <rect x="10" y="125" width="8" height="9"/><rect x="36" y="125" width="8" height="9"/><rect x="70" y="118" width="9" height="10"/>
-        <rect x="100" y="118" width="9" height="10"/><rect x="84" y="138" width="10" height="17"/><rect x="140" y="128" width="8" height="9"/>
-        <rect x="190" y="115" width="9" height="10"/><rect x="220" y="115" width="9" height="10"/><rect x="254" y="130" width="7" height="8"/>
-      </g>
-      <g stroke="#fff" stroke-width=".8" stroke-linecap="round" opacity=".6">
-        <line x1="101" y1="58" x2="101" y2="68"/><line x1="105" y1="54" x2="105" y2="67"/><line x1="109" y1="59" x2="109" y2="68"/>
-        <line x1="191" y1="24" x2="191" y2="34"/><line x1="195" y1="20" x2="195" y2="33"/><line x1="199" y1="25" x2="199" y2="34"/>
-      </g>
-      <rect x="99" y="71" width="12" height="10" rx="1" fill="#e8333a"/><rect x="104" y="71" width="2" height="10" fill="#ffd35a"/><rect x="99" y="75" width="12" height="2" fill="#ffd35a"/>
-      <rect x="189" y="38" width="12" height="10" rx="1" fill="#2fbf71"/><rect x="194" y="38" width="2" height="10" fill="#fff"/><rect x="189" y="42" width="12" height="2" fill="#fff"/>
-      <rect x="40" y="50" width="9" height="8" rx="1" fill="#3d8bff" transform="translate(-24,18) rotate(-15 44 54)"/><rect x="43.5" y="50" width="2" height="8" fill="#ffd35a" transform="translate(-24,18) rotate(-15 44 54)"/>
+      <g fill="#ffe25a"><use href="#ster4" transform="translate(76,96) scale(.6)"/><use href="#ster4" transform="translate(30,98) scale(.45)"/></g>
     </g>
 
     <!-- Snijlijnmarkering -->
@@ -133,7 +146,7 @@
   <h2>Overzicht van de pagina's</h2>
   <table>
     <tr><th>Blz.</th><th>Sjabloon</th><th>Formaat</th></tr>
-    <tr><td>2</td><td>Scherm met eigen spel “SURPRISE!” (liggend afdrukken)</td><td>27 × 15,5 cm</td></tr>
+    <tr><td>2</td><td>Scherm in schattige pastelstijl met eigen figuurtje “Pepernootje” (liggend afdrukken)</td><td>27 × 15,5 cm</td></tr>
     <tr><td>3</td><td>Voorkant linker + rechter controller</td><td>2× 6,5 × 19 cm</td></tr>
     <tr><td>4</td><td>Zijstroken in controllerkleur</td><td>5 cm breed</td></tr>
     <tr><td>5</td><td>3D-onderdelen: joysticks, knoppen, schouderknoppen, bovenkant, standaard</td><td>diverse</td></tr>
@@ -151,14 +164,17 @@
     <g transform="translate(3.5,14)">
       <svg width="270" height="155" viewBox="0 0 270 155"><use href="#scene"/></svg>
       <!-- HUD -->
-      <text x="8" y="13" font-size="8" fill="#ff5a6e">♥♥♥</text>
-      <text x="200" y="12" font-size="6" fill="#fff" text-anchor="end" font-family="Courier New, monospace">PAKJES × 24</text>
-      <g transform="translate(236,6)"><rect width="16" height="7" rx="1.2" fill="none" stroke="#fff" stroke-width=".8"/><rect x="16.6" y="2.2" width="1.4" height="2.6" fill="#fff"/><rect x="1.4" y="1.4" width="11" height="4.2" fill="#5ee37a"/></g>
-      <text x="135" y="13" font-size="5" fill="#cfd3ff" text-anchor="middle" font-family="Courier New, monospace">5 DEC · 19:00</text>
-      <text x="135" y="72" font-size="36" fill="#fff" stroke="#1b1046" stroke-width="2.4" paint-order="stroke" text-anchor="middle">SURPRISE!</text>
-      <text x="135" y="92" font-size="13" fill="#ffd35a" stroke="#1b1046" stroke-width="1.6" paint-order="stroke" text-anchor="middle">voor <tspan class="naam">Tess</tspan></text>
-      <rect x="85" y="133" width="100" height="12" rx="6" fill="#000" opacity=".55"/>
-      <text x="135" y="141.3" font-size="6" fill="#fff" text-anchor="middle">Druk op <tspan fill="#ffd35a">Ⓐ</tspan> om te openen</text>
+      <g transform="translate(7,6)">
+        <rect width="62" height="11" rx="5.5" fill="#fff" opacity=".85"/>
+        <text x="5" y="7.6" font-size="5" fill="#ff4f9a">PEPERNOOTJE</text>
+        <g transform="translate(7,13)"><rect width="52" height="5" rx="2.5" fill="#fff" stroke="#ff4f9a" stroke-width=".8"/>
+          <g fill="#ffcf3a"><rect x="1.5" y="1.2" width="6.5" height="2.6" rx="1.3"/><rect x="9.2" y="1.2" width="6.5" height="2.6" rx="1.3"/><rect x="16.9" y="1.2" width="6.5" height="2.6" rx="1.3"/><rect x="24.6" y="1.2" width="6.5" height="2.6" rx="1.3"/><rect x="32.3" y="1.2" width="6.5" height="2.6" rx="1.3"/><rect x="40" y="1.2" width="6.5" height="2.6" rx="1.3"/></g></g>
+      </g>
+      <g transform="translate(218,6)"><rect width="45" height="11" rx="5.5" fill="#fff" opacity=".85"/><use href="#ster4" transform="translate(8,5.5) scale(.9)" fill="#ffcf3a"/><text x="15" y="7.8" font-size="5.5" fill="#ff4f9a">× 24</text></g>
+      <text x="135" y="64" font-size="36" fill="#fff" stroke="#ff4f9a" stroke-width="4" stroke-linejoin="round" paint-order="stroke" text-anchor="middle">SURPRISE!</text>
+      <text x="135" y="84" font-size="13" fill="#ff4f9a" stroke="#fff" stroke-width="2.4" stroke-linejoin="round" paint-order="stroke" text-anchor="middle">voor <tspan class="naam">Tess</tspan></text>
+      <rect x="85" y="141" width="100" height="11" rx="5.5" fill="#fff" opacity=".9"/>
+      <text x="135" y="148.6" font-size="5.6" fill="#ff4f9a" text-anchor="middle">Druk op Ⓐ om te openen</text>
       <rect width="270" height="155" fill="url(#glans)"/>
       <rect width="270" height="155" fill="none" class="c"/>
     </g>
