@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sjablonen – Sinterklaas-surprise Switch met 2 controllers</title>
+<style>
+  :root { --jl: #19b5e6; --jr: #ff5148; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #d9dbe0; font-family: "Segoe UI", Verdana, Arial, sans-serif; color: #222; }
+  .page { width: 210mm; height: 297mm; padding: 10mm; margin: 10mm auto; background: #fff; box-shadow: 0 2px 10px rgba(0,0,0,.2); overflow: hidden; position: relative; }
+  .page.land { width: 297mm; height: 210mm; page: liggend; }
+  .page svg.vel { display: block; width: 190mm; height: 277mm; }
+  .page.land svg.vel { width: 277mm; height: 190mm; }
+  svg text { font-family: "Arial Black", "Segoe UI Black", Arial, sans-serif; }
+  .c { stroke: #555; stroke-width: .3; stroke-dasharray: 2 1; }
+  .lijn { fill: none; stroke: #555; stroke-width: .3; stroke-dasharray: 2 1; }
+  .vouw { fill: none; stroke: #888; stroke-width: .3; stroke-dasharray: 4 1 1 1; }
+  .kop { font-size: 6px; fill: #222; }
+  .sub { font-family: Verdana, Arial, sans-serif !important; font-size: 3.2px; fill: #555; font-weight: normal; }
+  .lbl { font-family: Verdana, Arial, sans-serif !important; font-size: 2.6px; fill: #666; }
+  .jl { fill: var(--jl); }
+  .jr { fill: var(--jr); }
+  h1 { font-size: 22pt; margin: 0 0 2mm; }
+  h2 { font-size: 13pt; margin: 5mm 0 2mm; }
+  p, li { font-size: 10pt; line-height: 1.45; }
+  ol, ul { margin: 0; padding-left: 6mm; }
+  table { border-collapse: collapse; width: 100%; font-size: 9.5pt; }
+  td, th { border: 1px solid #ccc; padding: 1.2mm 2mm; text-align: left; }
+  .instel { background: #f3f6ff; border: 1px solid #c9d3f5; border-radius: 3mm; padding: 3mm 4mm; margin: 3mm 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2mm 6mm; font-size: 10pt; }
+  .instel label { display: flex; flex-direction: column; gap: 1mm; }
+  .instel input[type=text] { font-size: 11pt; padding: 1.5mm; border: 1px solid #aab; border-radius: 1.5mm; }
+  .instel input[type=color] { width: 100%; height: 9mm; border: 1px solid #aab; border-radius: 1.5mm; }
+  .knop { grid-column: 1 / -1; font-size: 12pt; padding: 2.5mm; border: 0; border-radius: 2mm; background: #2b5be3; color: #fff; cursor: pointer; font-weight: bold; }
+  .tip { background: #fff7d6; border-left: 4px solid #f2b705; padding: 2mm 3mm; font-size: 9.5pt; margin-top: 3mm; }
+  @page { size: A4 portrait; margin: 0; }
+  @page liggend { size: A4 landscape; margin: 0; }
+  @media print {
+    body { background: none; }
+    .page { margin: 0; box-shadow: none; break-after: page; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Gedeelde definities -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="lucht" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0a1440"/><stop offset=".6" stop-color="#2d2470"/><stop offset="1" stop-color="#5a2f80"/>
+    </linearGradient>
+    <linearGradient id="glans" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <pattern id="arcering" width="2.5" height="2.5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="2.5" height="2.5" fill="#fff"/><line x1="0" y1="0" x2="0" y2="2.5" stroke="#bbb" stroke-width=".6"/>
+    </pattern>
+
+    <!-- Eigen overwoekerde-stadswereld (270 x 155) -->
+    <linearGradient id="blauwlucht" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d9ff0"/><stop offset=".55" stop-color="#a9dcff"/><stop offset="1" stop-color="#eaf8ff"/>
+    </linearGradient>
+    <linearGradient id="gras" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8be05f"/><stop offset="1" stop-color="#3f9d38"/>
+    </linearGradient>
+    <pattern id="ramen" width="8" height="9" patternUnits="userSpaceOnUse"><rect x="2" y="2" width="4" height="5" rx=".5" fill="#7f9ca6"/></pattern>
+    <linearGradient id="bovenlicht" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <g id="ster4"><path d="M0,-4 Q.8,-.8 4,0 Q.8,.8 0,4 Q-.8,.8 -4,0 Q-.8,-.8 0,-4Z"/></g>
+    <g id="wolk" fill="#fff"><circle cx="0" cy="0" r="9"/><circle cx="10" cy="-5" r="11"/><circle cx="22" cy="0" r="9"/><rect x="0" y="0" width="22" height="9"/></g>
+    <g id="scene">
+      <rect width="270" height="155" fill="url(#blauwlucht)"/>
+      <use href="#wolk" transform="translate(70,22) scale(.9)" opacity=".95"/><use href="#wolk" transform="translate(228,20) scale(.7)" opacity=".9"/><use href="#wolk" transform="translate(120,50) scale(.5)" opacity=".8"/>
+      <!-- verre skyline -->
+      <g fill="#bcdcec">
+        <rect x="45" y="60" width="18" height="60"/><rect x="66" y="44" width="10" height="76"/><ellipse cx="71" cy="44" rx="9" ry="3.5"/><rect x="69.5" y="32" width="3" height="10"/>
+        <rect x="80" y="70" width="24" height="50"/><rect x="236" y="38" width="14" height="80"/><rect x="252" y="58" width="18" height="60"/>
+      </g>
+      <!-- overwoekerde gebouwen -->
+      <g>
+        <rect x="0" y="55" width="40" height="70" fill="#c7d2ce"/><rect x="0" y="55" width="40" height="70" fill="url(#ramen)"/>
+        <rect x="110" y="62" width="40" height="60" fill="#cfd8d4"/><rect x="110" y="62" width="40" height="60" fill="url(#ramen)"/><rect x="142" y="62" width="8" height="60" fill="#000" opacity=".08"/>
+        <rect x="150" y="30" width="55" height="92" fill="#d6dedb"/><rect x="150" y="30" width="55" height="92" fill="url(#ramen)"/><rect x="195" y="30" width="10" height="92" fill="#000" opacity=".08"/>
+        <rect x="205" y="48" width="57" height="74" fill="#c3cfcb"/><rect x="205" y="48" width="57" height="74" fill="url(#ramen)"/>
+      </g>
+      <circle cx="150.0" cy="29.8" r="5.5" fill="#4fae4a"/><circle cx="155.5" cy="28.7" r="3.5" fill="#4fae4a"/><circle cx="161.0" cy="29.0" r="3.1" fill="#4fae4a"/><circle cx="166.5" cy="28.9" r="4.7" fill="#4fae4a"/><circle cx="172.0" cy="30.0" r="3.1" fill="#4fae4a"/><circle cx="177.5" cy="31.5" r="3.6" fill="#4fae4a"/><circle cx="183.0" cy="30.1" r="3.3" fill="#4fae4a"/><circle cx="188.5" cy="29.7" r="4.9" fill="#4fae4a"/><circle cx="194.0" cy="29.9" r="5.5" fill="#4fae4a"/><circle cx="199.5" cy="29.7" r="3.6" fill="#4fae4a"/><circle cx="205.0" cy="29.8" r="3.1" fill="#4fae4a"/><circle cx="152.0" cy="33.2" r="3.6" fill="#6cc95a"/><circle cx="157.7" cy="32.0" r="5.1" fill="#6cc95a"/><circle cx="163.3" cy="31.3" r="3.1" fill="#6cc95a"/><circle cx="169.0" cy="31.1" r="3.6" fill="#6cc95a"/><circle cx="174.7" cy="33.1" r="3.6" fill="#6cc95a"/><circle cx="180.3" cy="30.7" r="3.4" fill="#6cc95a"/><circle cx="186.0" cy="32.2" r="5.3" fill="#6cc95a"/><circle cx="191.7" cy="31.7" r="5.5" fill="#6cc95a"/><circle cx="197.3" cy="32.5" r="5.3" fill="#6cc95a"/><circle cx="203.0" cy="32.7" r="5.0" fill="#6cc95a"/><path d="M154.0,30 q2,8.6 0,17.2 t0,8.6" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="155.0" cy="42.9" r="1.6" fill="#6cc95a"/><circle cx="153.0" cy="52.0" r="1.4" fill="#4fae4a"/><path d="M169.7,30 q2,4.9 0,9.7 t0,4.9" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="170.7" cy="37.3" r="1.6" fill="#6cc95a"/><circle cx="168.7" cy="42.4" r="1.4" fill="#4fae4a"/><path d="M185.3,30 q2,6.0 0,11.9 t0,6.0" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="186.3" cy="39.0" r="1.6" fill="#6cc95a"/><circle cx="184.3" cy="45.2" r="1.4" fill="#4fae4a"/><path d="M201.0,30 q2,12.2 0,24.3 t0,12.2" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="202.0" cy="48.2" r="1.6" fill="#6cc95a"/><circle cx="200.0" cy="61.0" r="1.4" fill="#4fae4a"/><circle cx="205.0" cy="49.3" r="5.2" fill="#4fae4a"/><circle cx="210.7" cy="48.5" r="3.8" fill="#4fae4a"/><circle cx="216.4" cy="48.4" r="5.0" fill="#4fae4a"/><circle cx="222.1" cy="48.1" r="5.0" fill="#4fae4a"/><circle cx="227.8" cy="48.6" r="4.6" fill="#4fae4a"/><circle cx="233.5" cy="49.3" r="3.7" fill="#4fae4a"/><circle cx="239.2" cy="46.7" r="5.4" fill="#4fae4a"/><circle cx="244.9" cy="49.4" r="5.4" fill="#4fae4a"/><circle cx="250.6" cy="46.6" r="4.7" fill="#4fae4a"/><circle cx="256.3" cy="46.9" r="5.2" fill="#4fae4a"/><circle cx="262.0" cy="48.5" r="5.4" fill="#4fae4a"/><circle cx="207.0" cy="49.0" r="3.2" fill="#6cc95a"/><circle cx="212.9" cy="50.2" r="4.6" fill="#6cc95a"/><circle cx="218.8" cy="51.3" r="4.9" fill="#6cc95a"/><circle cx="224.7" cy="48.5" r="3.5" fill="#6cc95a"/><circle cx="230.6" cy="48.5" r="5.3" fill="#6cc95a"/><circle cx="236.4" cy="48.8" r="5.2" fill="#6cc95a"/><circle cx="242.3" cy="50.8" r="5.0" fill="#6cc95a"/><circle cx="248.2" cy="50.2" r="5.2" fill="#6cc95a"/><circle cx="254.1" cy="49.1" r="5.2" fill="#6cc95a"/><circle cx="260.0" cy="49.5" r="4.7" fill="#6cc95a"/><path d="M209.0,48 q2,12.3 0,24.6 t0,12.3" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="210.0" cy="66.5" r="1.6" fill="#6cc95a"/><circle cx="208.0" cy="79.4" r="1.4" fill="#4fae4a"/><path d="M225.3,48 q2,11.2 0,22.4 t0,11.2" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="226.3" cy="64.8" r="1.6" fill="#6cc95a"/><circle cx="224.3" cy="76.6" r="1.4" fill="#4fae4a"/><path d="M241.7,48 q2,8.4 0,16.8 t0,8.4" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="242.7" cy="60.6" r="1.6" fill="#6cc95a"/><circle cx="240.7" cy="69.4" r="1.4" fill="#4fae4a"/><path d="M258.0,48 q2,8.9 0,17.8 t0,8.9" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="259.0" cy="61.4" r="1.6" fill="#6cc95a"/><circle cx="257.0" cy="70.7" r="1.4" fill="#4fae4a"/><circle cx="110.0" cy="60.6" r="3.1" fill="#4fae4a"/><circle cx="115.7" cy="62.0" r="4.5" fill="#4fae4a"/><circle cx="121.4" cy="62.3" r="5.2" fill="#4fae4a"/><circle cx="127.1" cy="61.6" r="3.3" fill="#4fae4a"/><circle cx="132.9" cy="62.1" r="4.9" fill="#4fae4a"/><circle cx="138.6" cy="63.0" r="3.0" fill="#4fae4a"/><circle cx="144.3" cy="60.8" r="5.1" fill="#4fae4a"/><circle cx="150.0" cy="61.6" r="4.4" fill="#4fae4a"/><circle cx="112.0" cy="63.4" r="5.0" fill="#6cc95a"/><circle cx="118.0" cy="64.0" r="3.6" fill="#6cc95a"/><circle cx="124.0" cy="62.8" r="5.4" fill="#6cc95a"/><circle cx="130.0" cy="64.4" r="3.3" fill="#6cc95a"/><circle cx="136.0" cy="64.0" r="5.2" fill="#6cc95a"/><circle cx="142.0" cy="65.1" r="4.1" fill="#6cc95a"/><circle cx="148.0" cy="62.7" r="4.9" fill="#6cc95a"/><path d="M114.0,62 q2,12.2 0,24.5 t0,12.2" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="115.0" cy="80.3" r="1.6" fill="#6cc95a"/><circle cx="113.0" cy="93.2" r="1.4" fill="#4fae4a"/><path d="M124.7,62 q2,5.8 0,11.7 t0,5.8" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="125.7" cy="70.7" r="1.6" fill="#6cc95a"/><circle cx="123.7" cy="76.9" r="1.4" fill="#4fae4a"/><path d="M135.3,62 q2,6.8 0,13.6 t0,6.8" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="136.3" cy="72.2" r="1.6" fill="#6cc95a"/><circle cx="134.3" cy="79.4" r="1.4" fill="#4fae4a"/><path d="M146.0,62 q2,11.8 0,23.6 t0,11.8" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="147.0" cy="79.7" r="1.6" fill="#6cc95a"/><circle cx="145.0" cy="92.1" r="1.4" fill="#4fae4a"/><circle cx="0.0" cy="55.9" r="4.1" fill="#4fae4a"/><circle cx="5.7" cy="56.1" r="3.4" fill="#4fae4a"/><circle cx="11.4" cy="53.9" r="3.4" fill="#4fae4a"/><circle cx="17.1" cy="54.5" r="4.2" fill="#4fae4a"/><circle cx="22.9" cy="56.2" r="4.4" fill="#4fae4a"/><circle cx="28.6" cy="53.5" r="4.8" fill="#4fae4a"/><circle cx="34.3" cy="55.1" r="3.8" fill="#4fae4a"/><circle cx="40.0" cy="55.6" r="4.2" fill="#4fae4a"/><circle cx="2.0" cy="55.7" r="4.2" fill="#6cc95a"/><circle cx="8.0" cy="58.0" r="3.6" fill="#6cc95a"/><circle cx="14.0" cy="57.8" r="3.9" fill="#6cc95a"/><circle cx="20.0" cy="57.4" r="5.5" fill="#6cc95a"/><circle cx="26.0" cy="57.3" r="4.7" fill="#6cc95a"/><circle cx="32.0" cy="58.2" r="3.8" fill="#6cc95a"/><circle cx="38.0" cy="58.2" r="4.2" fill="#6cc95a"/><path d="M4.0,55 q2,6.9 0,13.7 t0,6.9" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="5.0" cy="65.3" r="1.6" fill="#6cc95a"/><circle cx="3.0" cy="72.5" r="1.4" fill="#4fae4a"/><path d="M14.7,55 q2,12.1 0,24.2 t0,12.1" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="15.7" cy="73.1" r="1.6" fill="#6cc95a"/><circle cx="13.7" cy="85.8" r="1.4" fill="#4fae4a"/><path d="M25.3,55 q2,11.3 0,22.7 t0,11.3" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="26.3" cy="72.0" r="1.6" fill="#6cc95a"/><circle cx="24.3" cy="83.9" r="1.4" fill="#4fae4a"/><path d="M36.0,55 q2,9.7 0,19.4 t0,9.7" fill="none" stroke="#4fae4a" stroke-width="1.4" stroke-linecap="round"/><circle cx="37.0" cy="69.6" r="1.6" fill="#6cc95a"/><circle cx="35.0" cy="79.8" r="1.4" fill="#4fae4a"/>
+      <!-- grasveld -->
+      <path d="M0,124 Q50,112 120,120 T270,116 V155 H0Z" fill="url(#gras)"/>
+      <g fill="none" stroke="#3a8f33" stroke-width=".6" stroke-linejoin="round"><path d="M63.3,125.3 l1,-4.2 l1,4.2 l1,-5.0 l1,5.0 l1,-3.4 l1,3.4"/><path d="M41.5,124.1 l1,-4.2 l1,4.2 l1,-5.0 l1,5.0 l1,-3.4 l1,3.4"/><path d="M246.0,147.6 l1,-5.3 l1,5.3 l1,-6.4 l1,6.4 l1,-4.2 l1,4.2"/><path d="M59.5,139.2 l1,-3.8 l1,3.8 l1,-4.6 l1,4.6 l1,-3.1 l1,3.1"/><path d="M46.3,125.4 l1,-3.6 l1,3.6 l1,-4.4 l1,4.4 l1,-2.9 l1,2.9"/><path d="M248.6,148.5 l1,-5.4 l1,5.4 l1,-6.5 l1,6.5 l1,-4.3 l1,4.3"/><path d="M214.5,128.2 l1,-3.9 l1,3.9 l1,-4.7 l1,4.7 l1,-3.1 l1,3.1"/><path d="M168.0,145.4 l1,-5.6 l1,5.6 l1,-6.7 l1,6.7 l1,-4.5 l1,4.5"/><path d="M235.9,124.8 l1,-4.8 l1,4.8 l1,-5.8 l1,5.8 l1,-3.9 l1,3.9"/><path d="M180.0,138.2 l1,-3.5 l1,3.5 l1,-4.2 l1,4.2 l1,-2.8 l1,2.8"/><path d="M126.9,124.9 l1,-5.8 l1,5.8 l1,-7.0 l1,7.0 l1,-4.6 l1,4.6"/><path d="M231.9,139.5 l1,-3.9 l1,3.9 l1,-4.7 l1,4.7 l1,-3.1 l1,3.1"/><path d="M243.6,140.3 l1,-5.6 l1,5.6 l1,-6.8 l1,6.8 l1,-4.5 l1,4.5"/><path d="M227.3,138.3 l1,-4.2 l1,4.2 l1,-5.1 l1,5.1 l1,-3.4 l1,3.4"/><path d="M160.5,135.8 l1,-3.5 l1,3.5 l1,-4.2 l1,4.2 l1,-2.8 l1,2.8"/><path d="M81.8,148.0 l1,-3.1 l1,3.1 l1,-3.8 l1,3.8 l1,-2.5 l1,2.5"/><path d="M12.4,142.0 l1,-3.8 l1,3.8 l1,-4.6 l1,4.6 l1,-3.1 l1,3.1"/><path d="M143.3,137.1 l1,-4.0 l1,4.0 l1,-4.8 l1,4.8 l1,-3.2 l1,3.2"/><path d="M267.3,128.3 l1,-4.2 l1,4.2 l1,-5.1 l1,5.1 l1,-3.4 l1,3.4"/><path d="M54.3,142.2 l1,-3.8 l1,3.8 l1,-4.6 l1,4.6 l1,-3.1 l1,3.1"/><path d="M95.4,145.9 l1,-4.0 l1,4.0 l1,-4.8 l1,4.8 l1,-3.2 l1,3.2"/><path d="M149.7,150.9 l1,-3.3 l1,3.3 l1,-4.0 l1,4.0 l1,-2.6 l1,2.6"/><path d="M16.5,129.3 l1,-5.3 l1,5.3 l1,-6.4 l1,6.4 l1,-4.2 l1,4.2"/><path d="M164.9,129.6 l1,-4.0 l1,4.0 l1,-4.8 l1,4.8 l1,-3.2 l1,3.2"/><path d="M47.6,136.7 l1,-3.1 l1,3.1 l1,-3.8 l1,3.8 l1,-2.5 l1,2.5"/><path d="M186.9,150.7 l1,-5.9 l1,5.9 l1,-7.0 l1,7.0 l1,-4.7 l1,4.7"/><path d="M196.9,152.7 l1,-3.1 l1,3.1 l1,-3.7 l1,3.7 l1,-2.4 l1,2.4"/><path d="M77.5,152.9 l1,-5.3 l1,5.3 l1,-6.4 l1,6.4 l1,-4.3 l1,4.3"/><path d="M110.0,152.2 l1,-4.9 l1,4.9 l1,-5.8 l1,5.8 l1,-3.9 l1,3.9"/><path d="M219.2,131.4 l1,-3.6 l1,3.6 l1,-4.3 l1,4.3 l1,-2.9 l1,2.9"/><path d="M119.0,126.4 l1,-4.1 l1,4.1 l1,-5.0 l1,5.0 l1,-3.3 l1,3.3"/><path d="M257.8,132.6 l1,-3.0 l1,3.0 l1,-3.6 l1,3.6 l1,-2.4 l1,2.4"/><path d="M12.0,127.4 l1,-5.4 l1,5.4 l1,-6.4 l1,6.4 l1,-4.3 l1,4.3"/><path d="M97.2,131.3 l1,-3.3 l1,3.3 l1,-3.9 l1,3.9 l1,-2.6 l1,2.6"/></g>
+      <!-- oude roestige auto -->
+      <g transform="translate(212,108)">
+        <path d="M0,14 V8 Q0,5 4,4.5 L10,4 Q13,-2 20,-2 H30 Q35,-2 38,4 L44,5 Q48,6 48,10 V14 Z" fill="#6c9fc4"/>
+        <path d="M13,4 Q15,0 20,0 H24 V4Z M26,0 H30 Q33,0 35,4 H26Z" fill="#d8eef9"/>
+        <circle cx="10" cy="14" r="4.5" fill="#3b3b3b"/><circle cx="38" cy="14" r="4.5" fill="#3b3b3b"/><circle cx="10" cy="14" r="1.8" fill="#888"/><circle cx="38" cy="14" r="1.8" fill="#888"/>
+        <g fill="#b5703f" opacity=".85"><circle cx="6" cy="9" r="1.6"/><circle cx="30" cy="9" r="1.2"/><circle cx="42" cy="8" r="1.4"/></g>
+        <path d="M-2,16 q3,-6 6,0 q3,-7 6,0 q3,-5 6,0 q3,-7 6,0 q3,-5 6,0 q3,-7 6,0 q3,-5 6,0 q3,-6 6,0 q3,-5 4,0" fill="#5cb847"/>
+        <circle cx="20" cy="-2" r="2.4" fill="#5cb847"/><circle cx="23" cy="-3" r="2" fill="#6cc95a"/>
+      </g>
+      <circle cx="8.0" cy="136.1" r="1.8" fill="#fff"/><circle cx="9.8" cy="137.4" r="1.8" fill="#fff"/><circle cx="9.2" cy="139.6" r="1.8" fill="#fff"/><circle cx="6.8" cy="139.6" r="1.8" fill="#fff"/><circle cx="6.2" cy="137.4" r="1.8" fill="#fff"/><circle cx="8" cy="138" r="1.2" fill="#ffd23f"/><circle cx="22.0" cy="145.2" r="1.7" fill="#ffb3d1"/><circle cx="23.6" cy="146.4" r="1.7" fill="#ffb3d1"/><circle cx="23.1" cy="148.4" r="1.7" fill="#ffb3d1"/><circle cx="20.9" cy="148.4" r="1.7" fill="#ffb3d1"/><circle cx="20.4" cy="146.4" r="1.7" fill="#ffb3d1"/><circle cx="22" cy="147" r="1.1" fill="#ffd23f"/><circle cx="96.0" cy="134.4" r="1.5" fill="#fff"/><circle cx="97.5" cy="135.5" r="1.5" fill="#fff"/><circle cx="97.0" cy="137.3" r="1.5" fill="#fff"/><circle cx="95.0" cy="137.3" r="1.5" fill="#fff"/><circle cx="94.5" cy="135.5" r="1.5" fill="#fff"/><circle cx="96" cy="136" r="1.0" fill="#ffd23f"/><circle cx="110.0" cy="145.9" r="2.0" fill="#fff"/><circle cx="112.0" cy="147.3" r="2.0" fill="#fff"/><circle cx="111.3" cy="149.7" r="2.0" fill="#fff"/><circle cx="108.7" cy="149.7" r="2.0" fill="#fff"/><circle cx="108.0" cy="147.3" r="2.0" fill="#fff"/><circle cx="110" cy="148" r="1.3" fill="#ffd23f"/><circle cx="128.0" cy="138.4" r="1.5" fill="#ffe066"/><circle cx="129.5" cy="139.5" r="1.5" fill="#ffe066"/><circle cx="129.0" cy="141.3" r="1.5" fill="#ffe066"/><circle cx="127.0" cy="141.3" r="1.5" fill="#ffe066"/><circle cx="126.5" cy="139.5" r="1.5" fill="#ffe066"/><circle cx="128" cy="140" r="1.0" fill="#ffd23f"/><circle cx="150.0" cy="145.1" r="1.8" fill="#fff"/><circle cx="151.8" cy="146.4" r="1.8" fill="#fff"/><circle cx="151.2" cy="148.6" r="1.8" fill="#fff"/><circle cx="148.8" cy="148.6" r="1.8" fill="#fff"/><circle cx="148.2" cy="146.4" r="1.8" fill="#fff"/><circle cx="150" cy="147" r="1.2" fill="#ffd23f"/><circle cx="172.0" cy="137.4" r="1.5" fill="#ffb3d1"/><circle cx="173.5" cy="138.5" r="1.5" fill="#ffb3d1"/><circle cx="173.0" cy="140.3" r="1.5" fill="#ffb3d1"/><circle cx="171.0" cy="140.3" r="1.5" fill="#ffb3d1"/><circle cx="170.5" cy="138.5" r="1.5" fill="#ffb3d1"/><circle cx="172" cy="139" r="1.0" fill="#ffd23f"/><circle cx="190.0" cy="146.8" r="2.1" fill="#fff"/><circle cx="192.1" cy="148.3" r="2.1" fill="#fff"/><circle cx="191.4" cy="150.8" r="2.1" fill="#fff"/><circle cx="188.6" cy="150.8" r="2.1" fill="#fff"/><circle cx="187.9" cy="148.3" r="2.1" fill="#fff"/><circle cx="190" cy="149" r="1.4" fill="#ffd23f"/><circle cx="244.0" cy="140.2" r="1.7" fill="#fff"/><circle cx="245.7" cy="141.4" r="1.7" fill="#fff"/><circle cx="245.1" cy="143.4" r="1.7" fill="#fff"/><circle cx="242.9" cy="143.4" r="1.7" fill="#fff"/><circle cx="242.3" cy="141.4" r="1.7" fill="#fff"/><circle cx="244" cy="142" r="1.1" fill="#ffd23f"/><circle cx="260.0" cy="148.1" r="1.8" fill="#ffb3d1"/><circle cx="261.8" cy="149.4" r="1.8" fill="#ffb3d1"/><circle cx="261.2" cy="151.6" r="1.8" fill="#ffb3d1"/><circle cx="258.8" cy="151.6" r="1.8" fill="#ffb3d1"/><circle cx="258.2" cy="149.4" r="1.8" fill="#ffb3d1"/><circle cx="260" cy="150" r="1.2" fill="#ffd23f"/><circle cx="58.0" cy="147.4" r="1.5" fill="#ffe066"/><circle cx="59.5" cy="148.5" r="1.5" fill="#ffe066"/><circle cx="59.0" cy="150.3" r="1.5" fill="#ffe066"/><circle cx="57.0" cy="150.3" r="1.5" fill="#ffe066"/><circle cx="56.5" cy="148.5" r="1.5" fill="#ffe066"/><circle cx="58" cy="149" r="1.0" fill="#ffd23f"/><circle cx="82.0" cy="126.7" r="1.2" fill="#fff"/><circle cx="83.2" cy="127.6" r="1.2" fill="#fff"/><circle cx="82.8" cy="129.0" r="1.2" fill="#fff"/><circle cx="81.2" cy="129.0" r="1.2" fill="#fff"/><circle cx="80.8" cy="127.6" r="1.2" fill="#fff"/><circle cx="82" cy="128" r="0.8" fill="#ffd23f"/><circle cx="230.0" cy="129.7" r="1.2" fill="#ffe066"/><circle cx="231.2" cy="130.6" r="1.2" fill="#ffe066"/><circle cx="230.8" cy="132.0" r="1.2" fill="#ffe066"/><circle cx="229.2" cy="132.0" r="1.2" fill="#ffe066"/><circle cx="228.8" cy="130.6" r="1.2" fill="#ffe066"/><circle cx="230" cy="131" r="0.8" fill="#ffd23f"/><circle cx="140.0" cy="125.7" r="1.2" fill="#fff"/><circle cx="141.2" cy="126.6" r="1.2" fill="#fff"/><circle cx="140.8" cy="128.0" r="1.2" fill="#fff"/><circle cx="139.2" cy="128.0" r="1.2" fill="#fff"/><circle cx="138.8" cy="126.6" r="1.2" fill="#fff"/><circle cx="140" cy="127" r="0.8" fill="#ffd23f"/><circle cx="40.0" cy="127.7" r="1.2" fill="#fff"/><circle cx="41.2" cy="128.6" r="1.2" fill="#fff"/><circle cx="40.8" cy="130.0" r="1.2" fill="#fff"/><circle cx="39.2" cy="130.0" r="1.2" fill="#fff"/><circle cx="38.8" cy="128.6" r="1.2" fill="#fff"/><circle cx="40" cy="129" r="0.8" fill="#ffd23f"/>
+      <g fill="#fff"><use href="#ster4" transform="translate(110,20) scale(.6)"/><use href="#ster4" transform="translate(140,38) scale(.4)"/></g>
+    </g>
+
+    <!-- Snijlijnmarkering -->
+    <g id="schaar"><text font-size="5" fill="#777" font-family="Arial">✂</text></g>
+  </defs>
+</svg>
+
+<!-- ================= PAGINA 1: HANDLEIDING ================= -->
+<section class="page">
+  <h1>🎮 Surprise: spelcomputer in Switch-stijl</h1>
+  <p style="margin:0;color:#555">Sjablonen om af te drukken voor een Sinterklaas-surprise van ± <b>48 × 24 × 6 cm</b> (middendeel 34 × 24 cm, ruim 2× zo groot als het echte apparaat).</p>
+
+  <div class="instel no-print">
+    <label>Naam van de ontvanger <input type="text" id="in-naam" value="Indy" maxlength="18"></label>
+    <label>Kleur linker controller <input type="color" id="in-jl" value="#19b5e6"></label>
+    <label>Kleur rechter controller <input type="color" id="in-jr" value="#ff5148"></label>
+    <label style="grid-column:1/-1">Achtergrondfoto voor het scherm (bijv. een plaatje uit het spel, liggend) <input type="file" id="in-plaatje" accept="image/*"></label>
+    <button class="knop" onclick="window.print()">🖨️ Alles afdrukken (A4, schaal 100% / werkelijke grootte)</button>
+  </div>
+
+  <h2>Wat heb je nodig?</h2>
+  <ul>
+    <li>Een platte doos van ± 48 × 24 × 6 cm (of maak er een van stevig karton)</li>
+    <li>Zwarte verf of zwart (kaft)papier voor het middendeel van de console</li>
+    <li>Schaar, hobbymes, liniaal, lijmstift en alleslijm / dubbelzijdig tape</li>
+    <li>2 flessendoppen of stukjes wc-rol voor de joysticks · stukjes foamboard/karton voor reliëfknoppen</li>
+    <li>Wit papier (liefst 160 g/m² voor stevigheid), kleurenprinter</li>
+  </ul>
+
+  <h2>Zo maak je hem</h2>
+  <ol>
+    <li><b>Doos:</b> knip of plak een doos van 48 × 24 × 6 cm. Rond de vier hoeken aan de zijkanten een beetje af (straal ± 4 cm) als je dat kunt.</li>
+    <li><b>Verven:</b> schilder of beplak de middelste 34 cm zwart (dat is het middendeel van 34 × 24 cm; voor- en achterkant, boven en onder). Links en rechts blijft 7 cm over voor de controllers.</li>
+    <li><b>Scherm (blz. 2):</b> knip het scherm uit en plak het precies in het midden van de zwarte voorkant (3,5 cm zwarte rand boven en onder, 5 cm links en rechts).</li>
+    <li><b>Controllers (blz. 3 + 4):</b> plak de twee controller-voorkanten links en rechts tegen het scherm aan. Beplak de zijkanten met de gekleurde stroken.</li>
+    <li><b>3D-knoppen (blz. 5):</b> plak de joystick-kapjes op flessendoppen en de knopjes op een stukje karton, zo krijg je reliëf. Schouderknoppen komen bovenop, aan de buitenkanten.</li>
+    <li><b>Bovenkant:</b> aan/uit-knop, volumeknoppen, ventilatierooster en spelkaartsleuf (blz. 5) plakken op de zwarte bovenkant.</li>
+  </ol>
+
+  <h2>Overzicht van de pagina's</h2>
+  <table>
+    <tr><th>Blz.</th><th>Sjabloon</th><th>Formaat</th></tr>
+    <tr><td>2</td><td>Scherm met je eigen achtergrondfoto, “SURPRISE!” en de naam (liggend afdrukken)</td><td>24 × 17 cm</td></tr>
+    <tr><td>3</td><td>Voorkant linker + rechter controller</td><td>2× 7 × 24 cm</td></tr>
+    <tr><td>4</td><td>Zijstroken in controllerkleur</td><td>6 cm breed</td></tr>
+    <tr><td>5</td><td>3D-onderdelen: joysticks, knoppen, schouderknoppen, bovenkant, standaard</td><td>diverse</td></tr>
+  </table>
+
+  <div class="tip">✂ <b>Stippellijn</b> = knippen &nbsp;·&nbsp; <b>streep-punt</b> = vouwen &nbsp;·&nbsp; <b>gearceerd</b> = lijmrand. Op elke pagina staat een controlelijn van 5 cm: meet even na of je printer niet heeft verkleind.</div>
+
+</section>
+
+<!-- ================= PAGINA 2: SCHERM ================= -->
+<section class="page land">
+  <svg class="vel" viewBox="0 0 277 190">
+    <text x="0" y="6" class="kop">2 · Scherm</text>
+    <text x="40" y="6" class="sub">24 × 17 cm. Knip langs de stippellijn en plak midden op de zwarte voorkant (3,5 cm rand boven/onder, 5 cm links/rechts).</text>
+    <g transform="translate(18.5,11)">
+      <svg width="240" height="170" viewBox="0 0 270 155" preserveAspectRatio="xMidYMid slice"><use href="#scene" id="standaardscene"/></svg>
+      <image id="achtergrond" x="0" y="0" width="240" height="170" preserveAspectRatio="xMidYMid slice" href="" style="display:none"/>
+      <!-- zachte lichtrand bovenin voor leesbaarheid -->
+      <rect width="240" height="42" fill="url(#bovenlicht)"/>
+      <!-- HUD -->
+      <g transform="translate(7,6)"><rect width="38" height="11" rx="5.5" fill="#fff" opacity=".92"/><text x="5" y="8.2" font-size="6.5" fill="#ff4f9a">♥♥♥♥</text></g>
+      <g transform="translate(188,6)"><rect width="45" height="11" rx="5.5" fill="#fff" opacity=".92"/><use href="#ster4" transform="translate(8,5.5) scale(.9)" fill="#ffcf3a"/><text x="15" y="7.8" font-size="5.5" fill="#ff4f9a">× 24</text></g>
+      <!-- glitters -->
+      <g fill="#fff"><use href="#ster4" transform="translate(130,30) scale(1.1)"/><use href="#ster4" transform="translate(234,50) scale(.8)"/><use href="#ster4" transform="translate(128,88) scale(.7)"/></g>
+      <g fill="#ffe25a"><use href="#ster4" transform="translate(230,90) scale(1)"/><use href="#ster4" transform="translate(140,98) scale(.6)"/></g>
+      <!-- titel -->
+      <g text-anchor="middle" stroke-linejoin="round" paint-order="stroke">
+        <text x="182" y="56" font-size="26" textLength="98" lengthAdjust="spacingAndGlyphs" fill="#fff" stroke="#fff" stroke-width="10">SURPRISE!</text>
+        <text x="182" y="56" font-size="26" textLength="98" lengthAdjust="spacingAndGlyphs" fill="#ffd93b" stroke="#2457d6" stroke-width="4.2">SURPRISE!</text>
+        <text x="181.4" y="55.2" font-size="26" textLength="98" lengthAdjust="spacingAndGlyphs" fill="none" stroke="#fff6b0" stroke-width=".8" opacity=".75">SURPRISE!</text>
+      </g>
+      <path d="M133,63 H231 L225,71.5 L231,80 H133 L139,71.5 Z" fill="#2e9e3f" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>
+      <text x="182" y="75" font-size="9.5" fill="#fff" text-anchor="middle">voor <tspan class="naam">Indy</tspan></text>
+      <!-- onderbalk -->
+      <rect x="134" y="153" width="96" height="11" rx="5.5" fill="#fff" opacity=".94" stroke="#ff7fb2" stroke-width=".8"/>
+      <text x="182" y="160.6" font-size="5.6" fill="#ff4f9a" text-anchor="middle">Druk op Ⓐ om te openen</text>
+      <rect width="240" height="170" fill="url(#glans)"/>
+      <rect width="240" height="170" fill="none" class="c"/>
+    </g>
+    <g transform="translate(18.5,186.5)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 3: CONTROLLERS ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <text x="0" y="6" class="kop">3 · Controllers (voorkant) · 7 × 24 cm</text>
+    <text x="0" y="11" class="sub">Knip uit en plak links en rechts tegen het zwarte middendeel (de rechte kant komt ertegen).</text>
+    <text x="190" y="6" class="sub" text-anchor="end">Tip: knoppen van blz. 5 erop plakken voor reliëf.</text>
+
+    <!-- Linker controller 70 x 240 -->
+    <g transform="translate(20,17)">
+      <path d="M70,0 H40 A40,40 0 0 0 0,40 V200 A40,40 0 0 0 40,240 H70 Z" class="jl c"/><path d="M70,0 H40 A40,40 0 0 0 0,40 V200 A40,40 0 0 0 40,240 H70 Z" fill="url(#glans)"/>
+      <rect x="66" y="0" width="4" height="240" fill="#000" opacity=".12"/>
+      <rect x="44" y="23" width="12" height="3.4" rx="1" fill="#2a2a2a"/>
+      <circle cx="36" cy="72" r="17" fill="#2a2a2a"/><circle cx="36" cy="72" r="12.5" fill="#3b3b3b"/><circle cx="36" cy="72" r="9" fill="none" stroke="#505050" stroke-width=".9"/>
+      <g fill="#2a2a2a"><circle cx="36" cy="119" r="7"/><circle cx="36" cy="151" r="7"/><circle cx="20" cy="135" r="7"/><circle cx="52" cy="135" r="7"/></g>
+      <g fill="#ddd">
+        <polygon points="36,115.8 33.3,120.6 38.7,120.6"/><polygon points="36,154.2 33.3,149.4 38.7,149.4"/>
+        <polygon points="16.8,135 21.6,132.3 21.6,137.7"/><polygon points="55.2,135 50.4,132.3 50.4,137.7"/>
+      </g>
+      <rect x="29" y="183" width="14" height="14" rx="2.2" fill="#2a2a2a"/><circle cx="36" cy="190" r="4" fill="#444"/>
+      <text x="36" y="246" class="lbl" text-anchor="middle">LINKS</text>
+    </g>
+
+    <!-- Rechter controller 70 x 240 -->
+    <g transform="translate(100,17)">
+      <path d="M0,0 H30 A40,40 0 0 1 70,40 V200 A40,40 0 0 1 30,240 H0 Z" class="jr c"/><path d="M0,0 H30 A40,40 0 0 1 70,40 V200 A40,40 0 0 1 30,240 H0 Z" fill="url(#glans)"/>
+      <rect x="0" y="0" width="4" height="240" fill="#000" opacity=".12"/>
+      <rect x="12" y="22.3" width="12" height="3.4" rx="1" fill="#2a2a2a"/><rect x="16.3" y="18" width="3.4" height="12" rx="1" fill="#2a2a2a"/>
+      <g fill="#2a2a2a"><circle cx="34" cy="54" r="7"/><circle cx="34" cy="86" r="7"/><circle cx="18" cy="70" r="7"/><circle cx="50" cy="70" r="7"/></g>
+      <g fill="#ddd" font-size="6.4" text-anchor="middle" font-family="Arial">
+        <text x="34" y="56.3">X</text><text x="34" y="88.3">B</text><text x="18" y="72.3">Y</text><text x="50" y="72.3">A</text>
+      </g>
+      <circle cx="34" cy="140" r="17" fill="#2a2a2a"/><circle cx="34" cy="140" r="12.5" fill="#3b3b3b"/><circle cx="34" cy="140" r="9" fill="none" stroke="#505050" stroke-width=".9"/>
+      <circle cx="34" cy="192" r="8" fill="#3a3a3a"/><circle cx="34" cy="192" r="6.5" fill="#2a2a2a"/>
+      <path d="M30.2,193 L34,189.2 L37.8,193 V196.3 H30.2 Z" fill="none" stroke="#ddd" stroke-width=".9" stroke-linejoin="round"/>
+      <text x="34" y="246" class="lbl" text-anchor="middle">RECHTS</text>
+    </g>
+    <g transform="translate(0,272)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 4: ZIJSTROKEN ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <text x="0" y="6" class="kop">4 · Zijstroken controllers</text>
+    <text x="0" y="11" class="sub">Voor de zijkanten van de doos (6 cm dik). Buig de boven- en onderstroken mee met de ronde hoek.</text>
+    <rect x="0" y="16" width="60" height="160" class="jl c"/><text x="30" y="97.0" class="lbl" text-anchor="middle">LINKS · buitenzijde</text><rect x="0" y="180" width="60" height="95" class="jl c"/><text x="30" y="228.5" class="lbl" text-anchor="middle">LINKS · boven</text>
+    <rect x="65" y="16" width="60" height="160" class="jr c"/><text x="95" y="97.0" class="lbl" text-anchor="middle">RECHTS · buitenzijde</text><rect x="65" y="180" width="60" height="95" class="jr c"/><text x="95" y="228.5" class="lbl" text-anchor="middle">RECHTS · boven</text>
+    <rect x="130" y="16" width="60" height="95" class="jl c"/><text x="160" y="64.5" class="lbl" text-anchor="middle">LINKS · onder</text><rect x="130" y="115" width="60" height="95" class="jr c"/><text x="160" y="163.5" class="lbl" text-anchor="middle">RECHTS · onder</text>
+    <rect x="130" y="216" width="28" height="14" fill="#2a2a2a" class="c"/><text x="144" y="224" font-size="2.6" fill="#ddd" text-anchor="middle" font-family="Arial">SL  SR</text>
+    <rect x="162" y="216" width="28" height="14" fill="#2a2a2a" class="c"/><text x="176" y="224" font-size="2.6" fill="#ddd" text-anchor="middle" font-family="Arial">SL  SR</text>
+    <text x="130" y="235" class="lbl">optioneel: zwarte rail-plaatjes</text>
+    <g transform="translate(130,250)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="0" y="5" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<!-- ================= PAGINA 5: 3D-ONDERDELEN ================= -->
+<section class="page">
+  <svg class="vel" viewBox="0 0 190 277">
+    <text x="0" y="6" class="kop">5 · 3D-onderdelen</text>
+    <text x="0" y="11" class="sub">Plak op karton of foam voor reliëf. Joystick-kapjes op een flessendop, de ringen eronder.</text>
+    <g transform="translate(0,18)">
+      <!-- joysticks -->
+      <text x="0" y="0" class="lbl">JOYSTICKS (2×)</text>
+      <g transform="translate(22,24)"><circle r="20" fill="#2a2a2a" class="c"/><circle r="15.5" fill="none" stroke="#444" stroke-width=".6"/><text y="1" class="lbl" text-anchor="middle" fill="#999">ring</text></g>
+      <g transform="translate(66,24)"><circle r="20" fill="#2a2a2a" class="c"/><circle r="15.5" fill="none" stroke="#444" stroke-width=".6"/><text y="1" class="lbl" text-anchor="middle" fill="#999">ring</text></g>
+      <g transform="translate(112,24)"><circle r="16" fill="#3b3b3b" class="c"/><circle r="12" fill="none" stroke="#555" stroke-width="1"/><circle r="8" fill="none" stroke="#555" stroke-width=".6"/><circle r="3" fill="#333"/></g>
+      <g transform="translate(152,24)"><circle r="16" fill="#3b3b3b" class="c"/><circle r="12" fill="none" stroke="#555" stroke-width="1"/><circle r="8" fill="none" stroke="#555" stroke-width=".6"/><circle r="3" fill="#333"/></g>
+
+      <!-- knoppen -->
+      <text x="0" y="54" class="lbl">KNOPPEN</text>
+      <g fill="#2a2a2a">
+        <circle cx="10" cy="66" r="6.5" class="c"/><circle cx="26" cy="66" r="6.5" class="c"/><circle cx="42" cy="66" r="6.5" class="c"/><circle cx="58" cy="66" r="6.5" class="c"/>
+        <circle cx="80" cy="66" r="6.5" class="c"/><circle cx="96" cy="66" r="6.5" class="c"/><circle cx="112" cy="66" r="6.5" class="c"/><circle cx="128" cy="66" r="6.5" class="c"/>
+      </g>
+      <g fill="#ddd">
+        <polygon points="10,63 7.5,67.5 12.5,67.5"/><polygon points="26,69 23.5,64.5 28.5,64.5"/><polygon points="39,66 43.5,63.5 43.5,68.5"/><polygon points="61,66 56.5,63.5 56.5,68.5"/>
+      </g>
+      <g fill="#ddd" font-size="6" text-anchor="middle" font-family="Arial"><text x="80" y="68.2">A</text><text x="96" y="68.2">B</text><text x="112" y="68.2">X</text><text x="128" y="68.2">Y</text></g>
+      <rect x="140" y="64.4" width="11" height="3.2" rx="1" fill="#2a2a2a" class="c"/>
+      <g fill="#2a2a2a"><rect x="157" y="64.4" width="11" height="3.2" rx="1"/><rect x="160.9" y="60.5" width="3.2" height="11" rx="1"/></g>
+      <path d="M157,60.5 h11 v11 h-11 z" class="lijn"/>
+      <circle cx="180" cy="66" r="7" fill="#2a2a2a" class="c"/><path d="M176.5,67 L180,63.5 L183.5,67 V70 H176.5 Z" fill="none" stroke="#ddd" stroke-width=".9" stroke-linejoin="round"/>
+      <rect x="0" y="78" width="12" height="12" rx="2" fill="#2a2a2a" class="c"/><circle cx="6" cy="84" r="3.5" fill="#444"/>
+      <text x="16" y="85" class="lbl">pijltjes · A B X Y · min · plus · home · foto</text>
+
+      <!-- bovenkant -->
+      <text x="0" y="102" class="lbl">BOVENKANT (op de zwarte doos)</text>
+      <g transform="translate(0,106)">
+        <rect x="0" y="0" width="16" height="6" rx="2" fill="#555" class="c"/><text x="8" y="11" class="lbl" text-anchor="middle">aan/uit</text>
+        <rect x="22" y="0" width="18" height="6" rx="2" fill="#555" class="c"/><text x="31" y="4.3" font-size="4" fill="#ddd" text-anchor="middle" font-family="Arial">–</text>
+        <rect x="42" y="0" width="18" height="6" rx="2" fill="#555" class="c"/><text x="51" y="4.5" font-size="4" fill="#ddd" text-anchor="middle" font-family="Arial">+</text>
+        <text x="41" y="11" class="lbl" text-anchor="middle">volume</text>
+        <circle cx="70" cy="3" r="4" fill="#111" stroke="#555" stroke-width=".6" class="c"/><text x="70" y="11" class="lbl" text-anchor="middle">koptelefoon</text>
+        <g transform="translate(82,0)">
+          <rect x="0" y="0" width="100" height="9" rx="2" fill="#1d1d1d" class="c"/>
+          <g fill="#000"><rect x="5" y="2.5" width="90" height="1.2" rx=".6"/><rect x="5" y="5.3" width="90" height="1.2" rx=".6"/></g>
+          <text x="50" y="14" class="lbl" text-anchor="middle">ventilatierooster</text>
+        </g>
+      </g>
+      <g transform="translate(0,128)">
+        <rect x="0" y="0" width="50" height="12" rx="2" fill="#1d1d1d" class="c"/><rect x="5" y="4" width="40" height="4" rx="1" fill="#000"/>
+        <text x="25" y="17" class="lbl" text-anchor="middle">spelkaartsleuf</text>
+        <rect x="60" y="0" width="122" height="22" rx="2" fill="#1d1d1d" class="c"/><rect x="63" y="3" width="116" height="16" rx="1.5" fill="none" stroke="#333" stroke-width=".6"/>
+        <text x="121" y="27" class="lbl" text-anchor="middle">uitklapstandaard (achterkant, laat de onderrand vastzitten)</text>
+      </g>
+
+      <!-- schouderknoppen -->
+      <text x="0" y="172" class="lbl">SCHOUDERKNOPPEN (bovenop, buitenkanten)</text>
+      <g transform="translate(0,178)">
+        <path d="M70,0 H26 A26,18 0 0 0 0,18 H70 Z" class="jl c"/><text x="45" y="12" font-size="6" fill="#fff" font-family="Arial" text-anchor="middle">L</text>
+        <path d="M0,0 H44 A26,18 0 0 1 70,18 H0 Z" transform="translate(100,0)" class="jr c"/><text x="125" y="12" font-size="6" fill="#fff" font-family="Arial" text-anchor="middle">R</text>
+      </g>
+      <g transform="translate(0,204)">
+        <path d="M70,0 H30 Q6,0 0,22 H70 Z" fill="#2a2a2a" class="c"/><text x="45" y="14" font-size="6" fill="#ddd" font-family="Arial" text-anchor="middle">ZL</text>
+        <path d="M0,0 H40 Q64,0 70,22 H0 Z" transform="translate(100,0)" fill="#2a2a2a" class="c"/><text x="125" y="14" font-size="6" fill="#ddd" font-family="Arial" text-anchor="middle">ZR</text>
+      </g>
+    </g>
+    <g transform="translate(0,262)"><line x1="0" y1="0" x2="50" y2="0" stroke="#000" stroke-width=".5"/><line x1="0" y1="-1.5" x2="0" y2="1.5" stroke="#000" stroke-width=".5"/><line x1="50" y1="-1.5" x2="50" y2="1.5" stroke="#000" stroke-width=".5"/><text x="54" y="1" class="lbl">controle: 5 cm</text></g>
+  </svg>
+</section>
+
+<script>
+  const velden = { naam: 'in-naam', jl: 'in-jl', jr: 'in-jr' };
+  const opgeslagen = JSON.parse(localStorage.getItem('surprise-switch-indy') || '{}');
+  for (const [k, id] of Object.entries(velden)) if (opgeslagen[k]) document.getElementById(id).value = opgeslagen[k];
+
+  function bijwerken() {
+    const w = {}; for (const [k, id] of Object.entries(velden)) w[k] = document.getElementById(id).value;
+    const naam = w.naam.trim() || 'jou';
+    document.querySelectorAll('.naam').forEach(el => el.textContent = naam);
+    document.documentElement.style.setProperty('--jl', w.jl);
+    document.documentElement.style.setProperty('--jr', w.jr);
+    localStorage.setItem('surprise-switch-indy', JSON.stringify(w));
+  }
+  Object.values(velden).forEach(id => document.getElementById(id).addEventListener('input', bijwerken));
+  bijwerken();
+  document.getElementById('in-plaatje').addEventListener('change', e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      const img = document.getElementById('achtergrond');
+      img.setAttribute('href', r.result); img.style.display = '';
+      document.getElementById('standaardscene').style.display = 'none';
+    };
+    r.readAsDataURL(f);
+  });
+</script>
+</body>
+</html>
